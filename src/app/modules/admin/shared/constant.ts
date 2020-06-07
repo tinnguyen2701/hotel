@@ -1,14 +1,9 @@
-import {StatusBooking, RoomStatus} from '@app/modules/admin/shared/enums';
+import {StatusBooking, RoomStatus, RoomType} from '@app/modules/admin/shared/enums';
 
 export const ADMIN_MENU = [
     {
         text: 'All Rooms',
         link: '/admin/all',
-        icon: 'fas fa-address-book'
-    },
-    {
-        text: 'Available Rooms',
-        link: '/admin/available-rooms',
         icon: 'fas fa-address-book'
     },
     {
@@ -77,3 +72,7 @@ export const ROOM_STATUS_TYPE: { value: RoomStatus, name: string }[] = [
     {value: RoomStatus.Booking, name: 'Booking'},
 ];
 
+export const ROOM_TYPE: { value: RoomType, name: string }[] = [
+    {value: RoomType.Single, name: 'Phòng đơn'},
+    {value: RoomType.Double, name: 'Phòng đôi'},
+];

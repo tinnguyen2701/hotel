@@ -2,6 +2,7 @@ import * as faker from 'faker';
 import {random} from 'lodash';
 //
 import { RoomModel, FloorModel } from '@app/modules/admin/models/room.model';
+import { RoomStatus } from '@app/modules/admin/shared/enums';
 
 export function randomFloors(count: number): FloorModel[] {
     return Array(count).fill({}).map((item: FloorModel, index) => {
@@ -15,12 +16,13 @@ export function randomFloors(count: number): FloorModel[] {
 
 export function randomRooms(count: number, floor: number): RoomModel[] {
     return Array(count).fill({}).map((item: RoomModel, index) => {
+        const statusRoom =  random(2, 4);
         return new RoomModel({
             id: index + 1,
-            status: random(2, 4),
+            status: statusRoom,
             name: floor.toString() + '0' + (index + 1).toString(),
-            checkinDate: faker.date.past(),
-            checkoutDate: faker.date.future(),
+            checkinDate: (statusRoom === RoomStatus.Booking || statusRoom === RoomStatus.Checkin) ? faker.date.past() : null,
+            checkoutDate: (statusRoom === RoomStatus.Booking || statusRoom === RoomStatus.Checkin) ? faker.date.future() : null,
         });
     });
 }

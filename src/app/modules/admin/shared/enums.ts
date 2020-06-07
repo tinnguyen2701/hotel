@@ -19,3 +19,8 @@ export enum RoomStatus {
     Checkin = 3,
     Booking = 4,
 }
+
+export enum RoomType {
+    Single = 1,
+    Double = 2
+}

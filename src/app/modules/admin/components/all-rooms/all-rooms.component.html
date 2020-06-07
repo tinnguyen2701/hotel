@@ -16,18 +16,28 @@
                 <div class="field-lable">Tìm kiếm theo ngày checkin</div>
                 <div class="field-value">
                     <dx-date-box
-                    [value]="now"
-                    type="date">
-                </dx-date-box>
+                        [(value)]="checkinDate"
+                        [max]="checkoutDate"
+                        [useMaskBehavior]="true"
+                        displayFormat="dd/MM/yyyy"
+                        [showClearButton]="true"
+                        type="date"
+                    >
+                    </dx-date-box>
                 </div>
             </div>
             <div class="field col-md-3">
                 <div class="field-lable">Ngày checkout</div>
                 <div class="field-value">
                     <dx-date-box
-                    [value]="now"
-                    type="date">
-                </dx-date-box>
+                        [(value)]="checkoutDate"
+                        [min]="checkinDate"
+                        [useMaskBehavior]="true"
+                        displayFormat="dd/MM/yyyy"
+                        [showClearButton]="true"
+                        type="date"
+                    >
+                    </dx-date-box>
                 </div>
             </div>
         </div>
@@ -41,12 +51,18 @@
                 class="room"
                 *ngFor="let room of item.rooms"
                 [ngClass]="{
-                    hidden:
+                    'hidden':
                         selectedStatus !== roomStatus.All &&
                         room.status !== selectedStatus,
                     'bg-warning': room.status === roomStatus.Booking,
                     'bg-success': room.status === roomStatus.Available,
-                    'bg-danger': room.status === roomStatus.Checkin
+                    'bg-danger': room.status === roomStatus.Checkin,
+                    'hiddenViaDate':
+                        (checkinDate !== null && checkoutDate !== null) ?
+                        (room.status === roomStatus.Available ||
+                        room.status === roomStatus.All ||
+                        checkinDate > room.checkoutDate ||
+                        room.checkinDate > checkoutDate) : false
                 }"
             >
                 {{ room.name }}

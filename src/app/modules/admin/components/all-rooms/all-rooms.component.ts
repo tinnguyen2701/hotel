@@ -16,11 +16,10 @@ export class AllRoomsComponent implements OnInit {
   roomStatus = RoomStatus;
   roomStatusType = ROOM_STATUS_TYPE;
   selectedStatus = RoomStatus.All;
-  now: Date = new Date();
+  checkinDate: Date = null;
+  checkoutDate: Date = null;
   constructor(private bookingsService: BookingService) {
   }
-
-
 
   ngOnInit() {
       this.loadFloor();
@@ -32,9 +31,6 @@ export class AllRoomsComponent implements OnInit {
         console.log(this.floors);
 
       }, err => {
-
       });
   }
-
-
 }
