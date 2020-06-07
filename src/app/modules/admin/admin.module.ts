@@ -76,6 +76,7 @@ const PROVIDERS = [
         AdminComponent,
         UsersComponent,
         BookedClientsComponent,
+        GroupsComponent,
         ScheduleComponent,
         RevenueComponent,
         SearchFormComponent

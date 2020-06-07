@@ -42,8 +42,6 @@ export class BookedClientsComponent implements OnInit {
     }
 
     onSearchBooking() {
-        console.log('as');
-
         this.filterBooking.codeBook = this.codeBook;
         this.filterBooking.nameRoom = this.nameRoom;
         this.loadBookings();

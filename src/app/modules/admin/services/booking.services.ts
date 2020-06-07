@@ -54,6 +54,6 @@ export class BookingService {
             console.log('API: getRooms');
         }
 
-        return of(randomFloors(5));
+        return of(randomFloors(7));
     }
 }

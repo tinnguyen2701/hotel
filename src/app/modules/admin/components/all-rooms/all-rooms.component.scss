@@ -1,6 +1,10 @@
 @import "src/styles/scss/variables";
 .wrapper {
-    margin: 10px;
+    padding: 20px;
+
+    .list-room {
+        padding-top: 20px;
+    }
 
     .row {
         .floor, .room {

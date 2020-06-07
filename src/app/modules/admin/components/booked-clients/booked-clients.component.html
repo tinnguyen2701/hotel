@@ -43,8 +43,7 @@
                 [showNavigationButtons]="true"
             >
             </dxo-pager>
-            <dxo-filter-row [visible]="true" applyFilter="auto">
-            </dxo-filter-row>
+
             <dxo-remote-operations
                 [filtering]="true"
                 [sorting]="true"
@@ -54,6 +53,7 @@
             <dxi-column
                 [minWidth]="100"
                 [caption]="'Room name'"
+                [allowFiltering]="true"
                 alignment="center"
                 dataField="roomName"
             ></dxi-column>
