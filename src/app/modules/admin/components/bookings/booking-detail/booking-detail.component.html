@@ -1,0 +1,186 @@
+<dx-load-panel *ngIf="visible" [visible]="true" [showPane]="false"></dx-load-panel>
+
+<app-popup-container [width]="600"
+                     [height]="'auto'"
+                     [fullScreen]="false"
+                     [(visible)]="visible"
+                     [title]="selectedBooking.id ? 'Edit Booking': 'New Booking'">
+    <dx-validation-group>
+        <div class="form-wrapper" appAutoFocusInput>
+            <div class="field row-layout">
+                <div class="field-label w-25">User ID</div>
+                <div class="field-value w-75">
+                    <dx-text-box class="w-100"
+                                 [(value)]="editingBooking.userID">
+                        <dx-validator>
+                            <dxi-validation-rule type="required"
+                                                 [message]="'This field is required'">
+                            </dxi-validation-rule>
+                        </dx-validator>
+                    </dx-text-box>
+                </div>
+            </div>
+            <div class="field row-layout">
+                <div class="field-label w-25">Departing Date</div>
+                <div class="field-value w-75">
+                    <dx-date-box type="date"
+                                 [(value)]="editingBooking.departingDate">
+                        <dx-validator>
+                            <dxi-validation-rule type="required"
+                                                 [message]="'This field is required'">
+                            </dxi-validation-rule>
+                        </dx-validator>
+                    </dx-date-box>
+                </div>
+            </div>
+            <div class="field row-layout">
+                <div class="field-label w-25">Time</div>
+                <div class="field-value w-25">
+                    <dx-date-box type="time"
+                                 [(value)]="editingBooking.pickupTime">
+                        displayFormat="HH:mm a">
+                        <dx-validator>
+                            <dxi-validation-rule type="required"
+                                                 [message]="'This field is required'">
+                            </dxi-validation-rule>
+                        </dx-validator>
+                    </dx-date-box>
+                </div>
+            </div>
+            <div class="field row-layout">
+                <div class="field-label w-25">Driver ID</div>
+                <div class="field-value w-75">
+                    <dx-text-box class="w-100"
+                                 [(value)]="editingBooking.driverID">
+                        <dx-validator>
+                            <dxi-validation-rule type="required"
+                                                 [message]="'This field is required'">
+                            </dxi-validation-rule>
+                        </dx-validator>
+                    </dx-text-box>
+                </div>
+            </div>
+            <div class="field row-layout">
+                <div class="field-label w-25">Boat ID</div>
+                <div class="field-value w-75">
+                    <dx-text-box class="w-100"
+                                 [(value)]="editingBooking.boatID">
+                        <dx-validator>
+                            <dxi-validation-rule type="required"
+                                                 [message]="'This field is required'">
+                            </dxi-validation-rule>
+                        </dx-validator>
+                    </dx-text-box>
+                </div>
+            </div>
+            <div class="field row-layout">
+                <div class="field-label w-25">Region</div>
+                <div class="field-value w-75">
+                    <dx-text-box class="w-100"
+                                 [(value)]="editingBooking.region">
+                        <dx-validator>
+                            <dxi-validation-rule type="required"
+                                                 [message]="'This field is required'">
+                            </dxi-validation-rule>
+                        </dx-validator>
+                    </dx-text-box>
+                </div>
+            </div>
+            <div class="field row-layout">
+                <div class="field-label w-25">Departing harbor</div>
+                <div class="field-value w-75">
+                    <dx-text-box class="w-100"
+                                 [(value)]="editingBooking.departingHarbor">
+                        <dx-validator>
+                            <dxi-validation-rule type="required"
+                                                 [message]="'This field is required'">
+                            </dxi-validation-rule>
+                        </dx-validator>
+                    </dx-text-box>
+                </div>
+            </div>
+            <div class="field row-layout align-items-start">
+                <div class="field-label w-25">Activities</div>
+                <div class="field-value w-75">
+                    <div class="row">
+                        <div class="col-md-6 field mt-0">
+                            <dx-check-box [text]="'Transportation'"
+                                          [(value)]="bookingActivities[_activity.Transportation]">
+                            </dx-check-box>
+                        </div>
+                        <div class="col-md-6 field mt-0">
+                            <dx-check-box [text]="'Island hopping'"
+                                          [(value)]="bookingActivities[_activity.IslandHopping]">
+                            </dx-check-box>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 field mt-0">
+                            <dx-check-box [text]="'Snorkeling'"
+                                          [(value)]="bookingActivities[_activity.Snorkeling]">
+                            </dx-check-box>
+                        </div>
+                        <div class="col-md-6 field mt-0">
+                            <dx-check-box [text]="'Scuba diving'"
+                                          [(value)]="bookingActivities[_activity.ScubaDiving]">
+                            </dx-check-box>
+                        </div>
+                    </div>
+                    <div class="row" style="height: 36px">
+                        <div class="col-md-3">
+                            <dx-check-box [text]="'Overnight'"
+                                          [(value)]="bookingActivities[_activity.Overnight]">
+                            </dx-check-box>
+                        </div>
+                        <div class="col-md-2" *ngIf="bookingActivities[_activity.Overnight]">
+                            <div class="field row-layout mt-0 align-items-start">
+                                <div class="field-value">
+                                    <dx-number-box [height]="25" [width]="40"
+                                                   [step]="0"
+                                                   [min]="0"
+                                                   [(value)]="editingBooking.overnightD">
+                                    </dx-number-box>
+                                </div>
+                                <div class="field-label ml-1">D</div>
+                            </div>
+                        </div>
+                        <div class="col-md-2" *ngIf="bookingActivities[_activity.Overnight]">
+                            <div class="field row-layout mt-0 align-items-start">
+                                <div class="field-value">
+                                    <dx-number-box [height]="25" [width]="40"
+                                                   [step]="0"
+                                                   [min]="0"
+                                                   [(value)]="editingBooking.overnightN">
+                                    </dx-number-box>
+                                </div>
+                                <div class="field-label ml-1">N</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="field row-layout">
+                <div class="field-label w-25">Price</div>
+                <div class="field-value w-75">
+                    <dx-number-box class="w-100"
+                                   min="0"
+                                   format="#,##0"
+                                   [step]="0"
+                                   [(value)]="editingBooking.price">
+                        <dx-validator>
+                            <dxi-validation-rule type="required"
+                                                 [message]="'This field is required'">
+                            </dxi-validation-rule>
+                        </dx-validator>
+                    </dx-number-box>
+                </div>
+            </div>
+            <div class="form-footer-wrapper">
+                <dx-button [focusStateEnabled]="false"
+                           [text]="'OK'" type="default"
+                           (onClick)="submitForm($event)">
+                </dx-button>
+            </div>
+        </div>
+    </dx-validation-group>
+</app-popup-container>

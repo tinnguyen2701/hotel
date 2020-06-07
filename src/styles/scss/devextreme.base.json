@@ -1,0 +1,13 @@
+{
+    "items": [
+        {
+            "key": "@base-accent",
+            "value": "rgba(51, 204, 204, 1)"
+        }
+    ],
+    "baseTheme": "generic.light",
+    "outputColorScheme": "custom-scheme",
+    "makeSwatch": false,
+    "version": "19.2.6",
+    "widgets": []
+}

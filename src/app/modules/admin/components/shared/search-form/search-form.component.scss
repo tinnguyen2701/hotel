@@ -1,0 +1,34 @@
+@import "variables";
+
+.search-box {
+    color: gray;
+    background: white;
+    border-radius: 2px;
+    height: 36px;
+    width: 260px;
+    padding-left: 31px;
+    overflow: hidden;
+    border: 1px solid #dedede;
+    position: relative;
+
+    .search-icon {
+        background-color: white;
+        font-size: 16px;
+        width: 31px;
+        height: 36px;
+        line-height: 36px;
+        text-align: center;
+        position: absolute;
+        top: 0;
+        left: 0;
+
+        &:hover {
+            color: white;
+            background-color: #33cccc;
+        }
+    }
+
+    dx-text-box {
+        font-size: 13px;
+    }
+}

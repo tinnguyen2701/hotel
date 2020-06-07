@@ -1,0 +1,13 @@
+<div class="form-wrapper">
+    <div class="search-box">
+        <div class="search-icon" (click)="onSearch()" title="Search">
+            <i class="fas fa-search cursor-pointer"></i>
+        </div>
+        <dx-text-box class="w-100 border-0"
+                     [placeholder]="'Search by driver name, user name,...'"
+                     (onValueChanged)="onSearch()"
+                     [(value)]="filterBooking.keyword"
+                     [showClearButton]="true">
+        </dx-text-box>
+    </div>
+</div>

@@ -1,0 +1,152 @@
+@import "variables";
+
+:host {
+    flex: 0 0 auto;
+    z-index: 1;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+
+    ::ng-deep .dx-toolbar.header-toolbar {
+            background: transparent;
+            height: 100%;
+
+            .dx-toolbar-items-container {
+                height: 100%;
+                min-height: 36px;
+
+                .dx-toolbar-after {
+                    padding: 0 5px;
+
+                    :host-context(.screen-x-small) & {
+                        padding: 0 20px;
+                    }
+                }
+            }
+
+            // Toggle menu button
+            .menu-button {
+                width: $side-panel-min-width;
+                text-align: center;
+                padding: 0;
+
+                > .dx-toolbar-item-content .dx-icon {
+                    color: white;
+                }
+            }
+
+            // Logo
+            .header-logo {
+                padding-right: 10px;
+
+                img {
+                    max-height: 50px;
+                }
+
+                .dx-item-content {
+                    padding: 0;
+                    margin: 0;
+                }
+            }
+
+            // Menu
+            $hoverColor: #525362;
+            $menuHeight: 65px;
+
+            .header-menu {
+                height: $menuHeight;
+
+                .dx-menu-horizontal, .dx-menu-items-container, .dx-menu-item-wrapper {
+                    height: 100%;
+                }
+
+                .dx-context-menu-container-border {
+                    border: none;
+                }
+
+                .dx-menu-item {
+                    &.dx-menu-item-expanded,
+                    &.dx-state-hover,
+                    &.dx-state-focused {
+                        background-color: $hoverColor;
+                    }
+
+                    .dx-menu-item-content {
+                        padding: 0;
+                    }
+                }
+
+                &.dx-menu {
+                    .menu-item {
+                        height: $menuHeight;
+                        line-height: $menuHeight;
+                        font-size: 16px;
+                        padding: 0 20px;
+                        display: block;
+                        color: white;
+                        text-decoration: none;
+
+                        &.active {
+                            background-color: #3cbab2;
+                            fill: #3cbab2;
+                        }
+
+                        &.has-child {
+                            position: relative;
+                            padding-right: 40px;
+
+                            &:after {
+                                font: 20px/1 DXIcons;
+                                content: "\F001";
+                                color: #fff;
+                                position: absolute;
+                                top: 25px;
+                                right: 15px;
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Account menu
+            .user-button {
+                width: auto;
+                max-width: 200px;
+
+                > .dx-button-content {
+                    padding: 3px;
+                }
+
+                &.dx-state-focused, &.dx-state-active, &.dx-state-hover {
+                    background: transparent;
+                }
+            }
+        }
+}
+
+::ng-deep .dx-overlay-wrapper {
+    .header-submenu {
+        .dx-menu-items-container {
+            min-width: 180px;
+            padding: 0;
+
+            .dx-menu-item-content {
+                padding: 0;
+
+                .menu-item {
+                    text-decoration: none;
+                    padding: 7px 15px;
+                    display: inline-block;
+                    width: 100%;
+
+                    &.active {
+                        background-color: #3cbab2;
+                        color: white;
+                    }
+                }
+            }
+        }
+    }
+
+    .dx-context-menu-content-delimiter {
+        background-color: transparent;
+    }
+}

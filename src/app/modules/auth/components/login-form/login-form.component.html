@@ -1,0 +1,46 @@
+<app-layout-single-card>
+  <form class="form-wrapper animated fadeIn" appAutoFocusInput>
+    <dx-validation-group>
+      <div class="login-header">
+        <img class="animated pulse" src="../../../../../assets/images/naugo_logo_color.png" alt="logo">
+      </div>
+      <div class="field">
+        <div class="field-label">Mobile Number or Email:</div>
+        <div class="field-value">
+          <dx-text-box [(value)]="userName" width="100%" [disabled]="isSubmitting">
+            <dx-validator>
+              <dxi-validation-rule type="required" message="Username is required">
+              </dxi-validation-rule>
+              <dxi-validation-rule type="custom"
+                                   [validationCallback]="userNameValidator"
+                                   message="Invalid username">
+              </dxi-validation-rule>
+            </dx-validator>
+          </dx-text-box>
+        </div>
+      </div>
+      <div class="field">
+        <div class="field-label">Password:</div>
+        <div class="field-value">
+          <dx-text-box mode="password" [(value)]="password" width="100%" [disabled]="isSubmitting">
+            <dx-validator>
+              <dxi-validation-rule type="required" message="Password is required"></dxi-validation-rule>
+            </dx-validator>
+          </dx-text-box>
+        </div>
+      </div>
+      <div class="field mt-2">
+        <dx-button type="default" width="100%" [disabled]="isSubmitting"
+                   icon="{{isSubmitting?'fas fa-spinner fa-spin':''}}"
+                   text="{{isSubmitting?'Signing in':'Sign in'}}"
+                   (onClick)="onLoginClick($event)"></dx-button>
+      </div>
+      <div class="dx-field mt-3">
+        <p>If you need to register a new company or contractor account click below</p>
+        <dx-button type="default" stylingMode="outlined" width="100%" [disabled]="isSubmitting"
+                   [useSubmitBehavior]="false" text="Register New Account" routerLink="/account/register">
+        </dx-button>
+      </div>
+    </dx-validation-group>
+  </form>
+</app-layout-single-card>

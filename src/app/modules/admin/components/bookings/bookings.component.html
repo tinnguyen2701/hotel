@@ -1,0 +1,119 @@
+<div class="full-container-wrapper">
+    <div class="d-flex justify-content-between align-items-center mb-3 mt-3">
+        <app-search-form [request]="filterBooking"
+                         (onFilterAction)="onSearchBooking($event)">
+        </app-search-form>
+        <dx-button icon="plus"
+                   type="default"
+                   (onClick)="createBooking()" [text]="'New Booking'">
+        </dx-button>
+    </div>
+
+    <div class="grid-wrapper auto-fill-content">
+        <dx-data-grid class="h-100"
+                      [dataSource]="dataSource"
+                      [columnHidingEnabled]="false"
+                      [showBorders]="true"
+                      [showRowLines]="true"
+                      [hoverStateEnabled]="true">
+            <dxo-paging [pageSize]="20"></dxo-paging>
+            <dxo-pager [showInfo]="true"
+                       [showPageSizeSelector]="false"
+                       [allowedPageSizes]="[20,50,100]"
+                       [showNavigationButtons]="true">
+            </dxo-pager>
+            <dxo-filter-row [visible]="true"
+                            applyFilter="auto">
+            </dxo-filter-row>
+            <dxo-remote-operations [filtering]="true" [sorting]="true" [paging]="true"></dxo-remote-operations>
+
+            <dxi-column [minWidth]="100" [caption]="'Booking ID'" [fixed]="true"
+                        alignment="center" dataField="bookingID" dataType="string" fixedPosition="left">
+            </dxi-column>
+            <dxi-column [minWidth]="170" [caption]="'Date of booking made'"
+                        alignment="center" dataField="dateBooking" dataType="date" format="MMM d, yyyy">
+            </dxi-column>
+            <dxi-column [minWidth]="200" [caption]="'Region'"
+                        alignment="left" dataField="region" dataType="string">
+            </dxi-column>
+            <dxi-column [minWidth]="200" [caption]="'Departing harbor'"
+                        alignment="left" dataField="departingHarbor" dataType="string">
+            </dxi-column>
+            <dxi-column [minWidth]="150" [caption]="'Departing date'"
+                        alignment="center" dataField="departingDate" dataType="date" format="MMM d, yyyy">
+            </dxi-column>
+            <dxi-column [minWidth]="150" [caption]="'Pickup time'"
+                        alignment="center" dataField="pickupTime" dataType="date" format="h:mm a">
+            </dxi-column>
+            <dxi-column [minWidth]="100" [caption]="'User ID'"
+                        alignment="center" dataField="userID" dataType="string">
+            </dxi-column>
+            <dxi-column [minWidth]="200" [caption]="'User name'"
+                        alignment="left" dataField="userName" dataType="string">
+            </dxi-column>
+            <dxi-column [minWidth]="100" [caption]="'Driver ID'"
+                        alignment="center" dataField="driverID" dataType="string">
+            </dxi-column>
+            <dxi-column [minWidth]="200" [caption]="'Driver name'"
+                        alignment="left" dataField="driverName" dataType="string">
+            </dxi-column>
+            <dxi-column [minWidth]="100" [caption]="'Boat ID'"
+                        alignment="center" dataField="boatID" dataType="string">
+            </dxi-column>
+            <dxi-column [minWidth]="200" [caption]="'Boat name'"
+                        alignment="left" dataField="boatName" dataType="string">
+            </dxi-column>
+            <dxi-column [minWidth]="350" [caption]="'Activities'"
+                        alignment="left" dataField="activities" cellTemplate="activitiesCellTemplate">
+                <div *dxTemplate="let cell of 'activitiesCellTemplate'">
+                    <span *ngFor="let reference of cell.value; let last=last">
+                        <ng-container *ngIf="reference === overnight">
+                            {{bookingActivities[reference] + ' (' + cell.row.data.overnightN + 'N' + cell.row.data.overnightD + 'D)' }}<span *ngIf="!last">, </span>
+                        </ng-container>
+                        <ng-container *ngIf="reference !== overnight">{{bookingActivities[reference]}}<span *ngIf="!last">, </span></ng-container>
+                    </span>
+                </div>
+            </dxi-column>
+            <dxi-column [minWidth]="150" [caption]="'Price (IDR)'"
+                        alignment="center" dataField="price" dataType="string" [format]="{currency: 'IDR'}">
+            </dxi-column>
+            <dxi-column [minWidth]="150" [caption]="'Status'"
+                        alignment="left" dataField="status" [filterOperations]="['=']">
+                <dxo-lookup [dataSource]="statusBooking"
+                            displayExpr="name"
+                            valueExpr="value">
+                </dxo-lookup>
+            </dxi-column>
+            <dxi-column [minWidth]="150" [caption]="'Discount applied'"
+                        alignment="center" dataField="discountApplied" dataType="string" [format]="{currency: 'IDR'}">
+            </dxi-column>
+            <dxi-column [minWidth]="150" [caption]="'Income to naugo'"
+                        alignment="center" dataField="income" dataType="string" [format]="{currency: 'IDR'}">
+            </dxi-column>
+            <dxi-column [minWidth]="100" [fixed]="true"
+                        alignment="center" cellTemplate="actionsCellTemplate" fixedPosition="right"
+                        [caption]="'Action'">
+                <div *dxTemplate="let cell of 'actionsCellTemplate'">
+                    <div class="action-inline">
+                        <i class="fas fa-pencil-alt edit-icon pointer" title="'Edit'"
+                           (click)="onBookingDetail(cell.data)"></i>
+                        <i class="far fa-trash-alt delete-icon ml-2 pointer" title="'Delete'"
+                           (click)="onDeleteBooking(cell.data.id, $event)"></i>
+                    </div>
+                </div>
+            </dxi-column>
+        </dx-data-grid>
+    </div>
+</div>
+
+<ng-container *ngIf="isOpenBookingDetailPopup">
+    <app-booking-detail
+        [(visible)]="isOpenBookingDetailPopup"
+        [selectedBooking]="dataBooking"
+        (onSuccess)="onUpdateBookingSuccess($event)">
+    </app-booking-detail>
+</ng-container>
+<app-popover-confirm-box #deleteDetailConfirmPopover
+                         [message]="'Are you sure to delete?'"
+                         (onConfirm)="deleteBooking()">
+</app-popover-confirm-box>

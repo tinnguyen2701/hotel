@@ -1,0 +1,21 @@
+<div class="user-panel">
+  <div class="user-info" *ngIf="currentUser">
+    <div class="image-container">
+      <ng-container *ngIf="currentUser.avatarImg">
+        <img src="{{currentUser.avatarImg}}">
+      </ng-container>
+      <ng-container *ngIf="!currentUser.avatarImg">
+        <div class="name-avatar">{{currentUser.nameAvatar}}</div>
+      </ng-container>
+    </div>
+    <div class="user-name">{{currentUser.fullName}}</div>
+  </div>
+  <dx-context-menu
+    [items]="menuItems"
+    target=".user-button"
+    showEvent="dxclick"
+    width="170px"
+    [position]="{ my: 'top center', at: 'bottom center' }"
+    cssClass="user-menu">
+  </dx-context-menu>
+</div>

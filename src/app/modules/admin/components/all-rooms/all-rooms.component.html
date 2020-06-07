@@ -1,0 +1,56 @@
+<div class="wrapper">
+    <div class="row">
+        <div class="col-md-8 d-flex align-items-center">
+            <div class="field col-md-3">
+                <div class="field-lable">Tìm kiếm theo trạng thái</div>
+                <div class="field-value">
+                    <dx-select-box
+                        [dataSource]="roomStatusType"
+                        displayExpr="name"
+                        valueExpr="value"
+                        [(value)]="selectedStatus"
+                    ></dx-select-box>
+                </div>
+            </div>
+            <div class="field col-md-3">
+                <div class="field-lable">Tìm kiếm theo ngày checkin</div>
+                <div class="field-value">
+                    <dx-date-box
+                    [value]="now"
+                    type="date">
+                </dx-date-box>
+                </div>
+            </div>
+            <div class="field col-md-3">
+                <div class="field-lable">Ngày checkout</div>
+                <div class="field-value">
+                    <dx-date-box
+                    [value]="now"
+                    type="date">
+                </dx-date-box>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4"></div>
+    </div>
+
+    <div class="list-room">
+        <div class="row" *ngFor="let item of floors">
+            <div class="floor">{{ item.name }}</div>
+            <div
+                class="room"
+                *ngFor="let room of item.rooms"
+                [ngClass]="{
+                    hidden:
+                        selectedStatus !== roomStatus.All &&
+                        room.status !== selectedStatus,
+                    'bg-warning': room.status === roomStatus.Booking,
+                    'bg-success': room.status === roomStatus.Available,
+                    'bg-danger': room.status === roomStatus.Checkin
+                }"
+            >
+                {{ room.name }}
+            </div>
+        </div>
+    </div>
+</div>

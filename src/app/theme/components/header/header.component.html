@@ -1,0 +1,55 @@
+<dx-toolbar class="header-toolbar">
+        <dxi-item
+            *ngIf="menuToggleEnabled"
+            location="before"
+            widget="dxButton"
+            cssClass="menu-button"
+            [options]="{icon: 'menu', stylingMode: 'text', onClick: toggleMenu}">
+        </dxi-item>
+        <dxi-item
+            location="before"
+            cssClass="header-logo">
+            <div *dxTemplate="let data of 'item'">
+                <a routerLink="/">
+                    <img src="../../assets/images/naugo_logo.png" alt="logo">
+                </a>
+            </div>
+        </dxi-item>
+        <dxi-item *ngIf="showHeaderMenu"
+            location="before"
+            locateInMenu="auto">
+            <div *dxTemplate="let data of 'item'">
+                <dx-menu
+                    [elementAttr]="{ id: 'elementId', class: 'class-name' }"
+                    class="header-menu"
+                    [dataSource]="menuItems"
+                    displayExpr="text"
+                    [showFirstSubmenuMode]="{name: 'onHover',delay: { show: 0, hide: 500 }}"
+                    orientation="horizontal"
+                    submenuDirection="auto"
+                    [hideSubmenuOnMouseLeave]="true"
+                    (onSubmenuShowing)="onSubmenuShowing($event)">
+                    <div *dxTemplate="let menu of 'item'">
+                        <a [routerLink]="[menu.link]" [ngClass]="(menu.items !== undefined && menu.items.length) ? 'has-child' : ''"
+                           routerLinkActive="active" class="menu-item">
+                            <i *ngIf="menu.icon" [ngClass]="menu.icon ? menu.icon : ''"></i> {{menu.text}}
+                        </a>
+                    </div>
+                </dx-menu>
+            </div>
+        </dxi-item>
+        <dxi-item
+            location="after"
+            locateInMenu="auto">
+            <div *dxTemplate="let data of 'item'">
+                <dx-button
+                    class="user-button"
+                    height="100%"
+                    stylingMode="text">
+                    <div *dxTemplate="let data of 'content'">
+                        <app-user-panel></app-user-panel>
+                    </div>
+                </dx-button>
+            </div>
+        </dxi-item>
+    </dx-toolbar>

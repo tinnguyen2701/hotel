@@ -1,0 +1,12 @@
+<app-header
+    class="app-header"
+    [menuToggleEnabled]="false"
+    [showHeaderMenu]="true">
+</app-header>
+<div class="app-content">
+    <dx-scroll-view class="full-height-scrollable">
+        <main class="content">
+            <ng-content></ng-content>
+        </main>
+    </dx-scroll-view>
+</div>

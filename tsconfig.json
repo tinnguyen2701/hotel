@@ -1,0 +1,71 @@
+{
+    "compileOnSave": true,
+    "compilerOptions": {
+        "baseUrl": "src",
+        "outDir": "./dist/out-tsc",
+        "sourceMap": true,
+        "declaration": false,
+        "downlevelIteration": true,
+        "experimentalDecorators": true,
+        "module": "esnext",
+        "moduleResolution": "node",
+        "importHelpers": true,
+        "target": "es2015",
+        "typeRoots": [
+            "node_modules/@types"
+        ],
+        "lib": [
+            "es2018",
+            "dom"
+        ],
+        "paths": {
+            "jszip": [
+                "../node_modules/jszip/dist/jszip.min.js"
+            ],
+            "@environment": [
+                "environments/environment.ts"
+            ],
+            "@environments/*": [
+                "environments/*"
+            ],
+            "@app/utilities": [
+                "app/utilities"
+            ],
+            "@app/theme": [
+                "app/theme"
+            ],
+            "@app/modules/*": [
+                "app/modules/*"
+            ],
+            "@app/shared/*": [
+                "app/shared/*.ts"
+            ],
+            "@app/shared/components": [
+                "app/shared/components/index.ts"
+            ],
+            "@app/shared/components/*": [
+                "app/shared/components/*"
+            ],
+            "@app/services/endpoints": [
+                "app/services/endpoints.ts"
+            ],
+            "@app/services/*": [
+                "app/services/*"
+            ],
+            "@app/models": [
+                "app/models"
+            ],
+            "@app/models/*": [
+                "app/models/*"
+            ],
+            "@app/data/*": [
+                "app/data/*"
+            ]
+        }
+    },
+    "angularCompilerOptions": {
+        "fullTemplateTypeCheck": true,
+        "strictInjectionParameters": true,
+        "enableIvy": true
+    }
+}

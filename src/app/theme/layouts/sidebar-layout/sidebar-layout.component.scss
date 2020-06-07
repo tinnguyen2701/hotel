@@ -1,0 +1,36 @@
+@import "variables";
+
+$container-max-width: 2100px;
+$container-min-width: 800px;
+
+:host {
+    flex-direction: column;
+    display: flex;
+    height: 100%;
+    width: 100%;
+
+    .app-header {
+        z-index: 1501;
+        width: 100%;
+        max-width: $container-max-width;
+        min-width: $container-min-width;
+        background: $base-accent;
+        padding: 0 10px;
+        height: 65px;
+        margin: 0 auto;
+    }
+
+    .app-content {
+        flex: 1;
+        min-height: 0;
+        width: 100%;
+        max-width: $container-max-width;
+        min-width: $container-min-width;
+        margin: 0 auto;
+
+        main.content {
+            flex-grow: 1;
+            padding: 0 10px;
+        }
+    }
+}
