@@ -3,21 +3,15 @@ import {RouterModule} from '@angular/router';
 
 import {ThemeModule, RouterOutletComponent} from '@app/theme';
 import {SharedModule} from '@app/shared/shared.module';
-import {BookingService, PartnerService} from '@app/modules/admin/services';
+import {BookingService} from '@app/modules/admin/services';
 import {AdminComponent} from './components/admin/admin.component';
 import {UsersComponent} from './components/users/users.component';
-import {ScheduleComponent} from './components/schedule/schedule.component';
-import {RevenueComponent} from './components/revenue/revenue.component';
 import {SearchFormComponent} from '@app/modules/admin/components/shared/search-form/search-form.component';
-import {BoatService} from '@app/modules/admin/services/boat.services';
 import { AllRoomsComponent } from './components/all-rooms/all-rooms.component';
-import { BookedClientsComponent } from './components/booked-clients/booked-clients.component';
-import { GroupsComponent } from './components/groups/groups.component';
+import { BookedClientsComponent } from './components/booked/booked.component';
 
 const PROVIDERS = [
     BookingService,
-    PartnerService,
-    BoatService
 ];
 
 @NgModule({
@@ -36,12 +30,8 @@ const PROVIDERS = [
                         component: AllRoomsComponent
                     },
                     {
-                        path: 'booked-clients',
+                        path: 'booked',
                         component: BookedClientsComponent
-                    },
-                    {
-                        path: 'groups',
-                        component: GroupsComponent
                     },
                     // {
                     //     // To fix the top menu issue
@@ -76,9 +66,6 @@ const PROVIDERS = [
         AdminComponent,
         UsersComponent,
         BookedClientsComponent,
-        GroupsComponent,
-        ScheduleComponent,
-        RevenueComponent,
         SearchFormComponent
     ],
     providers: [

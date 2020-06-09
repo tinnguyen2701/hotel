@@ -4,10 +4,10 @@ import {random} from 'lodash';
 import {randomBookings} from '@app/data/admin';
 //
 import {environment} from '@environment';
-import {LoadParamModel, LoadResultModel} from '@app/modules/core/models';
 import { RoomModel, FloorModel } from '../models/room.model';
 import { randomRooms, randomFloors } from '@app/data/admin/room.mock';
 import { BookModel } from '../models';
+import { LoadParamModel, LoadResultModel } from '@app/modules/core/models';
 
 export class BookingService {
 

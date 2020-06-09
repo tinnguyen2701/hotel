@@ -47,26 +47,41 @@
     <div class="list-room">
         <div class="row" *ngFor="let item of floors">
             <div class="floor">{{ item.name }}</div>
-            <div
+            <dx-button
+                [id]="'room-' + room.name"
                 class="room"
                 *ngFor="let room of item.rooms"
                 [ngClass]="{
-                    'hidden':
+                    hidden:
                         selectedStatus !== roomStatus.All &&
                         room.status !== selectedStatus,
                     'bg-warning': room.status === roomStatus.Booking,
                     'bg-success': room.status === roomStatus.Available,
                     'bg-danger': room.status === roomStatus.Checkin,
-                    'hiddenViaDate':
-                        (checkinDate !== null && checkoutDate !== null) ?
-                        (room.status === roomStatus.Available ||
-                        room.status === roomStatus.All ||
-                        checkinDate > room.checkoutDate ||
-                        room.checkinDate > checkoutDate) : false
+                    hiddenViaDate:
+                        checkinDate !== null && checkoutDate !== null
+                            ? room.status === roomStatus.Available ||
+                              room.status === roomStatus.All ||
+                              checkinDate > room.checkoutDate ||
+                              room.checkinDate > checkoutDate
+                            : false
                 }"
+                (onClick)="onClickRoom(room)"
+                [text]="room.name"
             >
-                {{ room.name }}
-            </div>
+            </dx-button>
         </div>
     </div>
 </div>
+
+<dx-popover
+    [target]="'#room-' + selectedRoom.name"
+    (onClick)="toggleDefault()"
+    [width]="300"
+    [(visible)]="selectedRoom && selectedRoom.id"
+>
+    <div>
+        Make final decision on whether we are going to increase our Google
+        AdWord spend based on our 2013 marketing plan.
+    </div>
+</dx-popover>

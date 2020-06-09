@@ -9,7 +9,7 @@ export function randomFloors(count: number): FloorModel[] {
         return new FloorModel({
             id: index + 1,
             name: 'Lầu ' + (index + 1).toString(),
-            rooms: randomRooms(8, index + 1)
+            rooms: randomRooms(6, index + 1)
         });
     });
 }

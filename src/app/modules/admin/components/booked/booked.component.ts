@@ -8,9 +8,9 @@ import { BookingService } from '../../services';
 import { ROOM_TYPE } from '../../shared/constant';
 
 @Component({
-  selector: 'app-booked-clients',
-  templateUrl: './booked-clients.component.html',
-  styleUrls: ['./booked-clients.component.scss']
+  selector: 'app-admin-booked',
+  templateUrl: './booked.component.html',
+  styleUrls: ['./booked.component.scss']
 })
 export class BookedClientsComponent implements OnInit {
     @ViewChild('deleteDetailConfirmPopover') deleteDetailConfirmPopover: PopoverConfirmBoxComponent;
