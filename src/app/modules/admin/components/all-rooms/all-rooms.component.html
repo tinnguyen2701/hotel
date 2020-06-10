@@ -77,11 +77,17 @@
 <dx-popover
     [target]="'#room-' + selectedRoom.name"
     (onClick)="toggleDefault()"
+    position="right"
     [width]="300"
     [(visible)]="selectedRoom && selectedRoom.id"
 >
-    <div>
-        Make final decision on whether we are going to increase our Google
-        AdWord spend based on our 2013 marketing plan.
-    </div>
+    <dx-list [dataSource]="menus" itemTemplate="itemTemplate">
+        <div *dxTemplate="let item of 'itemTemplate'" (click)="onClickItem(item,$event)"
+            class="d-flex align-items-center">
+            <div class="icon-style">
+                <i *ngIf="!!item.icon" class="{{item.icon}}"></i>
+            </div>
+            <div class="ml-2"> {{item.name}}</div>
+        </div>
+    </dx-list>
 </dx-popover>

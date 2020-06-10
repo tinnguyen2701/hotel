@@ -19,8 +19,10 @@ export class AllRoomsComponent implements OnInit {
   selectedStatus = RoomStatus.All;
   checkinDate: Date = null;
   checkoutDate: Date = null;
-  selectedRoom: RoomModel;
+  selectedRoom: RoomModel = new RoomModel();
   defaultVisible: boolean;
+	menus = [];
+
   constructor(private bookingsService: BookingService) {
   }
 
@@ -44,4 +46,22 @@ export class AllRoomsComponent implements OnInit {
   toggleDefault() {
     this.defaultVisible = !this.defaultVisible;
   }
+
+  this.menus = [
+    {
+      value: TrainingActionType.EditTraining,
+      name: this.translator.instant(marker('HRM.TRAINING.EditTraining')),
+      icon: 'fas fa-pencil-alt'
+    },
+    {
+      value: TrainingActionType.DeleteTraining,
+      name: this.translator.instant(marker('HRM.TRAINING.DeleteTraining')),
+      icon: 'far fa-trash-alt'
+    },
+    {
+      value: TrainingActionType.StateTransitions,
+      name: this.translator.instant(marker('HRM.TRAINING.StateTransitions')),
+      icon: 'far fa-clone'
+    },
+  ];
 }
