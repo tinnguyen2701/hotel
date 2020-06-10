@@ -4,7 +4,15 @@ import { FloorModel, RoomModel } from '../../models/room.model';
 import { RoomStatus } from '../../shared/enums';
 import { ROOM_STATUS_TYPE } from '../../shared/constant';
 
-
+export enum ActionType {
+	StateTransitions,
+	Edit,
+	Delete,
+	Cancel,
+	Plan,
+	Processing,
+	Accomplished
+}
 
 @Component({
   selector: 'app-admin-all-rooms',
@@ -21,8 +29,23 @@ export class AllRoomsComponent implements OnInit {
   checkoutDate: Date = null;
   selectedRoom: RoomModel = new RoomModel();
   defaultVisible: boolean;
-	menus = [];
-
+	menus = [
+    {
+      value: ActionType.Edit,
+      name: 'Edit',
+      icon: 'fas fa-pencil-alt'
+    },
+    {
+      value: ActionType.Delete,
+      name: this.translator.instant(marker('HRM..Delete')),
+      icon: 'far fa-trash-alt'
+    },
+    {
+      value: ActionType.StateTransitions,
+      name: this.translator.instant(marker('HRM..StateTransitions')),
+      icon: 'far fa-clone'
+    },
+  ];
   constructor(private bookingsService: BookingService) {
   }
 
@@ -47,21 +70,4 @@ export class AllRoomsComponent implements OnInit {
     this.defaultVisible = !this.defaultVisible;
   }
 
-  this.menus = [
-    {
-      value: TrainingActionType.EditTraining,
-      name: this.translator.instant(marker('HRM.TRAINING.EditTraining')),
-      icon: 'fas fa-pencil-alt'
-    },
-    {
-      value: TrainingActionType.DeleteTraining,
-      name: this.translator.instant(marker('HRM.TRAINING.DeleteTraining')),
-      icon: 'far fa-trash-alt'
-    },
-    {
-      value: TrainingActionType.StateTransitions,
-      name: this.translator.instant(marker('HRM.TRAINING.StateTransitions')),
-      icon: 'far fa-clone'
-    },
-  ];
 }
