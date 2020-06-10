@@ -82,7 +82,7 @@
     [(visible)]="selectedRoom && selectedRoom.id"
 >
     <dx-list [dataSource]="menus" itemTemplate="itemTemplate">
-        <div *dxTemplate="let item of 'itemTemplate'" (click)="onClickItem(item,$event)"
+        <div *dxTemplate="let item of 'itemTemplate'" (click)="onClickItem(item)"
             class="d-flex align-items-center">
             <div class="icon-style">
                 <i *ngIf="!!item.icon" class="{{item.icon}}"></i>

@@ -24,6 +24,7 @@
         "@angular/router": "~9.0.6",
         "@auth0/angular-jwt": "^3.0.1",
         "@ngx-translate/core": "^12.1.2",
+        "@ngxs/store": "^3.6.2",
         "bootstrap": "^4.4.1",
         "devextreme": "^19.2.6",
         "devextreme-angular": "^19.2.6",
