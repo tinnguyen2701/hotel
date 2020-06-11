@@ -1,14 +1,16 @@
 import { RoomModel } from '@app/modules/admin/models';
 import { State, Selector, Action, StateContext } from '@ngxs/store';
 import { Injectable } from '@angular/core';
-import { SetListRoom } from '..';
+import { SetListRoom, SetIsShowListRoom } from '..';
 
 export interface AppStateModel {
     listRoom: RoomModel[] | [];
+    isShowListRoom: boolean | false;
 }
 
 const appStateDefaults: AppStateModel = {
     listRoom: [],
+    isShowListRoom: false
 };
 
 @State<AppStateModel>({
@@ -25,14 +27,25 @@ export class AppState {
         return state.listRoom;
     }
 
+    @Selector()
+    static isShowListRoom(state: AppStateModel) {
+        return state.isShowListRoom;
+    }
+
     @Action(SetListRoom)
     SetListRoom(sc: StateContext<AppStateModel>, action: SetListRoom) {
-        // patchState({
-        //     listRoom: [action.payload.room]
-        // });
         sc.setState({
             ...sc.getState(),
-            ...action.payload,
+            listRoom: [...sc.getState().listRoom, action.payload]
+        });
+    }
+
+
+    @Action(SetIsShowListRoom)
+    SetIsShowListRoom(sc: StateContext<AppStateModel>) {
+        sc.setState({
+            ...sc.getState(),
+            isShowListRoom: !sc.getState().isShowListRoom
         });
     }
 }

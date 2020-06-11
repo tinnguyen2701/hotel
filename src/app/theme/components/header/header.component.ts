@@ -1,6 +1,9 @@
 import {Component, Input, Output, EventEmitter} from '@angular/core';
-
+import { Store } from '@ngxs/store';
+import {SelectSnapshot} from '@ngxs-labs/select-snapshot';
+//
 import {ADMIN_MENU} from '@app/modules/admin/shared/constant';
+import { AppState, AppStateModel } from '@app/modules/admin/store';
 
 @Component({
     selector: 'app-header',
@@ -9,6 +12,9 @@ import {ADMIN_MENU} from '@app/modules/admin/shared/constant';
 })
 
 export class HeaderComponent {
+    @SelectSnapshot(AppState.isShowListRoom) appLookup: AppStateModel;
+    @SelectSnapshot(AppState.)
+
     @Input() menuToggleEnabled: boolean = false;
     @Input() showHeaderMenu: boolean = false;
 
@@ -16,7 +22,7 @@ export class HeaderComponent {
 
     menuItems = ADMIN_MENU;
 
-    constructor() {
+    constructor(private store: Store) {
     }
 
     onSubmenuShowing(e) {

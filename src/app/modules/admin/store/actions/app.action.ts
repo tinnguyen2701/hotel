@@ -8,3 +8,10 @@ export class SetListRoom {
     constructor(public payload: RoomModel) {
     }
 }
+
+export class SetIsShowListRoom {
+    static readonly type = '[App] Set is show list room';
+
+    constructor() {
+    }
+}
