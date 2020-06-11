@@ -1,38 +1,10 @@
-import { Selector, State, Action, StateContext } from "@ngxs/store";
-import { Injectable } from "@angular/core";
-//
-import { SetListRoom } from "..";
-import { RoomModel } from "@app/modules/admin/models";
+// 
+import { RoomModel } from '@app/modules/admin/models';
 
-export interface AppStateModel {
-    listRoom: RoomModel[] | [];
-}
 
-const appStateDefaults: AppStateModel = {
-    listRoom: [],
-};
+export class SetListRoom {
+    static readonly type = '[App] Set list room';
 
-@State<AppStateModel>({
-    name: "app",
-    defaults: appStateDefaults,
-})
-@Injectable()
-export class AppState {
-    constructor() {}
-
-    @Selector()
-    static listRoom(state: AppStateModel) {
-        return state.listRoom;
-    }
-
-    @Action(SetListRoom)
-    SetListRoom(sc: StateContext<AppStateModel>, action: SetListRoom) {
-        // patchState({
-        //     listRoom: [action.payload.room]
-        // });
-        sc.setState({
-            ...sc.getState(),
-            ...action.payload.room,
-        });
+    constructor(public payload: RoomModel) {
     }
 }
