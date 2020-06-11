@@ -17,7 +17,7 @@ export function randomFloors(count: number): FloorModel[] {
 export function randomRooms(count: number, floor: number): RoomModel[] {
     return Array(count).fill({}).map((item: RoomModel, index) => {
         const statusRoom =  random(2, 4);
-        return new RoomModel({
+        return ({
             id: index + 1,
             status: statusRoom,
             name: floor.toString() + '0' + (index + 1).toString(),

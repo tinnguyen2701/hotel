@@ -4,7 +4,6 @@ import { FloorModel, RoomModel } from '../../models/room.model';
 import { RoomStatus } from '../../shared/enums';
 import { ROOM_STATUS_TYPE } from '../../shared/constant';
 import { Store } from '@ngxs/store';
-import { SetListRoom } from '@app/modules/core/store';
 
 export enum ActionType {
     Edit,
@@ -26,7 +25,7 @@ export class AllRoomsComponent implements OnInit {
     selectedStatus = RoomStatus.All;
     checkinDate: Date = null;
     checkoutDate: Date = null;
-    selectedRoom: RoomModel = new RoomModel();
+    selectedRoom: RoomModel = {} as RoomModel;
     defaultVisible: boolean;
     menus = [
         {
@@ -81,6 +80,6 @@ export class AllRoomsComponent implements OnInit {
     }
 
     onClickItem(item) {
-        this.store.dispatch(new SetListRoom(this.selectedRoom));
+        this.store.dispatch(this.selectedRoom);
     }
 }

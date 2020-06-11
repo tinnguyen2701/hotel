@@ -10,15 +10,16 @@ import { SearchFormComponent } from '@app/modules/admin/components/shared/search
 import { AllRoomsComponent } from './components/all-rooms/all-rooms.component';
 import { BookedClientsComponent } from './components/booked/booked.component';
 import { NgxsModule } from '@ngxs/store';
-import { SetListRoom } from '../core/store';
+import { SetListRoom, AppState } from './store';
 
 const PROVIDERS = [
     BookingService,
 ];
 
+
 export const STATES = [
-    SetListRoom
-];
+    AppState
+  ];
 
 @NgModule({
     imports: [

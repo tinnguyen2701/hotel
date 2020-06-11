@@ -11,6 +11,8 @@ import {AUTH_SCHEME, ACCESS_TOKEN_KEY} from '@app/shared/constants';
 import {AppLoadService} from '@app/modules/core/services';
 import {AppComponent} from './app.component';
 import {AppRoutingModule} from './app-routing.module';
+import { SetListRoom, AppState } from './modules/admin/store';
+import { NgxsModule } from '@ngxs/store';
 
 export function initializeApp(injector: Injector) {
   return (): Promise<any> => {
@@ -25,6 +27,9 @@ export function accessTokenGetter() {
   ) : null;
 }
 
+export const STATES = [
+  AppState
+];
 
 @NgModule({
   imports: [
@@ -32,6 +37,7 @@ export function accessTokenGetter() {
     BrowserAnimationsModule,
     HttpClientModule,
     //
+    NgxsModule.forRoot([...STATES]),
     NgxPermissionsModule.forRoot(),
     JwtModule.forRoot({
       config: {
@@ -42,6 +48,7 @@ export function accessTokenGetter() {
         ]
       }
     }),
+  
     //
     SharedModule.forRoot(),
     AppRoutingModule
