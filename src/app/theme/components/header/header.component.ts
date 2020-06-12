@@ -29,10 +29,8 @@ export class HeaderComponent implements OnInit {
     }
 
     ngOnInit() {
-		console.log(this.listRoom);
-		console.log(this.isShowListRoom);
     }
-    
+
     onSubmenuShowing(e) {
         if (e) {
             const menuPopup = e.submenu.$contentDelimiter[0].parentNode;

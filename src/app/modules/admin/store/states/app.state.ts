@@ -43,6 +43,8 @@ export class AppState {
 
     @Action(SetIsShowListRoom)
     SetIsShowListRoom(sc: StateContext<AppStateModel>) {
+        console.log('dispatch is show');
+
         sc.setState({
             ...sc.getState(),
             isShowListRoom: !sc.getState().isShowListRoom

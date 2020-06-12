@@ -21,9 +21,6 @@ export enum ActionType {
     styleUrls: ['./all-rooms.component.scss'],
 })
 export class AllRoomsComponent implements OnInit {
-    @SelectSnapshot(AppState.listRoom) listRoom: RoomModel[];
-    @SelectSnapshot(AppState.isShowListRoom) isShowListRoom: boolean;
-    
     floors: FloorModel[] = [];
     roomStatus = RoomStatus;
     roomStatusType = ROOM_STATUS_TYPE;
@@ -32,11 +29,13 @@ export class AllRoomsComponent implements OnInit {
     checkoutDate: Date = null;
     selectedRoom: RoomModel = {} as RoomModel;
     defaultVisible: boolean;
-    menus = [
+    menus = [];
+
+    totalMenus = [
         {
-            value: ActionType.Edit,
-            name: 'Edit infomation',
-            icon: 'fas fa-pencil-alt',
+            value: ActionType.BookingNow,
+            name: 'Booking now',
+            icon: 'fa fa-plus',
         },
         {
             value: ActionType.AddToBookingList,
@@ -44,19 +43,19 @@ export class AllRoomsComponent implements OnInit {
             icon: 'fa fa-book',
         },
         {
+            value: ActionType.CheckoutNow,
+            name: 'Checkout now',
+            icon: 'fa fa-check',
+        },
+        {
             value: ActionType.AddToCheckoutList,
             name: 'Add to list checkout',
             icon: 'fa fa-book',
         },
         {
-            value: ActionType.BookingNow,
-            name: 'Booking now',
-            icon: 'fa fa-plus',
-        },
-        {
-            value: ActionType.CheckoutNow,
-            name: 'Checkout now',
-            icon: 'fa fa-check',
+            value: ActionType.Edit,
+            name: 'Edit infomation',
+            icon: 'fas fa-pencil-alt',
         },
     ];
 
@@ -78,6 +77,20 @@ export class AllRoomsComponent implements OnInit {
 
     onClickRoom(room: RoomModel) {
         this.selectedRoom = room;
+
+        switch (room.status) {
+            case RoomStatus.Available:
+                this.menus = [this.totalMenus[0], this.totalMenus[1], this.totalMenus[4]];
+                break;
+            case RoomStatus.Booking:
+                this.menus = [this.totalMenus[4]];
+                break;
+            case RoomStatus.Checkin:
+                this.menus = [this.totalMenus[2], this.totalMenus[3], this.totalMenus[4]]
+                break;
+            default: break;
+        }
+
     }
 
     toggleDefault() {
@@ -85,6 +98,8 @@ export class AllRoomsComponent implements OnInit {
     }
 
     onClickItem(item) {
+
         this.store.dispatch(new SetListRoom(this.selectedRoom));
+        this.selectedRoom = {} as RoomModel;
     }
 }

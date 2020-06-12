@@ -1,10 +1,23 @@
-import {ModuleWithProviders, NgModule} from '@angular/core';
+import { ModuleWithProviders, NgModule } from "@angular/core";
 
-import {ThemeModule} from '@app/theme';
-import {AuthenticationService, AuthGuard, GuestGuard, LoggedUserService} from '@app/modules/auth/services';
-import {ApiService, AppLoadService, DeviceDetectorService, ScreenService} from '@app/modules/core/services';
-import {PopoverConfirmBoxComponent} from '@app/shared/components/popover-confirm-box/popover-confirm-box.component';
-import {PopoverTitleComponent} from '@app/shared/components/popover-title/popover-title.component';
+import { ThemeModule } from "@app/theme";
+import {
+    AuthenticationService,
+    AuthGuard,
+    GuestGuard,
+    LoggedUserService,
+} from "@app/modules/auth/services";
+import {
+    ApiService,
+    AppLoadService,
+    DeviceDetectorService,
+    ScreenService,
+} from "@app/modules/core/services";
+import { PopoverConfirmBoxComponent } from "@app/shared/components/popover-confirm-box/popover-confirm-box.component";
+import { PopoverTitleComponent } from "@app/shared/components/popover-title/popover-title.component";
+import { PopupListRoomsComponent } from "./components/popup-list-rooms/popup-list-rooms.component";
+import { AppState } from "@app/modules/admin/store";
+import { NgxsModule } from "@ngxs/store";
 
 const PROVIDERS = [
     //
@@ -16,18 +29,21 @@ const PROVIDERS = [
     AppLoadService,
     AuthenticationService,
     LoggedUserService,
-    DeviceDetectorService
+    DeviceDetectorService,
 ];
 
-const COMPONENTS = [PopoverConfirmBoxComponent,
-    PopoverTitleComponent];
+const COMPONENTS = [
+    PopoverConfirmBoxComponent,
+    PopoverTitleComponent,
+    PopupListRoomsComponent,
+];
+
+export const STATES = [AppState];
 
 @NgModule({
-    imports: [
-        ThemeModule
-    ],
+    imports: [ThemeModule, NgxsModule.forFeature([...STATES])],
     declarations: [...COMPONENTS],
-    exports: [...COMPONENTS]
+    exports: [...COMPONENTS],
 })
 export class SharedModule {
     static forRoot(): ModuleWithProviders {

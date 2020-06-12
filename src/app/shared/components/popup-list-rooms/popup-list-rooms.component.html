@@ -1,0 +1,25 @@
+<dx-load-panel
+    *ngIf="isLoading"
+    [visible]="true"
+    [showPane]="false"
+></dx-load-panel>
+
+<ng-container *ngIf="!isLoading">
+    <app-popup-container
+        [width]="800"
+        [(visible)]="isShowListRoom"
+        (onHiding)="onHiding()"
+        [title]="'List rooms'"
+    >
+         <dx-load-panel
+            *ngIf="isProcessing"
+            [visible]="true"
+            [showPane]="false"
+            [message]="'Load'"
+        >
+        </dx-load-panel>
+        <dx-validation-group>
+            <div class="form-wrapper">{{listRooms}}</div>
+        </dx-validation-group>
+    </app-popup-container>
+</ng-container>
