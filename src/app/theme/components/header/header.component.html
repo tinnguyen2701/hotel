@@ -38,15 +38,13 @@
                 </dx-menu>
             </div>
         </dxi-item>
-        <dxi-item>
-            <dx-button (onClick)="showPopUp()" [ngClass] = "class" [text]="listRoom.length + ' Rooms'">
-
-            </dx-button>
-        </dxi-item>
         <dxi-item
             location="after"
             locateInMenu="auto">
             <div *dxTemplate="let data of 'item'">
+                <dx-button (onClick)="showPopUp()" [ngClass] = "class" [text]="listRoom.length + ' Rooms'">
+
+                </dx-button>
                 <dx-button
                     class="user-button"
                     height="100%"
