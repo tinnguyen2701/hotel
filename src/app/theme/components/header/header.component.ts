@@ -1,9 +1,10 @@
-import {Component, Input, Output, EventEmitter} from '@angular/core';
+import {Component, Input, Output, EventEmitter, OnInit, DoCheck} from '@angular/core';
 import { Store } from '@ngxs/store';
 import {SelectSnapshot} from '@ngxs-labs/select-snapshot';
 //
 import {ADMIN_MENU} from '@app/modules/admin/shared/constant';
-import { AppState, AppStateModel } from '@app/modules/admin/store';
+import { AppState, AppStateModel, SetIsShowListRoom } from '@app/modules/admin/store';
+import { RoomModel } from '@app/modules/admin/models';
 
 @Component({
     selector: 'app-header',
@@ -11,9 +12,10 @@ import { AppState, AppStateModel } from '@app/modules/admin/store';
     styleUrls: ['./header.component.scss']
 })
 
-export class HeaderComponent {
-    @SelectSnapshot(AppState.isShowListRoom) appLookup: AppStateModel;
-    @SelectSnapshot(AppState.)
+export class HeaderComponent implements OnInit {
+    // @SelectSnapshot(AppState.listRoom) listRoom: RoomModel[];
+	@SelectSnapshot(AppState.listRoom) listRoom: RoomModel[];
+	@SelectSnapshot(AppState.isShowListRoom) isShowListRoom: boolean;
 
     @Input() menuToggleEnabled: boolean = false;
     @Input() showHeaderMenu: boolean = false;
@@ -21,10 +23,16 @@ export class HeaderComponent {
     @Output() menuToggle = new EventEmitter<boolean>();
 
     menuItems = ADMIN_MENU;
+    class = 'bg-info';
 
     constructor(private store: Store) {
     }
 
+    ngOnInit() {
+		console.log(this.listRoom);
+		console.log(this.isShowListRoom);
+    }
+    
     onSubmenuShowing(e) {
         if (e) {
             const menuPopup = e.submenu.$contentDelimiter[0].parentNode;
@@ -36,5 +44,9 @@ export class HeaderComponent {
 
     toggleMenu = () => {
         this.menuToggle.emit();
+    }
+
+    showPopUp = () => {
+        this.store.dispatch(new SetIsShowListRoom());
     }
 }

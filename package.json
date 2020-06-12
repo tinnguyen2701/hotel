@@ -25,6 +25,7 @@
         "@auth0/angular-jwt": "^3.0.1",
         "@ngx-translate/core": "^12.1.2",
         "@ngxs-labs/select-snapshot": "^2.0.1",
+        "@ngxs/devtools-plugin": "^3.6.2",
         "@ngxs/store": "^3.6.2",
         "bootstrap": "^4.4.1",
         "devextreme": "^19.2.6",

@@ -27,6 +27,8 @@ import {
     RouterOutletComponent
 } from './components';
 import {AutoFocusInputDirective} from './directives';
+import { AppState } from '@app/modules/admin/store';
+import { NgxsModule } from '@ngxs/store';
 
 //
 const DEVEXTREME_MODULES = [
@@ -71,8 +73,14 @@ const DIRECTIVES = [
 //
 const PIPES = [];
 
+
+export const STATES = [
+    AppState
+];
+
 @NgModule({
     imports: [
+        NgxsModule.forFeature([...STATES]),
         ...DEVEXTREME_MODULES,
         ...BASE_MODULES
     ],

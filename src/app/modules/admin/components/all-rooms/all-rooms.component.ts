@@ -4,7 +4,8 @@ import { FloorModel, RoomModel } from '../../models/room.model';
 import { RoomStatus } from '../../shared/enums';
 import { ROOM_STATUS_TYPE } from '../../shared/constant';
 import { Store } from '@ngxs/store';
-import { SetListRoom } from '../../store';
+import { SetListRoom, AppState } from '../../store';
+import { SelectSnapshot } from '@ngxs-labs/select-snapshot';
 
 export enum ActionType {
     Edit,
@@ -20,6 +21,9 @@ export enum ActionType {
     styleUrls: ['./all-rooms.component.scss'],
 })
 export class AllRoomsComponent implements OnInit {
+    @SelectSnapshot(AppState.listRoom) listRoom: RoomModel[];
+    @SelectSnapshot(AppState.isShowListRoom) isShowListRoom: boolean;
+    
     floors: FloorModel[] = [];
     roomStatus = RoomStatus;
     roomStatusType = ROOM_STATUS_TYPE;
@@ -77,7 +81,7 @@ export class AllRoomsComponent implements OnInit {
     }
 
     toggleDefault() {
-        this.defaultVisible = !this.defaultVisible;
+        // this.defaultVisible = !this.defaultVisible;
     }
 
     onClickItem(item) {

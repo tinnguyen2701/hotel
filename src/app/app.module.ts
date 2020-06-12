@@ -11,8 +11,11 @@ import {AUTH_SCHEME, ACCESS_TOKEN_KEY} from '@app/shared/constants';
 import {AppLoadService} from '@app/modules/core/services';
 import {AppComponent} from './app.component';
 import {AppRoutingModule} from './app-routing.module';
-import { SetListRoom, AppState } from './modules/admin/store';
+import { AppState } from './modules/admin/store';
 import { NgxsModule } from '@ngxs/store';
+import { NgxsSelectSnapshotModule } from '@ngxs-labs/select-snapshot';
+import {NgxsReduxDevtoolsPluginModule} from '@ngxs/devtools-plugin';
+import { environment } from '@environment';
 
 export function initializeApp(injector: Injector) {
   return (): Promise<any> => {
@@ -38,6 +41,11 @@ export const STATES = [
     HttpClientModule,
     //
     NgxsModule.forRoot([...STATES]),
+    NgxsSelectSnapshotModule.forRoot(),
+    NgxsReduxDevtoolsPluginModule.forRoot({
+			name: 'Eldesk Store',
+			disabled: environment.production
+		}),
     NgxPermissionsModule.forRoot(),
     JwtModule.forRoot({
       config: {

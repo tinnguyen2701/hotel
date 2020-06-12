@@ -39,7 +39,7 @@
             </div>
         </dxi-item>
         <dxi-item>
-            <dx-button [text]="3 + ' Rooms'">
+            <dx-button (onClick)="showPopUp()" [ngClass] = "class" [text]="listRoom.length + ' Rooms'">
 
             </dx-button>
         </dxi-item>
