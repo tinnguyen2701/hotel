@@ -42,7 +42,7 @@
             location="after"
             locateInMenu="auto">
             <div *dxTemplate="let data of 'item'">
-                <dx-button *ngIf='listRoom.length > 0' (onClick)="showPopUp()" [ngClass] = "class" [text]="listRoom.length + ' Rooms'">
+                <dx-button *ngIf='listRoom.length > 0' (onClick)="showPopUp()" [ngClass] = "class" [text]="numberRoom()">
                 </dx-button>
                 <dx-button
                     class="user-button"

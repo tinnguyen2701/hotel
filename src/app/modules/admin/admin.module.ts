@@ -3,7 +3,7 @@ import { RouterModule } from '@angular/router';
 
 import { ThemeModule, RouterOutletComponent } from '@app/theme';
 import { SharedModule } from '@app/shared/shared.module';
-import { BookingService } from '@app/modules/admin/services';
+import { BookingService, RoomService } from '@app/modules/admin/services';
 import { AdminComponent } from './components/admin/admin.component';
 import { UsersComponent } from './components/users/users.component';
 import { SearchFormComponent } from '@app/modules/admin/components/shared/search-form/search-form.component';
@@ -11,9 +11,12 @@ import { AllRoomsComponent } from './components/all-rooms/all-rooms.component';
 import { BookedClientsComponent } from './components/booked/booked.component';
 import { NgxsModule } from '@ngxs/store';
 import { SetListRoom, AppState } from './store';
+import { CustomerService } from './services/customer.services';
 
 const PROVIDERS = [
     BookingService,
+    RoomService,
+    CustomerService
 ];
 
 

@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { BookingService } from '../../services';
+import { Store } from '@ngxs/store';
+//
+import { RoomService } from '../../services';
 import { FloorModel, RoomModel } from '../../models/room.model';
 import { RoomStatus } from '../../shared/enums';
 import { ROOM_STATUS_TYPE } from '../../shared/constant';
-import { Store } from '@ngxs/store';
 import { SetListRoom, AppState } from '../../store';
-import { SelectSnapshot } from '@ngxs-labs/select-snapshot';
 
 export enum ActionType {
     Edit,
@@ -59,14 +59,14 @@ export class AllRoomsComponent implements OnInit {
         },
     ];
 
-    constructor(private bookingsService: BookingService, private store: Store) {}
+    constructor(private roomService: RoomService, private store: Store) {}
 
     ngOnInit() {
         this.loadFloor();
     }
 
     loadFloor() {
-        this.bookingsService.getFloors().subscribe(
+        this.roomService.getFloors().subscribe(
             (result) => {
                 this.floors = result;
                 console.log(this.floors);
@@ -98,8 +98,14 @@ export class AllRoomsComponent implements OnInit {
     }
 
     onClickItem(item) {
+        this.roomService.getRoom(this.selectedRoom.id).subscribe(
+            (result) => {
+                this.selectedRoom = result;
+                this.store.dispatch(new SetListRoom(this.selectedRoom));
+                this.selectedRoom = {} as RoomModel;
+            },
+            (err) => {}
+        );
 
-        this.store.dispatch(new SetListRoom(this.selectedRoom));
-        this.selectedRoom = {} as RoomModel;
     }
 }

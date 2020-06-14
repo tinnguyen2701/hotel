@@ -47,4 +47,8 @@ export class HeaderComponent implements OnInit {
     showPopUp = () => {
         this.store.dispatch(new SetIsShowListRoom());
     }
+
+    numberRoom() {
+        return this.listRoom.length + ' room' + (this.listRoom.length > 1 ? 's' : '');
+    }
 }

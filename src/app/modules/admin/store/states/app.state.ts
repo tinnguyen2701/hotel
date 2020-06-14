@@ -1,7 +1,7 @@
 import { RoomModel } from '@app/modules/admin/models';
 import { State, Selector, Action, StateContext } from '@ngxs/store';
 import { Injectable } from '@angular/core';
-import { SetListRoom, SetIsShowListRoom } from '..';
+import { SetListRoom, SetIsShowListRoom } from '../actions/app.action';
 
 export interface AppStateModel {
     listRoom: RoomModel[] | [];

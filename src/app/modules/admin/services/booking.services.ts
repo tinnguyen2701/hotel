@@ -44,16 +44,4 @@ export class BookingService {
         }
         return of(true);
     }
-
-    /**
-     * Rooms
-     */
-
-    getFloors(): Observable<FloorModel[]> {
-        if (environment.production) {
-            console.log('API: getRooms');
-        }
-
-        return of(randomFloors(7));
-    }
 }
