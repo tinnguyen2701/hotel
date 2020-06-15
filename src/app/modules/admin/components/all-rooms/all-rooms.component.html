@@ -76,10 +76,9 @@
 
 <dx-popover
     [target]="'#room-' + selectedRoom.name"
-    (onClick)="toggleDefault()"
     position="right"
     [width]="300"
-    [(visible)]="selectedRoom && selectedRoom.id"
+    [(visible)]="visible"
 >
     <dx-list [dataSource]="menus" itemTemplate="itemTemplate">
         <div *dxTemplate="let item of 'itemTemplate'" (click)="onClickItem(item)"
@@ -91,3 +90,9 @@
         </div>
     </dx-list>
 </dx-popover>
+
+<app-popup-list-rooms *ngIf="showBookingNow"
+    [(isShowListRoom)]="showBookingNow"
+    [isGroup]="false"
+    [listRooms]="[selectedRoom]">
+</app-popup-list-rooms>

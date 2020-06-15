@@ -28,7 +28,8 @@ export class AllRoomsComponent implements OnInit {
     checkinDate: Date = null;
     checkoutDate: Date = null;
     selectedRoom: RoomModel = {} as RoomModel;
-    defaultVisible: boolean;
+    showBookingNow: boolean = false;
+    visible: boolean = false;
     menus = [];
 
     totalMenus = [
@@ -77,35 +78,46 @@ export class AllRoomsComponent implements OnInit {
 
     onClickRoom(room: RoomModel) {
         this.selectedRoom = room;
+        this.visible = true;
 
         switch (room.status) {
             case RoomStatus.Available:
-                this.menus = [this.totalMenus[0], this.totalMenus[1], this.totalMenus[4]];
+                this.menus = [
+                    this.totalMenus[0],
+                    this.totalMenus[1],
+                    this.totalMenus[4],
+                ];
                 break;
             case RoomStatus.Booking:
                 this.menus = [this.totalMenus[4]];
                 break;
             case RoomStatus.Checkin:
-                this.menus = [this.totalMenus[2], this.totalMenus[3], this.totalMenus[4]]
+                this.menus = [
+                    this.totalMenus[2],
+                    this.totalMenus[3],
+                    this.totalMenus[4],
+                ];
                 break;
-            default: break;
+            default:
+                break;
         }
-
-    }
-
-    toggleDefault() {
-        // this.defaultVisible = !this.defaultVisible;
     }
 
     onClickItem(item) {
         this.roomService.getRoom(this.selectedRoom.id).subscribe(
             (result) => {
                 this.selectedRoom = result;
-                this.store.dispatch(new SetListRoom(this.selectedRoom));
-                this.selectedRoom = {} as RoomModel;
+
+                if (item.value === ActionType.AddToBookingList) {
+                    this.store.dispatch(new SetListRoom(this.selectedRoom));
+                    this.visible = false;
+                } else if (item.value === ActionType.BookingNow) {
+                    this.selectedRoom = result;
+                    this.showBookingNow = true;
+                    this.visible = false;
+                }
             },
             (err) => {}
         );
-
     }
 }
