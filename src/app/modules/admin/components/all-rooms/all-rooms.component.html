@@ -46,7 +46,7 @@
 
     <div class="list-room">
         <div class="row" *ngFor="let item of floors">
-            <div class="floor">{{ item.name }}</div>
+            <div class="floor d-flex justify-content-center align-items-center">{{ item.name }}</div>
             <dx-button
                 [id]="'room-' + room.name"
                 class="room"
