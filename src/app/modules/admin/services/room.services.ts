@@ -1,5 +1,5 @@
 import { Observable, of } from 'rxjs';
-import { RoomModel, FloorModel } from '../models';
+import { RoomModel, FloorModel, CustomerModel } from '../models';
 import { environment } from '@environment';
 import { randomFloors, randomRoom } from '@app/data/admin/room.mock';
 
@@ -18,5 +18,13 @@ export class RoomService {
         }
 
         return of(randomRoom(roomId, 1));
+    }
+
+    updateRoom(rooms: RoomModel[], customers: CustomerModel[], status: number, totalPeople: number): Observable<boolean> {
+        if (environment.production) {
+            console.log('API: updateRoom');
+        }
+
+        return of(true);
     }
 }

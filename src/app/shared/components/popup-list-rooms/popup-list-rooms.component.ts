@@ -6,29 +6,36 @@ import {
     ChangeDetectorRef,
     Output,
     EventEmitter,
-} from "@angular/core";
-import { AppState, SetIsShowListRoom } from "@app/modules/admin/store";
-import { RoomModel } from "@app/modules/admin/models";
-import { Store } from "@ngxs/store";
-import { DxDataGridComponent } from "devextreme-angular";
-import { PopoverConfirmBoxComponent } from "..";
+    DoCheck,
+} from '@angular/core';
+import {cloneDeep, isEqual} from 'lodash';
+import { Store } from '@ngxs/store';
+import { DxDataGridComponent } from 'devextreme-angular';
+//
+import { AppState, SetIsShowListRoom } from '@app/modules/admin/store';
+import { RoomModel, CustomerModel } from '@app/modules/admin/models';
+import { PopoverConfirmBoxComponent } from '..';
 import {
     ROOM_TYPE,
     ROOM_STATUS_TYPE,
-} from "@app/modules/admin/shared/constant";
-import { RoomStatus } from "@app/modules/admin/shared/enums";
-import { AppNotify } from "@app/utilities";
+} from '@app/modules/admin/shared/constant';
+import { RoomStatus } from '@app/modules/admin/shared/enums';
+import { AppNotify } from '@app/utilities';
+import { RoomService } from '@app/modules/admin/services';
 
 @Component({
-    selector: "app-popup-list-rooms",
-    templateUrl: "./popup-list-rooms.component.html",
-    styleUrls: ["./popup-list-rooms.component.scss"],
+    selector: 'app-popup-list-rooms',
+    templateUrl: './popup-list-rooms.component.html',
+    styleUrls: ['./popup-list-rooms.component.scss'],
 })
-export class PopupListRoomsComponent implements OnInit {
+export class PopupListRoomsComponent implements OnInit, DoCheck {
     private _isShowListRoom: boolean = false;
 
-    @ViewChild("dxDataGrid", { static: true }) roomGrid: DxDataGridComponent;
-    @ViewChild("deleteDetailConfirmPopover", { static: true })
+    @ViewChild('dxDataGridRoom', { static: true })
+    dxDataGridRoom: DxDataGridComponent;
+    @ViewChild('dxDataGridCustomer', { static: true })
+    dxDataGridCustomer: DxDataGridComponent;
+    @ViewChild('deleteDetailConfirmPopover', { static: true })
     confirmDeleteDetailPopover: PopoverConfirmBoxComponent;
 
     @Input() listRooms: RoomModel[];
@@ -45,6 +52,7 @@ export class PopupListRoomsComponent implements OnInit {
     }
 
     @Output() isShowListRoomChange = new EventEmitter();
+    @Output() onSuccess = new EventEmitter();
 
     isLoading: boolean = false;
     isProcessing: boolean = false;
@@ -54,8 +62,16 @@ export class PopupListRoomsComponent implements OnInit {
     roomStatusTypes = ROOM_STATUS_TYPE;
     totalPeoples: number;
     isFormDirty: boolean = false;
+    customers: CustomerModel[] = [];
+    customerOriginals: CustomerModel[] = [];
+    listRoomOriginals: RoomModel[] = [];
+    gender = [
+        { value: 0, text: 'Female' },
+        { value: 1, text: 'Male' },
+    ];
 
     constructor(
+        private roomService: RoomService,
         private store: Store,
         private changeDetectorRef: ChangeDetectorRef
     ) {}
@@ -63,6 +79,8 @@ export class PopupListRoomsComponent implements OnInit {
     ngOnInit() {
         console.log(this.isGroup);
         this.roomStatusTypes = this.roomStatusTypes.slice(2, 4);
+        this.listRoomOriginals = cloneDeep(this.listRooms);
+        this.customerOriginals = cloneDeep(this.customers);
     }
 
     onHiding() {
@@ -94,8 +112,8 @@ export class PopupListRoomsComponent implements OnInit {
         e.event.preventDefault();
         const data = e.row.data;
         if (!Boolean(data.id)) {
-            this.roomGrid.instance.deleteRow(
-                this.roomGrid.instance.getRowIndexByKey(data)
+            this.dxDataGridRoom.instance.deleteRow(
+                this.dxDataGridRoom.instance.getRowIndexByKey(data)
             );
         } else {
             this.selectedRoomId = this.listRooms.findIndex(
@@ -111,23 +129,23 @@ export class PopupListRoomsComponent implements OnInit {
         this.changeDetectorRef.markForCheck();
         if (this.selectedRoomId !== null) {
             this.listRooms.splice(this.selectedRoomId, 1);
-            this.roomGrid.instance.refresh(true);
+            this.dxDataGridRoom.instance.refresh(true);
             this.selectedRoomId = null;
         }
     }
 
     onHandleCancel() {
-        // if (this.isFormDirty) {
-        //     const confirmTitle = "ConfirmPopupTitle";
-        //     const confirmQuestion = "CancelEditingConfirmQuestion";
-        //     AppNotify.confirm(confirmQuestion, confirmTitle).then((result) => {
-        //         if (result) {
-        //             this.visible = false;
-        //         }
-        //     });
-        // } else {
-        //     this.visible = false;
-        // }
+        if (this.isFormDirty) {
+            const confirmTitle = 'Confirm Popup Title';
+            const confirmQuestion = 'Cancel Editing Confirm Question';
+            AppNotify.confirm(confirmQuestion, confirmTitle).then((result) => {
+                if (result) {
+                    this.isShowListRoom = false;
+                }
+            });
+        } else {
+            this.isShowListRoom = false;
+        }
     }
 
     onHandleSaving() {
@@ -135,26 +153,26 @@ export class PopupListRoomsComponent implements OnInit {
             return;
         }
 
-        // this.trainingService
-        //     .saveTrainingDetail(this.editTrainingDetail)
-        //     .subscribe(
-        //         (account) => {
-        //             const message = this.selectedTrainingId
-        //                 ? this.translator.instant(
-        //                       marker("UpdatedSuccessMessage")
-        //                   )
-        //                 : this.translator.instant(
-        //                       marker("CreatedSuccessMessage")
-        //                   );
-        //             AppNotify.success(message);
-        //             this.onSuccess.emit(this.editTrainingDetail);
-        //             this.visible = false;
-        //         },
-        //         (error) => {
-        //             AppNotify.error(error);
-        //         }
-        //     );
+        this.roomService
+            .updateRoom(this.listRooms, this.customers, this.status, this.totalPeoples)
+            .subscribe(
+                (account) => {
+                    AppNotify.success('UpdatedSuccessMessage');
+                    this.onSuccess.emit();
+                    this.isShowListRoom = false;
+                },
+                (error) => {
+                    AppNotify.error(error);
+                }
+            );
     }
 
-    isEmptyInfomation() { return false;}
+    isEmptyInfomation() {
+        return false;
+    }
+
+    ngDoCheck() {
+        this.isFormDirty = !isEqual(this.listRooms, this.listRoomOriginals) || !isEqual(this.customers, this.customerOriginals);
+
+	}
 }

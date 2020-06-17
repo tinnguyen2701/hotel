@@ -24,8 +24,8 @@
 
                 <ng-container>
                     <div class="row">
-                        <div class="col-md-6">
-                            <div class="field w-50">
+                        <div class="col-md-3">
+                            <div class="field w-90">
                                 <div class="field-label">
                                     Total peoples
                                 </div>
@@ -38,8 +38,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="field w-50">
+                        <div class="col-md-3">
+                            <div class="field w-90">
                                 <div class="field-label">
                                     Status
                                 </div>
@@ -64,7 +64,7 @@
 
                 <ng-container>
                     <dx-data-grid
-                        #dxDataGrid
+                        #dxDataGridRoom
                         height="auto"
                         [dataSource]="listRooms"
                         [showRowLines]="true"
@@ -92,7 +92,7 @@
                             alignment="center"
                             [allowEditing]="false"
                             [allowSorting]="false"
-                            [width]="40"
+                            [width]="60"
                             [fixed]="true"
                             fixedPosition="left"
                             headerCellTemplate="indexHeaderCellTemplate"
@@ -126,10 +126,10 @@
                             [width]="150"
                             dataField="checkinDate"
                             alignment="center"
+                            caption="Checkin date"
                             [minWidth]="130"
                             format="dd/MM/yyyy"
                             dataType="date"
-                            caption="Checkin date"
                             [editorOptions]="{
                                 pickerType: 'calendar'
                             }"
@@ -271,11 +271,11 @@
                 </ng-container>
 
                 <ng-container>
-                    <p>Customer Infomation</p>
+                    <p class="mt-4">Customer Infomation</p>
                     <dx-data-grid
-                        #dxDataGrid
+                        #dxDataGridCustomer
                         height="auto"
-                        [(dataSource)]="listRooms"
+                        [(dataSource)]="customers"
                         [showRowLines]="true"
                         [showBorders]="true"
                         [showColumnLines]="true"
@@ -301,9 +301,10 @@
                             alignment="center"
                             [allowEditing]="false"
                             [allowSorting]="false"
-                            [width]="40"
+                            [allowResizing]="false"
+                            [formItem]="{ visible: false }"
+                            [width]="60"
                             [fixed]="true"
-                            fixedPosition="left"
                             headerCellTemplate="indexHeaderCellTemplate"
                             cellTemplate="indexCellTemplate"
                         >
@@ -312,7 +313,17 @@
                                     let row of 'indexHeaderCellTemplate'
                                 "
                             >
-                                <span>Index</span>
+                                <dx-button
+                                    type="default"
+                                    icon="plus"
+                                    class="btn-add-row-circle"
+                                    [stylingMode]="'outlined'"
+                                    [hint]="'Add'"
+                                    (onClick)="
+                                        dxDataGridCustomer.instance.addRow()
+                                    "
+                                >
+                                </dx-button>
                             </div>
                             <div *dxTemplate="let cell of 'indexCellTemplate'">
                                 <ng-container>
@@ -325,95 +336,131 @@
                             dataField="name"
                             caption="Name"
                             [width]="210"
-                            [allowEditing]="false"
                             [width]="100"
                             alignment="right"
                         >
+                        <dxi-validation-rule
+                        type="required"
+                        [message]="'This field is required'"
+                    >
+                    </dxi-validation-rule>
+                        </dxi-column>
+
+                        <dxi-column
+                            dataField="address"
+                            caption="Address"
+                            [width]="210"
+                            [width]="100"
+                            alignment="right"
+                        >
+                        <dxi-validation-rule
+                        type="required"
+                        [message]="'This field is required'"
+                    >
+                    </dxi-validation-rule>
+                        </dxi-column>
+
+                        <dxi-column
+                            dataField="sex"
+                            caption="Sex"
+                            [width]="210"
+                            [width]="100"
+                            alignment="right"
+                            cellTemplate="cellTemplate"
+                            editCellTemplate="editCellTemplate"
+                        >
+                            <div *dxTemplate="let cell of 'cellTemplate'">
+                                <dx-switch
+                                    [(value)]="cell.value"
+                                    [switchedOnText]="'Male'"
+                                    [switchedOffText]="'Female'"
+                                >
+                                </dx-switch>
+                            </div>
+                            <div *dxTemplate="let cell of 'editCellTemplate'">
+                                <dx-switch
+                                    width="80"
+                                    [(value)]="cell.value"
+                                    [switchedOnText]="'Male'"
+                                    [switchedOffText]="'Female'"
+                                >
+                                </dx-switch>
+                            </div>
+                        </dxi-column>
+
+                        <dxi-column
+                            dataField="email"
+                            caption="Email"
+                            [width]="210"
+                            [width]="100"
+                            alignment="right"
+                        >
+                        <dxi-validation-rule
+                        type="required"
+                        [message]="'This field is required'"
+                    >
+                    </dxi-validation-rule>
                         </dxi-column>
 
                         <dxi-column
                             [width]="150"
-                            dataField="checkinDate"
+                            dataField="date"
                             alignment="center"
                             [minWidth]="130"
                             format="dd/MM/yyyy"
                             dataType="date"
-                            caption="Checkin date"
+                            caption="Date"
                             [editorOptions]="{
-                                pickerType: 'calendar'
+                                pickerType: 'rollers'
                             }"
                         >
-                            <dxi-validation-rule
-                                type="required"
-                                [message]="'This field is required'"
-                            >
-                            </dxi-validation-rule>
-                            >
+                        <dxi-validation-rule
+                        type="required"
+                        [message]="'This field is required'"
+                    >
+                    </dxi-validation-rule>
                         </dxi-column>
 
                         <dxi-column
-                            [width]="150"
-                            dataField="checkoutDate"
-                            alignment="center"
-                            [minWidth]="130"
-                            format="dd/MM/yyyy"
-                            dataType="date"
-                            caption="Checkout date"
-                            [editorOptions]="{
-                                pickerType: 'calendar'
-                            }"
-                        >
-                            <dxi-validation-rule
-                                type="required"
-                                [message]="'This field is required'"
-                            >
-                            </dxi-validation-rule>
-                        </dxi-column>
-
-                        <dxi-column
-                            dataField="type"
-                            caption="Type room"
-                            [width]="120"
-                        >
-                            <dxo-lookup
-                                [dataSource]="roomTypes"
-                                valueExpr="value"
-                                displayExpr="name"
-                            >
-                            </dxo-lookup>
-                            <dxi-validation-rule
-                                type="required"
-                                [message]="'This field is required'"
-                            >
-                            </dxi-validation-rule>
-                        </dxi-column>
-
-                        <dxi-column
-                            dataField="deduct"
-                            [minWidth]="130"
+                            dataField="cmnd"
+                            caption="Cmnd"
+                            [width]="210"
+                            [width]="100"
                             alignment="right"
-                            dataType="number"
-                            caption="Deduct"
                         >
-                            <dxi-validation-rule
-                                type="required"
-                                [message]="'This field is required'"
-                            >
-                            </dxi-validation-rule>
+                        <dxi-validation-rule
+                        type="required"
+                        [message]="'This field is required'"
+                    >
+                    </dxi-validation-rule>
                         </dxi-column>
 
                         <dxi-column
-                            dataField="prepay"
-                            [minWidth]="130"
+                            dataField="phone"
+                            caption="Phone"
+                            [width]="210"
+                            [width]="100"
                             alignment="right"
-                            dataType="number"
-                            caption="Prepay"
                         >
-                            <dxi-validation-rule
-                                type="required"
-                                [message]="'This field is required'"
-                            >
-                            </dxi-validation-rule>
+                        <dxi-validation-rule
+                        type="required"
+                        [message]="'This field is required'"
+                    >
+                    </dxi-validation-rule>
+                        </dxi-column>
+
+                        <dxi-column
+                            dataField="nationally"
+                            caption="Nationally"
+                            [width]="210"
+                            [width]="100"
+                            alignment="right"
+                        >
+                        <dxi-validation-rule
+                        type="required"
+                        [message]="'This field is required'"
+                    >
+                    </dxi-validation-rule>
                         </dxi-column>
 
                         <dxi-column
@@ -421,7 +468,7 @@
                             [minWidth]="130"
                             alignment="right"
                             dataType="number"
-                            caption="Total peoples"
+                            caption="People Number"
                         >
                             <dxi-validation-rule
                                 type="required"
@@ -433,10 +480,11 @@
                         <dxi-column
                             dataField="note"
                             caption="Note"
-                            [width]="200"
+                            [width]="210"
+                            [width]="100"
+                            alignment="right"
                         >
                         </dxi-column>
-
                         <dxi-column
                             caption="Action"
                             type="buttons"
@@ -467,7 +515,8 @@
                                 [onClick]="updateLookupData"
                             >
                             </dxi-button>
-                            <dxi-button *ngIf="isGroup"
+                            <dxi-button
+                                *ngIf="isGroup"
                                 name="delete"
                                 [cssClass]="'far fa-trash-alt delete-icon'"
                                 [hint]="'Delete'"
