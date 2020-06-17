@@ -467,7 +467,7 @@
                                 [onClick]="updateLookupData"
                             >
                             </dxi-button>
-                            <dxi-button
+                            <dxi-button *ngIf="isGroup"
                                 name="delete"
                                 [cssClass]="'far fa-trash-alt delete-icon'"
                                 [hint]="'Delete'"

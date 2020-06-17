@@ -46,7 +46,24 @@ export function randomRooms(count: number, floor: number): RoomModel[] {
         });
 }
 
-export function randomRoom(roomId: number): RoomModel {
+export function randomRoom(roomId: number, type: number): RoomModel {
+
+    if (type === 1) { // booking now
+        return {
+            id: roomId,
+            status: RoomStatus.Available,
+            name: random(1, 5) + "0" + random(1, 5),
+            checkinDate: null,
+            checkoutDate: null,
+            type: random(1, 2),
+            price: 100000,
+            deduct: 0,
+            prepay: 0,
+            note: faker.lorem.sentence(),
+            peopleNumber: 0,
+            customerInfomation: null
+        };
+    }
     const statusRoom = random(2, 4);
 
     return {

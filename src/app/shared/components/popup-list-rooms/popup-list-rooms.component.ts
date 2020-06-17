@@ -61,7 +61,7 @@ export class PopupListRoomsComponent implements OnInit {
     ) {}
 
     ngOnInit() {
-        console.log(this.listRooms);
+        console.log(this.isGroup);
         this.roomStatusTypes = this.roomStatusTypes.slice(2, 4);
     }
 

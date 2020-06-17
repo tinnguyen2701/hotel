@@ -14,9 +14,9 @@ export class RoomService {
 
     getRoom(roomId: number): Observable<RoomModel> {
         if (environment.production) {
-            console.log('API: getRooms');
+            console.log('API: getRoom');
         }
 
-        return of(randomRoom(roomId));
+        return of(randomRoom(roomId, 1));
     }
 }
