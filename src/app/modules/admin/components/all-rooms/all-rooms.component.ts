@@ -6,6 +6,7 @@ import { FloorModel, RoomModel } from '../../models/room.model';
 import { RoomStatus } from '../../shared/enums';
 import { ROOM_STATUS_TYPE } from '../../shared/constant';
 import { SetListRoom, AppState } from '../../store';
+import { SelectSnapshot } from '@ngxs-labs/select-snapshot';
 
 export enum ActionType {
     Edit,
@@ -21,7 +22,8 @@ export enum ActionType {
     styleUrls: ['./all-rooms.component.scss'],
 })
 export class AllRoomsComponent implements OnInit {
-    floors: FloorModel[] = [];
+    @SelectSnapshot(AppState.listFloor) floors: FloorModel[];
+
     roomStatus = RoomStatus;
     roomStatusType = ROOM_STATUS_TYPE;
     selectedStatus = RoomStatus.All;
@@ -63,17 +65,6 @@ export class AllRoomsComponent implements OnInit {
     constructor(private roomService: RoomService, private store: Store) {}
 
     ngOnInit() {
-        this.loadFloor();
-    }
-
-    loadFloor() {
-        this.roomService.getFloors().subscribe(
-            (result) => {
-                this.floors = result;
-                console.log(this.floors);
-            },
-            (err) => {}
-        );
     }
 
     onClickRoom(room: RoomModel) {
@@ -112,7 +103,6 @@ export class AllRoomsComponent implements OnInit {
                     this.store.dispatch(new SetListRoom(this.selectedRoom));
                     this.visible = false;
                 } else if (item.value === ActionType.BookingNow) {
-                    this.selectedRoom = result;
                     this.showBookingNow = true;
                     this.visible = false;
                 }

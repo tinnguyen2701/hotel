@@ -13,8 +13,7 @@ import { RoomModel } from '@app/modules/admin/models';
 })
 
 export class HeaderComponent implements OnInit {
-    // @SelectSnapshot(AppState.listRoom) listRoom: RoomModel[];
-	@SelectSnapshot(AppState.listRoom) listRoom: RoomModel[];
+	@SelectSnapshot(AppState.listRooms) listRoom: RoomModel[];
 	@SelectSnapshot(AppState.isShowListRoom) isShowListRoom: boolean;
 
     @Input() menuToggleEnabled: boolean = false;

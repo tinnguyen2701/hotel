@@ -1,6 +1,13 @@
 
-import { RoomModel } from '@app/modules/admin/models';
+import { RoomModel, FloorModel } from '@app/modules/admin/models';
 
+
+export class SetFloor {
+    static readonly type = '[App] Set list floor';
+
+    constructor(public payload: FloorModel[]) {
+    }
+}
 
 export class SetListRoom {
     static readonly type = '[App] Set list room';

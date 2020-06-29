@@ -5,7 +5,7 @@ import { randomFloors, randomRoom } from '@app/data/admin/room.mock';
 
 export class RoomService {
     getFloors(): Observable<FloorModel[]> {
-        if (environment.production) {
+        if (environment.debug) {
             console.log('API: getRooms');
         }
 
@@ -13,7 +13,7 @@ export class RoomService {
     }
 
     getRoom(roomId: number): Observable<RoomModel> {
-        if (environment.production) {
+        if (environment.debug) {
             console.log('API: getRoom');
         }
 
@@ -21,7 +21,7 @@ export class RoomService {
     }
 
     updateRoom(rooms: RoomModel[], customers: CustomerModel[], status: number, totalPeople: number): Observable<boolean> {
-        if (environment.production) {
+        if (environment.debug) {
             console.log('API: updateRoom');
         }
 

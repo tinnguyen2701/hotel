@@ -1,15 +1,17 @@
-import { RoomModel } from '@app/modules/admin/models';
+import { RoomModel, FloorModel } from '@app/modules/admin/models';
 import { State, Selector, Action, StateContext } from '@ngxs/store';
 import { Injectable } from '@angular/core';
-import { SetListRoom, SetIsShowListRoom } from '../actions/app.action';
+import { SetListRoom, SetIsShowListRoom, SetFloor } from '../actions/app.action';
 
 export interface AppStateModel {
-    listRoom: RoomModel[] | [];
+    listfloors: FloorModel[] | [];
+    listRooms: RoomModel[] | [];
     isShowListRoom: boolean | false;
 }
 
 const appStateDefaults: AppStateModel = {
-    listRoom: [],
+    listfloors: [],
+    listRooms: [],
     isShowListRoom: false
 };
 
@@ -23,8 +25,13 @@ export class AppState {
     constructor() {}
 
     @Selector()
-    static listRoom(state: AppStateModel) {
-        return state.listRoom;
+    static listFloor(state: AppStateModel) {
+        return state.listfloors;
+    }
+
+    @Selector()
+    static listRooms(state: AppStateModel) {
+        return state.listRooms;
     }
 
     @Selector()
@@ -32,14 +39,21 @@ export class AppState {
         return state.isShowListRoom;
     }
 
+    @Action(SetFloor)
+    SetFloor(sc: StateContext<AppStateModel>, action: SetFloor) {
+        sc.setState({
+            ...sc.getState(),
+            listfloors: action.payload
+        });
+    }
+
     @Action(SetListRoom)
     SetListRoom(sc: StateContext<AppStateModel>, action: SetListRoom) {
         sc.setState({
             ...sc.getState(),
-            listRoom: [...sc.getState().listRoom, action.payload]
+            listRooms: [...sc.getState().listRooms, action.payload]
         });
     }
-
 
     @Action(SetIsShowListRoom)
     SetIsShowListRoom(sc: StateContext<AppStateModel>) {

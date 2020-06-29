@@ -12,7 +12,7 @@ import {cloneDeep, isEqual} from 'lodash';
 import { Store } from '@ngxs/store';
 import { DxDataGridComponent } from 'devextreme-angular';
 //
-import { AppState, SetIsShowListRoom } from '@app/modules/admin/store';
+import { AppState, SetIsShowListRoom, SetFloor } from '@app/modules/admin/store';
 import { RoomModel, CustomerModel } from '@app/modules/admin/models';
 import { PopoverConfirmBoxComponent } from '..';
 import {
@@ -158,8 +158,9 @@ export class PopupListRoomsComponent implements OnInit, DoCheck {
             .subscribe(
                 (account) => {
                     AppNotify.success('UpdatedSuccessMessage');
-                    this.onSuccess.emit();
-                    this.isShowListRoom = false;
+                    this.refesh();
+                    // this.onSuccess.emit();
+                    // this.isShowListRoom = false;
                 },
                 (error) => {
                     AppNotify.error(error);
@@ -171,8 +172,22 @@ export class PopupListRoomsComponent implements OnInit, DoCheck {
         return false;
     }
 
+    refesh() {
+        setTimeout(() => {
+            this.loadFloor();
+        });
+    }
+
+    loadFloor() {
+        this.roomService.getFloors().subscribe(
+            (result) => {
+                this.store.dispatch(new SetFloor(result));
+            },
+            (err) => {}
+        );
+    }
+
     ngDoCheck() {
         this.isFormDirty = !isEqual(this.listRooms, this.listRoomOriginals) || !isEqual(this.customers, this.customerOriginals);
-
 	}
 }
