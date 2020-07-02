@@ -5,7 +5,7 @@ import { RoomService } from '../../services';
 import { FloorModel, RoomModel } from '../../models/room.model';
 import { RoomStatus } from '../../shared/enums';
 import { ROOM_STATUS_TYPE } from '../../shared/constant';
-import { SetListRoom, AppState } from '../../store';
+import { SetListRoom, AppState, SetIsShowListRoom } from '../../store';
 import { SelectSnapshot } from '@ngxs-labs/select-snapshot';
 
 export enum ActionType {
@@ -99,12 +99,20 @@ export class AllRoomsComponent implements OnInit {
             (result) => {
                 this.selectedRoom = result;
 
-                if (item.value === ActionType.AddToBookingList) {
-                    this.store.dispatch(new SetListRoom(this.selectedRoom));
-                    this.visible = false;
-                } else if (item.value === ActionType.BookingNow) {
-                    this.showBookingNow = true;
-                    this.visible = false;
+                switch (item.value) {
+                    case ActionType.AddToBookingList:
+                        this.store.dispatch(new SetListRoom(this.selectedRoom));
+                        this.visible = false;
+                        break;
+                    case ActionType.BookingNow:
+                        this.store.dispatch(new SetListRoom(this.selectedRoom));
+                        // this.showBookingNow = true;
+                        this.store.dispatch(new SetIsShowListRoom(true));
+
+                        this.visible = false;
+                        break;
+                    default:
+                        break;
                 }
             },
             (err) => {}

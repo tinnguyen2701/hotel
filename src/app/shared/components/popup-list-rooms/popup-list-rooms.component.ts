@@ -12,7 +12,7 @@ import {cloneDeep, isEqual} from 'lodash';
 import { Store } from '@ngxs/store';
 import { DxDataGridComponent } from 'devextreme-angular';
 //
-import { AppState, SetIsShowListRoom, SetFloor } from '@app/modules/admin/store';
+import { AppState, SetIsShowListRoom, SetFloor, SetEmptyListRoom } from '@app/modules/admin/store';
 import { RoomModel, CustomerModel } from '@app/modules/admin/models';
 import { PopoverConfirmBoxComponent } from '..';
 import {
@@ -29,8 +29,6 @@ import { RoomService } from '@app/modules/admin/services';
     styleUrls: ['./popup-list-rooms.component.scss'],
 })
 export class PopupListRoomsComponent implements OnInit, DoCheck {
-    private _isShowListRoom: boolean = false;
-
     @ViewChild('dxDataGridRoom', { static: true })
     dxDataGridRoom: DxDataGridComponent;
     @ViewChild('dxDataGridCustomer', { static: true })
@@ -41,17 +39,8 @@ export class PopupListRoomsComponent implements OnInit, DoCheck {
     @Input() listRooms: RoomModel[];
     @Input() isGroup: boolean = true;
 
-    @Input()
-    get isShowListRoom(): boolean {
-        return this._isShowListRoom;
-    }
+    @Input() isShowListRoom: boolean = false;
 
-    set isShowListRoom(value: boolean) {
-        this._isShowListRoom = value;
-        this.isShowListRoomChange.emit(value);
-    }
-
-    @Output() isShowListRoomChange = new EventEmitter();
     @Output() onSuccess = new EventEmitter();
 
     isLoading: boolean = false;
@@ -85,7 +74,7 @@ export class PopupListRoomsComponent implements OnInit, DoCheck {
 
     onHiding() {
         if (this.isGroup) {
-            this.store.dispatch(new SetIsShowListRoom());
+            this.store.dispatch(new SetIsShowListRoom(false));
         } else {
             this.isShowListRoom = !this.isShowListRoom;
         }
@@ -140,11 +129,13 @@ export class PopupListRoomsComponent implements OnInit, DoCheck {
             const confirmQuestion = 'Cancel Editing Confirm Question';
             AppNotify.confirm(confirmQuestion, confirmTitle).then((result) => {
                 if (result) {
-                    this.isShowListRoom = false;
+                    // this.isShowListRoom = false;
+                    this.store.dispatch(new SetIsShowListRoom(false));
                 }
             });
         } else {
-            this.isShowListRoom = false;
+            // this.isShowListRoom = false;
+            this.store.dispatch(new SetIsShowListRoom(false));
         }
     }
 
@@ -158,6 +149,8 @@ export class PopupListRoomsComponent implements OnInit, DoCheck {
             .subscribe(
                 (account) => {
                     AppNotify.success('UpdatedSuccessMessage');
+                    this.store.dispatch(new SetEmptyListRoom());
+                    this.store.dispatch(new SetIsShowListRoom(false));
                     this.refesh();
                     // this.onSuccess.emit();
                     // this.isShowListRoom = false;

@@ -19,6 +19,13 @@ export class SetListRoom {
 export class SetIsShowListRoom {
     static readonly type = '[App] Set is show list room';
 
+    constructor(public payload: boolean) {
+    }
+}
+
+export class SetEmptyListRoom {
+    static readonly type = '[App] Set empty list room';
+
     constructor() {
     }
 }

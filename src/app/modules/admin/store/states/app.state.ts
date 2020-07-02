@@ -1,7 +1,7 @@
 import { RoomModel, FloorModel } from '@app/modules/admin/models';
 import { State, Selector, Action, StateContext } from '@ngxs/store';
 import { Injectable } from '@angular/core';
-import { SetListRoom, SetIsShowListRoom, SetFloor } from '../actions/app.action';
+import { SetListRoom, SetIsShowListRoom, SetFloor, SetEmptyListRoom } from '../actions/app.action';
 
 export interface AppStateModel {
     listfloors: FloorModel[] | [];
@@ -55,13 +55,21 @@ export class AppState {
         });
     }
 
-    @Action(SetIsShowListRoom)
-    SetIsShowListRoom(sc: StateContext<AppStateModel>) {
-        console.log('dispatch is show');
-
+    @Action(SetEmptyListRoom)
+    SetEmptyListRoom(sc: StateContext<AppStateModel>) {
         sc.setState({
             ...sc.getState(),
-            isShowListRoom: !sc.getState().isShowListRoom
+            listRooms: []
         });
     }
+
+    @Action(SetIsShowListRoom)
+    SetIsShowListRoom(sc: StateContext<AppStateModel>, action: SetIsShowListRoom) {
+        sc.setState({
+            ...sc.getState(),
+            isShowListRoom: action.payload
+        });
+    }
+
+
 }
