@@ -1,10 +1,10 @@
 import {Component, Input, Output, EventEmitter, OnInit, DoCheck} from '@angular/core';
-import { Store } from '@ngxs/store';
+import {Store} from '@ngxs/store';
 import {SelectSnapshot} from '@ngxs-labs/select-snapshot';
 //
 import {ADMIN_MENU} from '@app/modules/admin/shared/constant';
-import { AppState, AppStateModel, SetIsShowListRoom } from '@app/modules/admin/store';
-import { RoomModel } from '@app/modules/admin/models';
+import {AppState, AppStateModel, SetIsShowListRoomCheckin, SetIsShowListRoomCheckout} from '@app/modules/admin/store';
+import {RoomModel} from '@app/modules/admin/models';
 
 @Component({
     selector: 'app-header',
@@ -13,8 +13,10 @@ import { RoomModel } from '@app/modules/admin/models';
 })
 
 export class HeaderComponent implements OnInit {
-	@SelectSnapshot(AppState.listRooms) listRoom: RoomModel[];
-	@SelectSnapshot(AppState.isShowListRoom) isShowListRoom: boolean;
+    @SelectSnapshot(AppState.listRoomsCheckin) listRoomCheckin: RoomModel[];
+    @SelectSnapshot(AppState.isShowListRoomCheckin) isShowListRoomCheckin: boolean;
+    @SelectSnapshot(AppState.listRoomsCheckout) listRoomCheckout: RoomModel[];
+    @SelectSnapshot(AppState.isShowListRoomCheckout) isShowListRoomCheckout: boolean;
 
     @Input() menuToggleEnabled: boolean = false;
     @Input() showHeaderMenu: boolean = false;
@@ -39,15 +41,23 @@ export class HeaderComponent implements OnInit {
         }
     }
 
-    toggleMenu = () => {
+    toggleMenu() {
         this.menuToggle.emit();
     }
 
-    showPopUp = () => {
-        this.store.dispatch(new SetIsShowListRoom(true));
+    showPopUpCheckin() {
+        this.store.dispatch(new SetIsShowListRoomCheckin(true));
     }
 
-    numberRoom() {
-        return this.listRoom.length + ' room' + (this.listRoom.length > 1 ? 's' : '');
+    numberRoomCheckin() {
+        return this.listRoomCheckin.length + ' room' + (this.listRoomCheckin.length > 1 ? 's' : '') + ' checkin';
+    }
+
+    showPopUpCheckout() {
+        this.store.dispatch(new SetIsShowListRoomCheckout(true));
+    }
+
+    numberRoomCheckout() {
+        return this.listRoomCheckout.length + ' room' + (this.listRoomCheckout.length > 1 ? 's' : '') + ' checkout';
     }
 }

@@ -9,22 +9,43 @@ export class SetFloor {
     }
 }
 
-export class SetListRoom {
-    static readonly type = '[App] Set list room';
+export class SetListRoomCheckin {
+    static readonly type = '[App] Set list room checkin';
 
     constructor(public payload: RoomModel) {
     }
 }
 
-export class SetIsShowListRoom {
-    static readonly type = '[App] Set is show list room';
+export class SetIsShowListRoomCheckin {
+    static readonly type = '[App] Set is show list room checkin';
 
     constructor(public payload: boolean) {
     }
 }
 
-export class SetEmptyListRoom {
-    static readonly type = '[App] Set empty list room';
+export class SetEmptyListRoomCheckin {
+    static readonly type = '[App] Set empty list room checkin';
+
+    constructor() {
+    }
+}
+
+export class SetListRoomCheckout {
+    static readonly type = '[App] Set list room checkout';
+
+    constructor(public payload: RoomModel) {
+    }
+}
+
+export class SetIsShowListRoomCheckout {
+    static readonly type = '[App] Set is show list room checkout';
+
+    constructor(public payload: boolean) {
+    }
+}
+
+export class SetEmptyListRoomCheckout {
+    static readonly type = '[App] Set empty list room checkout';
 
     constructor() {
     }

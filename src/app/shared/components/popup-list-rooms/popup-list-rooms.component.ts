@@ -9,19 +9,19 @@ import {
     DoCheck,
 } from '@angular/core';
 import {cloneDeep, isEqual} from 'lodash';
-import { Store } from '@ngxs/store';
-import { DxDataGridComponent } from 'devextreme-angular';
+import {Store} from '@ngxs/store';
+import {DxDataGridComponent} from 'devextreme-angular';
 //
-import { AppState, SetIsShowListRoom, SetFloor, SetEmptyListRoom } from '@app/modules/admin/store';
-import { RoomModel, CustomerModel } from '@app/modules/admin/models';
-import { PopoverConfirmBoxComponent } from '..';
+import {AppState, SetIsShowListRoomCheckin, SetFloor, SetEmptyListRoomCheckin} from '@app/modules/admin/store';
+import {RoomModel, CustomerModel} from '@app/modules/admin/models';
+import {PopoverConfirmBoxComponent} from '..';
 import {
     ROOM_TYPE,
     ROOM_STATUS_TYPE,
 } from '@app/modules/admin/shared/constant';
-import { RoomStatus } from '@app/modules/admin/shared/enums';
-import { AppNotify } from '@app/utilities';
-import { RoomService } from '@app/modules/admin/services';
+import {RoomStatus} from '@app/modules/admin/shared/enums';
+import {AppNotify} from '@app/utilities';
+import {RoomService} from '@app/modules/admin/services';
 
 @Component({
     selector: 'app-popup-list-rooms',
@@ -29,11 +29,11 @@ import { RoomService } from '@app/modules/admin/services';
     styleUrls: ['./popup-list-rooms.component.scss'],
 })
 export class PopupListRoomsComponent implements OnInit, DoCheck {
-    @ViewChild('dxDataGridRoom', { static: true })
+    @ViewChild('dxDataGridRoom', {static: true})
     dxDataGridRoom: DxDataGridComponent;
-    @ViewChild('dxDataGridCustomer', { static: true })
+    @ViewChild('dxDataGridCustomer', {static: true})
     dxDataGridCustomer: DxDataGridComponent;
-    @ViewChild('deleteDetailConfirmPopover', { static: true })
+    @ViewChild('deleteDetailConfirmPopover', {static: true})
     confirmDeleteDetailPopover: PopoverConfirmBoxComponent;
 
     @Input() listRooms: RoomModel[];
@@ -55,15 +55,16 @@ export class PopupListRoomsComponent implements OnInit, DoCheck {
     customerOriginals: CustomerModel[] = [];
     listRoomOriginals: RoomModel[] = [];
     gender = [
-        { value: 0, text: 'Female' },
-        { value: 1, text: 'Male' },
+        {value: 0, text: 'Female'},
+        {value: 1, text: 'Male'},
     ];
 
     constructor(
         private roomService: RoomService,
         private store: Store,
         private changeDetectorRef: ChangeDetectorRef
-    ) {}
+    ) {
+    }
 
     ngOnInit() {
         console.log(this.isGroup);
@@ -74,7 +75,7 @@ export class PopupListRoomsComponent implements OnInit, DoCheck {
 
     onHiding() {
         if (this.isGroup) {
-            this.store.dispatch(new SetIsShowListRoom(false));
+            this.store.dispatch(new SetIsShowListRoomCheckin(false));
         } else {
             this.isShowListRoom = !this.isShowListRoom;
         }
@@ -130,12 +131,12 @@ export class PopupListRoomsComponent implements OnInit, DoCheck {
             AppNotify.confirm(confirmQuestion, confirmTitle).then((result) => {
                 if (result) {
                     // this.isShowListRoom = false;
-                    this.store.dispatch(new SetIsShowListRoom(false));
+                    this.store.dispatch(new SetIsShowListRoomCheckin(false));
                 }
             });
         } else {
             // this.isShowListRoom = false;
-            this.store.dispatch(new SetIsShowListRoom(false));
+            this.store.dispatch(new SetIsShowListRoomCheckin(false));
         }
     }
 
@@ -149,8 +150,8 @@ export class PopupListRoomsComponent implements OnInit, DoCheck {
             .subscribe(
                 (account) => {
                     AppNotify.success('UpdatedSuccessMessage');
-                    this.store.dispatch(new SetEmptyListRoom());
-                    this.store.dispatch(new SetIsShowListRoom(false));
+                    this.store.dispatch(new SetEmptyListRoomCheckin());
+                    this.store.dispatch(new SetIsShowListRoomCheckin(false));
                     this.refesh();
                     // this.onSuccess.emit();
                     // this.isShowListRoom = false;
@@ -176,11 +177,12 @@ export class PopupListRoomsComponent implements OnInit, DoCheck {
             (result) => {
                 this.store.dispatch(new SetFloor(result));
             },
-            (err) => {}
+            (err) => {
+            }
         );
     }
 
     ngDoCheck() {
         this.isFormDirty = !isEqual(this.listRooms, this.listRoomOriginals) || !isEqual(this.customers, this.customerOriginals);
-	}
+    }
 }
