@@ -12,7 +12,7 @@ import {cloneDeep, isEqual} from 'lodash';
 import {Store} from '@ngxs/store';
 import {DxDataGridComponent} from 'devextreme-angular';
 //
-import {AppState, SetIsShowListRoomCheckin, SetFloor, SetEmptyListRoomCheckin} from '@app/modules/admin/store';
+import {AppState, SetIsShowListRoomCheckin, SetFloor, SetIsShowListRoomCheckout} from '@app/modules/admin/store';
 import {RoomModel, CustomerModel} from '@app/modules/admin/models';
 import {PopoverConfirmBoxComponent} from '..';
 import {
@@ -22,6 +22,7 @@ import {
 import {RoomStatus} from '@app/modules/admin/shared/enums';
 import {AppNotify} from '@app/utilities';
 import {RoomService} from '@app/modules/admin/services';
+import { SelectSnapshot } from '@ngxs-labs/select-snapshot';
 
 @Component({
     selector: 'app-popup-list-rooms',
@@ -29,6 +30,9 @@ import {RoomService} from '@app/modules/admin/services';
     styleUrls: ['./popup-list-rooms.component.scss'],
 })
 export class PopupListRoomsComponent implements OnInit, DoCheck {
+    @SelectSnapshot(AppState.isShowListRoomCheckin) isShowListRoomCheckin: boolean;
+    @SelectSnapshot(AppState.isShowListRoomCheckout) isShowListRoomCheckout: boolean;
+
     @ViewChild('dxDataGridRoom', {static: true})
     dxDataGridRoom: DxDataGridComponent;
     @ViewChild('dxDataGridCustomer', {static: true})
@@ -73,9 +77,19 @@ export class PopupListRoomsComponent implements OnInit, DoCheck {
         this.customerOriginals = cloneDeep(this.customers);
     }
 
+    handleTitlePopup() {
+        if (this.isShowListRoomCheckin) {
+            return "List checkin rooms";
+        } else if (this.isShowListRoomCheckout) {
+            return "List checkout rooms";
+        }
+        return "List rooms";
+    }
+
     onHiding() {
         if (this.isGroup) {
             this.store.dispatch(new SetIsShowListRoomCheckin(false));
+            this.store.dispatch(new SetIsShowListRoomCheckout(false));
         } else {
             this.isShowListRoom = !this.isShowListRoom;
         }
@@ -150,7 +164,6 @@ export class PopupListRoomsComponent implements OnInit, DoCheck {
             .subscribe(
                 (account) => {
                     AppNotify.success('UpdatedSuccessMessage');
-                    this.store.dispatch(new SetEmptyListRoomCheckin());
                     this.store.dispatch(new SetIsShowListRoomCheckin(false));
                     this.refesh();
                     // this.onSuccess.emit();

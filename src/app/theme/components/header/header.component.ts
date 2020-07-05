@@ -3,8 +3,9 @@ import {Store} from '@ngxs/store';
 import {SelectSnapshot} from '@ngxs-labs/select-snapshot';
 //
 import {ADMIN_MENU} from '@app/modules/admin/shared/constant';
-import {AppState, AppStateModel, SetIsShowListRoomCheckin, SetIsShowListRoomCheckout} from '@app/modules/admin/store';
+import {AppState, AppStateModel, SetIsShowListRoomCheckin, SetIsShowListRoomCheckout, SetActionType} from '@app/modules/admin/store';
 import {RoomModel} from '@app/modules/admin/models';
+import { ActionType } from '@app/modules/admin/shared/enums';
 
 @Component({
     selector: 'app-header',
@@ -24,7 +25,6 @@ export class HeaderComponent implements OnInit {
     @Output() menuToggle = new EventEmitter<boolean>();
 
     menuItems = ADMIN_MENU;
-    class = 'bg-info';
 
     constructor(private store: Store) {
     }
@@ -46,6 +46,7 @@ export class HeaderComponent implements OnInit {
     }
 
     showPopUpCheckin() {
+        this.store.dispatch(new SetActionType(ActionType.Checkin));
         this.store.dispatch(new SetIsShowListRoomCheckin(true));
     }
 
@@ -54,6 +55,7 @@ export class HeaderComponent implements OnInit {
     }
 
     showPopUpCheckout() {
+        this.store.dispatch(new SetActionType(ActionType.Checkout));
         this.store.dispatch(new SetIsShowListRoomCheckout(true));
     }
 

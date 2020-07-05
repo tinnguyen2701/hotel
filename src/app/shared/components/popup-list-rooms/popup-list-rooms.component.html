@@ -9,7 +9,7 @@
         [width]="1000"
         [(visible)]="isShowListRoom"
         (onHiding)="onHiding()"
-        [title]="'List rooms'"
+        [title]="handleTitlePopup()"
         [footerTemplate]="popupFooter">
         <dx-validation-group>
             <div class="form-wrapper">

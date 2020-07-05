@@ -3,12 +3,12 @@ import { Store } from '@ngxs/store';
 //
 import { RoomService } from '../../services';
 import { FloorModel, RoomModel } from '../../models/room.model';
-import { RoomStatus } from '../../shared/enums';
+import { RoomStatus, ActionType } from '../../shared/enums';
 import { ROOM_STATUS_TYPE } from '../../shared/constant';
-import { SetListRoomCheckin, AppState, SetIsShowListRoomCheckin } from '../../store';
+import { SetListRoomCheckin, AppState, SetIsShowListRoomCheckin, SetListRoomCheckout, SetIsShowListRoomCheckout, SetActionType } from '../../store';
 import { SelectSnapshot } from '@ngxs-labs/select-snapshot';
 
-export enum ActionType {
+export enum ActionNavigationType {
     Edit,
     AddToBookingList,
     AddToCheckoutList,
@@ -36,27 +36,27 @@ export class AllRoomsComponent implements OnInit {
 
     totalMenus = [
         {
-            value: ActionType.BookingNow,
+            value: ActionNavigationType.BookingNow,
             name: 'Booking now',
             icon: 'fa fa-plus',
         },
         {
-            value: ActionType.AddToBookingList,
+            value: ActionNavigationType.AddToBookingList,
             name: 'Add to list booking',
             icon: 'fa fa-book',
         },
         {
-            value: ActionType.CheckoutNow,
+            value: ActionNavigationType.CheckoutNow,
             name: 'Checkout now',
             icon: 'fa fa-check',
         },
         {
-            value: ActionType.AddToCheckoutList,
+            value: ActionNavigationType.AddToCheckoutList,
             name: 'Add to list checkout',
             icon: 'fa fa-book',
         },
         {
-            value: ActionType.Edit,
+            value: ActionNavigationType.Edit,
             name: 'Edit infomation',
             icon: 'fas fa-pencil-alt',
         },
@@ -100,16 +100,26 @@ export class AllRoomsComponent implements OnInit {
                 this.selectedRoom = result;
 
                 switch (item.value) {
-                    case ActionType.AddToBookingList:
+                    case ActionNavigationType.AddToBookingList:
                         this.store.dispatch(new SetListRoomCheckin(this.selectedRoom));
                         break;
-                    case ActionType.BookingNow:
+                    case ActionNavigationType.BookingNow:
+                        this.store.dispatch(new SetActionType(ActionType.Checkin));
                         this.store.dispatch(new SetListRoomCheckin(this.selectedRoom));
                         this.store.dispatch(new SetIsShowListRoomCheckin(true));
                         break;
-                    case ActionType.Edit:
+                    case ActionNavigationType.Edit:
+                        this.store.dispatch(new SetActionType(ActionType.Edit));
                         this.store.dispatch(new SetListRoomCheckin(this.selectedRoom));
                         this.store.dispatch(new SetIsShowListRoomCheckin(true));
+                        break;
+                    case ActionNavigationType.AddToCheckoutList:
+                            this.store.dispatch(new SetListRoomCheckout(this.selectedRoom));
+                            break;
+                    case ActionNavigationType.CheckoutNow:
+                        this.store.dispatch(new SetActionType(ActionType.Checkout));
+                        this.store.dispatch(new SetListRoomCheckout(this.selectedRoom));
+                        this.store.dispatch(new SetIsShowListRoomCheckout(true));
                         break;
                     default:
                         break;

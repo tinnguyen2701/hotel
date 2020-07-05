@@ -11,14 +11,18 @@ import {Store} from '@ngxs/store';
     styleUrls: ['./admin.component.scss'],
 })
 export class AdminComponent implements OnInit {
-    @SelectSnapshot(AppState.listRoomsCheckin) listRooms: RoomModel[];
-    @SelectSnapshot(AppState.isShowListRoomCheckin) isShowListRoom: boolean;
+    @SelectSnapshot(AppState.listRoomsCheckin) listRoomsCheckin: RoomModel[];
+    @SelectSnapshot(AppState.isShowListRoomCheckin) isShowListRoomCheckin: boolean;
+    @SelectSnapshot(AppState.listRoomsCheckout) listRoomsCheckout: RoomModel[];
+    @SelectSnapshot(AppState.isShowListRoomCheckout) isShowListRoomCheckout: boolean;
 
     constructor(private roomService: RoomService, private store: Store) {
         this.loadFloor();
     }
 
     ngOnInit() {
+        console.log(this.isShowListRoomCheckin);
+        console.log(this.isShowListRoomCheckout);
     }
 
     loadFloor() {

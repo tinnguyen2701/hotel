@@ -1,5 +1,6 @@
 
 import { RoomModel, FloorModel } from '@app/modules/admin/models';
+import { ActionType } from '../../shared/enums';
 
 
 export class SetFloor {
@@ -23,13 +24,6 @@ export class SetIsShowListRoomCheckin {
     }
 }
 
-export class SetEmptyListRoomCheckin {
-    static readonly type = '[App] Set empty list room checkin';
-
-    constructor() {
-    }
-}
-
 export class SetListRoomCheckout {
     static readonly type = '[App] Set list room checkout';
 
@@ -44,9 +38,8 @@ export class SetIsShowListRoomCheckout {
     }
 }
 
-export class SetEmptyListRoomCheckout {
-    static readonly type = '[App] Set empty list room checkout';
+export class SetActionType {
+    static readonly type = '[App] Set action type';
 
-    constructor() {
-    }
+    constructor(public payload: ActionType) {}
 }

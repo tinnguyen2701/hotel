@@ -42,21 +42,9 @@
             location="after"
             locateInMenu="auto">
             <div *dxTemplate="let data of 'item'">
-                <dx-button *ngIf='listRoom.length > 0' (onClick)="showPopUp()" [ngClass] = "class" [text]="numberRoom()">
+                <dx-button type="success" *ngIf='listRoomCheckin.length > 0' (onClick)="showPopUpCheckin()" [text]="numberRoomCheckin()">
                 </dx-button>
-                <dx-button
-                    class="user-button"
-                    height="100%"
-                    stylingMode="text">
-                    <div *dxTemplate="let data of 'content'">
-                        <app-user-panel></app-user-panel>
-                    </div>
-                </dx-button>
-            </div>
-            <div *dxTemplate="let data of 'item'">
-                <dx-button *ngIf='listRoomCheckin.length > 0' (onClick)="showPopUpCheckin()" [ngClass] = "class" [text]="numberRoomCheckin()">
-                </dx-button>
-                <dx-button *ngIf='listRoomCheckout.length > 0' (onClick)="showPopUpCheckout()" [ngClass] = "class" [text]="numberRoomCheckout()">
+                <dx-button class="ml-2" type="danger" *ngIf='listRoomCheckout.length > 0' (onClick)="showPopUpCheckout()" [text]="numberRoomCheckout()">
                 </dx-button>
                 <dx-button
                     class="user-button"

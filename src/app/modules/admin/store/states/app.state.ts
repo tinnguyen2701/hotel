@@ -5,11 +5,11 @@ import {
     SetListRoomCheckin,
     SetIsShowListRoomCheckin,
     SetFloor,
-    SetEmptyListRoomCheckin,
-    SetEmptyListRoomCheckout,
     SetIsShowListRoomCheckout,
-    SetListRoomCheckout
+    SetListRoomCheckout,
+    SetActionType
 } from '../actions/app.action';
+import { ActionType } from '../../shared/enums';
 
 export interface AppStateModel {
     listFloors: FloorModel[] | [];
@@ -17,6 +17,7 @@ export interface AppStateModel {
     isShowListRoomCheckin: boolean | false;
     listRoomsCheckout: RoomModel[] | [];
     isShowListRoomCheckout: boolean | false;
+    actionType: ActionType;
 }
 
 const appStateDefaults: AppStateModel = {
@@ -24,7 +25,8 @@ const appStateDefaults: AppStateModel = {
     listRoomsCheckin: [],
     isShowListRoomCheckin: false,
     listRoomsCheckout: [],
-    isShowListRoomCheckout: false
+    isShowListRoomCheckout: false,
+    actionType: ActionType.None
 };
 
 @State<AppStateModel>({
@@ -62,6 +64,11 @@ export class AppState {
         return state.isShowListRoomCheckout;
     }
 
+    @Selector()
+    static actionType(state: AppStateModel) {
+        return state.actionType;
+    }
+
     @Action(SetFloor)
     SetFloor(sc: StateContext<AppStateModel>, action: SetFloor) {
         sc.setState({
@@ -72,18 +79,12 @@ export class AppState {
 
     @Action(SetListRoomCheckin)
     SetListRoomCheckin(sc: StateContext<AppStateModel>, action: SetListRoomCheckin) {
-        sc.setState({
-            ...sc.getState(),
-            listRoomsCheckin: [...sc.getState().listRoomsCheckin, action.payload]
-        });
-    }
-
-    @Action(SetEmptyListRoomCheckin)
-    SetEmptyListRoomCheckin(sc: StateContext<AppStateModel>) {
-        sc.setState({
-            ...sc.getState(),
-            listRoomsCheckin: []
-        });
+        if (sc.getState().actionType !== ActionType.Edit) {
+            sc.setState({
+                ...sc.getState(),
+                listRoomsCheckin: [...sc.getState().listRoomsCheckin, action.payload]
+            });
+        }
     }
 
     @Action(SetIsShowListRoomCheckin)
@@ -102,19 +103,21 @@ export class AppState {
         });
     }
 
-    @Action(SetEmptyListRoomCheckout)
-    SetEmptyListRoomCheckout(sc: StateContext<AppStateModel>) {
-        sc.setState({
-            ...sc.getState(),
-            listRoomsCheckout: []
-        });
-    }
-
     @Action(SetIsShowListRoomCheckout)
     SetIsShowListRoomCheckout(sc: StateContext<AppStateModel>, action: SetIsShowListRoomCheckout) {
+        console.log('popup checkout');
+
         sc.setState({
             ...sc.getState(),
             isShowListRoomCheckout: action.payload
+        });
+    }
+
+    @Action(SetActionType)
+    SetActionType(sc: StateContext<AppStateModel>, action: SetActionType) {
+        sc.setState({
+            ...sc.getState(),
+            actionType: action.payload
         });
     }
 }
