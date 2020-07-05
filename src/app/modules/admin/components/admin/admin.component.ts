@@ -4,6 +4,7 @@ import {AppState, SetFloor} from '../../store';
 import {SelectSnapshot} from '@ngxs-labs/select-snapshot';
 import {RoomService} from '../../services';
 import {Store} from '@ngxs/store';
+import { ActionType } from '../../shared/enums';
 
 @Component({
     selector: 'app-admin',
@@ -11,18 +12,16 @@ import {Store} from '@ngxs/store';
     styleUrls: ['./admin.component.scss'],
 })
 export class AdminComponent implements OnInit {
+    @SelectSnapshot(AppState.actionType) actionType: ActionType;
     @SelectSnapshot(AppState.listRoomsCheckin) listRoomsCheckin: RoomModel[];
-    @SelectSnapshot(AppState.isShowListRoomCheckin) isShowListRoomCheckin: boolean;
     @SelectSnapshot(AppState.listRoomsCheckout) listRoomsCheckout: RoomModel[];
-    @SelectSnapshot(AppState.isShowListRoomCheckout) isShowListRoomCheckout: boolean;
 
     constructor(private roomService: RoomService, private store: Store) {
         this.loadFloor();
     }
 
     ngOnInit() {
-        console.log(this.isShowListRoomCheckin);
-        console.log(this.isShowListRoomCheckout);
+        console.log(this.actionType);
     }
 
     loadFloor() {
@@ -33,5 +32,17 @@ export class AdminComponent implements OnInit {
             (err) => {
             }
         );
+    }
+
+    isShowListRoomCheckin() {
+        return this.actionType === ActionType.Checkin;
+    }
+
+    isShowListRoomCheckout() {
+        return this.actionType === ActionType.Checkout;
+    }
+
+    isEditRoom() {
+        return this.actionType === ActionType.Edit;
     }
 }

@@ -3,7 +3,7 @@ import {Store} from '@ngxs/store';
 import {SelectSnapshot} from '@ngxs-labs/select-snapshot';
 //
 import {ADMIN_MENU} from '@app/modules/admin/shared/constant';
-import {AppState, AppStateModel, SetIsShowListRoomCheckin, SetIsShowListRoomCheckout, SetActionType} from '@app/modules/admin/store';
+import {AppState, SetActionType} from '@app/modules/admin/store';
 import {RoomModel} from '@app/modules/admin/models';
 import { ActionType } from '@app/modules/admin/shared/enums';
 
@@ -14,10 +14,9 @@ import { ActionType } from '@app/modules/admin/shared/enums';
 })
 
 export class HeaderComponent implements OnInit {
+    @SelectSnapshot(AppState.actionType) actionType: ActionType;
     @SelectSnapshot(AppState.listRoomsCheckin) listRoomCheckin: RoomModel[];
-    @SelectSnapshot(AppState.isShowListRoomCheckin) isShowListRoomCheckin: boolean;
     @SelectSnapshot(AppState.listRoomsCheckout) listRoomCheckout: RoomModel[];
-    @SelectSnapshot(AppState.isShowListRoomCheckout) isShowListRoomCheckout: boolean;
 
     @Input() menuToggleEnabled: boolean = false;
     @Input() showHeaderMenu: boolean = false;
@@ -47,7 +46,6 @@ export class HeaderComponent implements OnInit {
 
     showPopUpCheckin() {
         this.store.dispatch(new SetActionType(ActionType.Checkin));
-        this.store.dispatch(new SetIsShowListRoomCheckin(true));
     }
 
     numberRoomCheckin() {
@@ -56,7 +54,6 @@ export class HeaderComponent implements OnInit {
 
     showPopUpCheckout() {
         this.store.dispatch(new SetActionType(ActionType.Checkout));
-        this.store.dispatch(new SetIsShowListRoomCheckout(true));
     }
 
     numberRoomCheckout() {

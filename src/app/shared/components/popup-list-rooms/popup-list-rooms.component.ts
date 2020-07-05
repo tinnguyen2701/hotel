@@ -12,14 +12,14 @@ import {cloneDeep, isEqual} from 'lodash';
 import {Store} from '@ngxs/store';
 import {DxDataGridComponent} from 'devextreme-angular';
 //
-import {AppState, SetIsShowListRoomCheckin, SetFloor, SetIsShowListRoomCheckout} from '@app/modules/admin/store';
+import {AppState, SetFloor, SetActionType} from '@app/modules/admin/store';
 import {RoomModel, CustomerModel} from '@app/modules/admin/models';
 import {PopoverConfirmBoxComponent} from '..';
 import {
     ROOM_TYPE,
     ROOM_STATUS_TYPE,
 } from '@app/modules/admin/shared/constant';
-import {RoomStatus} from '@app/modules/admin/shared/enums';
+import {RoomStatus, ActionType} from '@app/modules/admin/shared/enums';
 import {AppNotify} from '@app/utilities';
 import {RoomService} from '@app/modules/admin/services';
 import { SelectSnapshot } from '@ngxs-labs/select-snapshot';
@@ -30,8 +30,7 @@ import { SelectSnapshot } from '@ngxs-labs/select-snapshot';
     styleUrls: ['./popup-list-rooms.component.scss'],
 })
 export class PopupListRoomsComponent implements OnInit, DoCheck {
-    @SelectSnapshot(AppState.isShowListRoomCheckin) isShowListRoomCheckin: boolean;
-    @SelectSnapshot(AppState.isShowListRoomCheckout) isShowListRoomCheckout: boolean;
+    @SelectSnapshot(AppState.actionType) actionType: ActionType;
 
     @ViewChild('dxDataGridRoom', {static: true})
     dxDataGridRoom: DxDataGridComponent;
@@ -78,18 +77,19 @@ export class PopupListRoomsComponent implements OnInit, DoCheck {
     }
 
     handleTitlePopup() {
-        if (this.isShowListRoomCheckin) {
+        if (this.actionType === ActionType.Checkin) {
             return "List checkin rooms";
-        } else if (this.isShowListRoomCheckout) {
+        } else if (this.actionType === ActionType.Checkout) {
             return "List checkout rooms";
+        } else if (this.actionType === ActionType.Edit) {
+            return "Edit room";
         }
-        return "List rooms";
+
     }
 
     onHiding() {
         if (this.isGroup) {
-            this.store.dispatch(new SetIsShowListRoomCheckin(false));
-            this.store.dispatch(new SetIsShowListRoomCheckout(false));
+            this.store.dispatch(new SetActionType(ActionType.None));
         } else {
             this.isShowListRoom = !this.isShowListRoom;
         }
@@ -145,12 +145,12 @@ export class PopupListRoomsComponent implements OnInit, DoCheck {
             AppNotify.confirm(confirmQuestion, confirmTitle).then((result) => {
                 if (result) {
                     // this.isShowListRoom = false;
-                    this.store.dispatch(new SetIsShowListRoomCheckin(false));
+                    this.store.dispatch(new SetActionType(ActionType.None));
                 }
             });
         } else {
             // this.isShowListRoom = false;
-            this.store.dispatch(new SetIsShowListRoomCheckin(false));
+            this.store.dispatch(new SetActionType(ActionType.None));
         }
     }
 
@@ -164,7 +164,7 @@ export class PopupListRoomsComponent implements OnInit, DoCheck {
             .subscribe(
                 (account) => {
                     AppNotify.success('UpdatedSuccessMessage');
-                    this.store.dispatch(new SetIsShowListRoomCheckin(false));
+                    this.store.dispatch(new SetActionType(ActionType.None));
                     this.refesh();
                     // this.onSuccess.emit();
                     // this.isShowListRoom = false;

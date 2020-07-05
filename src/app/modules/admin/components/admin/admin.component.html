@@ -2,10 +2,14 @@
     <router-outlet></router-outlet>
 </app-layout-default>
 
-<app-popup-list-rooms *ngIf='isShowListRoomCheckin' [listRooms]="listRoomsCheckin"
+<app-popup-list-rooms *ngIf='isShowListRoomCheckin()' [listRooms]="listRoomsCheckin"
                       [isShowListRoom]="true">
 </app-popup-list-rooms>
 
-<app-popup-list-rooms *ngIf='isShowListRoomCheckout' [listRooms]="listRoomsCheckout"
+<app-popup-list-rooms *ngIf='isShowListRoomCheckout()' [listRooms]="listRoomsCheckout"
+                      [isShowListRoom]="true">
+</app-popup-list-rooms>
+
+<app-popup-list-rooms *ngIf='isEditRoom()' [listRooms]="listRoomsCheckin"
                       [isShowListRoom]="true">
 </app-popup-list-rooms>

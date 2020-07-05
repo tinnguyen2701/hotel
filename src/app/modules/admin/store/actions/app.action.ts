@@ -17,24 +17,10 @@ export class SetListRoomCheckin {
     }
 }
 
-export class SetIsShowListRoomCheckin {
-    static readonly type = '[App] Set is show list room checkin';
-
-    constructor(public payload: boolean) {
-    }
-}
-
 export class SetListRoomCheckout {
     static readonly type = '[App] Set list room checkout';
 
     constructor(public payload: RoomModel) {
-    }
-}
-
-export class SetIsShowListRoomCheckout {
-    static readonly type = '[App] Set is show list room checkout';
-
-    constructor(public payload: boolean) {
     }
 }
 

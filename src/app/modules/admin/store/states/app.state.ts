@@ -3,9 +3,7 @@ import {State, Selector, Action, StateContext} from '@ngxs/store';
 import {Injectable} from '@angular/core';
 import {
     SetListRoomCheckin,
-    SetIsShowListRoomCheckin,
     SetFloor,
-    SetIsShowListRoomCheckout,
     SetListRoomCheckout,
     SetActionType
 } from '../actions/app.action';
@@ -14,18 +12,14 @@ import { ActionType } from '../../shared/enums';
 export interface AppStateModel {
     listFloors: FloorModel[] | [];
     listRoomsCheckin: RoomModel[] | [];
-    isShowListRoomCheckin: boolean | false;
     listRoomsCheckout: RoomModel[] | [];
-    isShowListRoomCheckout: boolean | false;
     actionType: ActionType;
 }
 
 const appStateDefaults: AppStateModel = {
     listFloors: [],
     listRoomsCheckin: [],
-    isShowListRoomCheckin: false,
     listRoomsCheckout: [],
-    isShowListRoomCheckout: false,
     actionType: ActionType.None
 };
 
@@ -49,19 +43,10 @@ export class AppState {
         return state.listRoomsCheckin;
     }
 
-    @Selector()
-    static isShowListRoomCheckin(state: AppStateModel) {
-        return state.isShowListRoomCheckin;
-    }
 
     @Selector()
     static listRoomsCheckout(state: AppStateModel) {
         return state.listRoomsCheckout;
-    }
-
-    @Selector()
-    static isShowListRoomCheckout(state: AppStateModel) {
-        return state.isShowListRoomCheckout;
     }
 
     @Selector()
@@ -87,29 +72,11 @@ export class AppState {
         }
     }
 
-    @Action(SetIsShowListRoomCheckin)
-    SetIsShowListRoomCheckin(sc: StateContext<AppStateModel>, action: SetIsShowListRoomCheckin) {
-        sc.setState({
-            ...sc.getState(),
-            isShowListRoomCheckin: action.payload
-        });
-    }
-
     @Action(SetListRoomCheckout)
     SetListRoomCheckout(sc: StateContext<AppStateModel>, action: SetListRoomCheckout) {
         sc.setState({
             ...sc.getState(),
             listRoomsCheckout: [...sc.getState().listRoomsCheckout, action.payload]
-        });
-    }
-
-    @Action(SetIsShowListRoomCheckout)
-    SetIsShowListRoomCheckout(sc: StateContext<AppStateModel>, action: SetIsShowListRoomCheckout) {
-        console.log('popup checkout');
-
-        sc.setState({
-            ...sc.getState(),
-            isShowListRoomCheckout: action.payload
         });
     }
 
