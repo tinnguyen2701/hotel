@@ -1,13 +1,8 @@
-import {RoomModel, FloorModel} from '@app/modules/admin/models';
-import {State, Selector, Action, StateContext} from '@ngxs/store';
+import {FloorModel, RoomModel} from '@app/modules/admin/models';
+import {Action, Selector, State, StateContext} from '@ngxs/store';
 import {Injectable} from '@angular/core';
-import {
-    SetListRoomCheckin,
-    SetFloor,
-    SetListRoomCheckout,
-    SetActionType
-} from '../actions/app.action';
-import { ActionType } from '../../shared/enums';
+import {SetActionType, SetEmptyListRoom, SetFloor, SetListRoomCheckin, SetListRoomCheckout} from '../actions/app.action';
+import {ActionType} from '../../shared/enums';
 
 export interface AppStateModel {
     listFloors: FloorModel[] | [];
@@ -65,10 +60,14 @@ export class AppState {
     @Action(SetListRoomCheckin)
     SetListRoomCheckin(sc: StateContext<AppStateModel>, action: SetListRoomCheckin) {
         if (sc.getState().actionType !== ActionType.Edit) {
-            sc.setState({
-                ...sc.getState(),
-                listRoomsCheckin: [...sc.getState().listRoomsCheckin, action.payload]
-            });
+            const listRoomsCheckin: RoomModel[] = sc.getState().listRoomsCheckin;
+
+            if (listRoomsCheckin.findIndex(_ => _.id === action.payload.id) === -1) {
+                sc.setState({
+                    ...sc.getState(),
+                    listRoomsCheckin: [...sc.getState().listRoomsCheckin, action.payload]
+                });
+            }
         }
     }
 
@@ -86,5 +85,22 @@ export class AppState {
             ...sc.getState(),
             actionType: action.payload
         });
+    }
+
+    @Action(SetEmptyListRoom)
+    SetEmptyListRoom(sc: StateContext<AppStateModel>) {
+        if (sc.getState().actionType === ActionType.Checkin) {
+            sc.setState({
+                ...sc.getState(),
+                listRoomsCheckin: []
+            });
+        }
+
+        if (sc.getState().actionType === ActionType.Checkout) {
+            sc.setState({
+                ...sc.getState(),
+                listRoomsCheckout: []
+            });
+        }
     }
 }

@@ -29,3 +29,10 @@ export class SetActionType {
 
     constructor(public payload: ActionType) {}
 }
+
+
+export class SetEmptyListRoom {
+    static readonly type = '[App] Set empty list room';
+
+    constructor() {}
+}

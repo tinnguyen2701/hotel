@@ -20,11 +20,11 @@ export class RoomService {
         return of(randomRoom(roomId, 1));
     }
 
-    updateRoom(rooms: RoomModel[], customers: CustomerModel[], status: number, totalPeople: number): Observable<boolean> {
+    updateRoom(rooms: RoomModel[], customers: CustomerModel[], status: number, totalPeople: number): Observable<string> {
         if (environment.debug) {
             console.log('API: updateRoom');
         }
 
-        return of(true);
+        return of('B-100');
     }
 }

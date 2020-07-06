@@ -12,7 +12,7 @@ import {cloneDeep, isEqual} from 'lodash';
 import {Store} from '@ngxs/store';
 import {DxDataGridComponent} from 'devextreme-angular';
 //
-import {AppState, SetFloor, SetActionType} from '@app/modules/admin/store';
+import {AppState, SetFloor, SetActionType, SetEmptyListRoom} from '@app/modules/admin/store';
 import {RoomModel, CustomerModel} from '@app/modules/admin/models';
 import {PopoverConfirmBoxComponent} from '..';
 import {
@@ -22,7 +22,7 @@ import {
 import {RoomStatus, ActionType} from '@app/modules/admin/shared/enums';
 import {AppNotify} from '@app/utilities';
 import {RoomService} from '@app/modules/admin/services';
-import { SelectSnapshot } from '@ngxs-labs/select-snapshot';
+import {SelectSnapshot} from '@ngxs-labs/select-snapshot';
 
 @Component({
     selector: 'app-popup-list-rooms',
@@ -78,11 +78,11 @@ export class PopupListRoomsComponent implements OnInit, DoCheck {
 
     handleTitlePopup() {
         if (this.actionType === ActionType.Checkin) {
-            return "List checkin rooms";
+            return 'List checkin rooms';
         } else if (this.actionType === ActionType.Checkout) {
-            return "List checkout rooms";
+            return 'List checkout rooms';
         } else if (this.actionType === ActionType.Edit) {
-            return "Edit room";
+            return 'Edit room';
         }
 
     }
@@ -164,6 +164,7 @@ export class PopupListRoomsComponent implements OnInit, DoCheck {
             .subscribe(
                 (account) => {
                     AppNotify.success('UpdatedSuccessMessage');
+                    this.store.dispatch(new SetEmptyListRoom());
                     this.store.dispatch(new SetActionType(ActionType.None));
                     this.refesh();
                     // this.onSuccess.emit();
