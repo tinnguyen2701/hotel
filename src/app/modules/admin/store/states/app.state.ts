@@ -1,7 +1,7 @@
 import {FloorModel, RoomModel} from '@app/modules/admin/models';
 import {Action, Selector, State, StateContext} from '@ngxs/store';
 import {Injectable} from '@angular/core';
-import {SetActionType, SetEmptyListRoom, SetFloor, SetListRoomCheckin, SetListRoomCheckout} from '../actions/app.action';
+import {SetActionType, SetEmptyListRoom, SetFloor, SetListRoomCheckin, SetListRoomCheckout, SetEditRoom} from '../actions/app.action';
 import {ActionType} from '../../shared/enums';
 
 export interface AppStateModel {
@@ -9,13 +9,15 @@ export interface AppStateModel {
     listRoomsCheckin: RoomModel[] | [];
     listRoomsCheckout: RoomModel[] | [];
     actionType: ActionType;
+    editRoom: RoomModel[];
 }
 
 const appStateDefaults: AppStateModel = {
     listFloors: [],
     listRoomsCheckin: [],
     listRoomsCheckout: [],
-    actionType: ActionType.None
+    actionType: ActionType.None,
+    editRoom: []
 };
 
 @State<AppStateModel>({
@@ -49,6 +51,11 @@ export class AppState {
         return state.actionType;
     }
 
+    @Selector()
+    static editRoom(state: AppStateModel) {
+        return state.editRoom;
+    }
+
     @Action(SetFloor)
     SetFloor(sc: StateContext<AppStateModel>, action: SetFloor) {
         sc.setState({
@@ -59,24 +66,26 @@ export class AppState {
 
     @Action(SetListRoomCheckin)
     SetListRoomCheckin(sc: StateContext<AppStateModel>, action: SetListRoomCheckin) {
-        if (sc.getState().actionType !== ActionType.Edit) {
-            const listRoomsCheckin: RoomModel[] = sc.getState().listRoomsCheckin;
+        const listRoomsCheckin: RoomModel[] = sc.getState().listRoomsCheckin;
 
-            if (listRoomsCheckin.findIndex(_ => _.id === action.payload.id) === -1) {
-                sc.setState({
-                    ...sc.getState(),
-                    listRoomsCheckin: [...sc.getState().listRoomsCheckin, action.payload]
-                });
-            }
+        if (listRoomsCheckin.findIndex(_ => _.id === action.payload.id) === -1) {
+            sc.setState({
+                ...sc.getState(),
+                listRoomsCheckin: [...sc.getState().listRoomsCheckin, action.payload]
+            });
         }
     }
 
     @Action(SetListRoomCheckout)
     SetListRoomCheckout(sc: StateContext<AppStateModel>, action: SetListRoomCheckout) {
-        sc.setState({
-            ...sc.getState(),
-            listRoomsCheckout: [...sc.getState().listRoomsCheckout, action.payload]
-        });
+        const listRoomsCheckout: RoomModel[] = sc.getState().listRoomsCheckout;
+
+        if (listRoomsCheckout.findIndex(_ => _.id === action.payload.id) === -1) {
+            sc.setState({
+                ...sc.getState(),
+                listRoomsCheckout: [...sc.getState().listRoomsCheckout, action.payload]
+            });
+        }
     }
 
     @Action(SetActionType)
@@ -103,4 +112,11 @@ export class AppState {
             });
         }
     }
-}
+
+    @Action(SetEditRoom)
+    SetEditRoom(sc: StateContext<AppStateModel>, action: SetEditRoom) {
+        sc.setState({
+            ...sc.getState(),
+            editRoom: [action.payload]
+        });
+    }}

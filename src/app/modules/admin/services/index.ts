@@ -1,2 +1,3 @@
-export * from './booking.services';
-export * from './room.services';
+export * from './booking.service';
+export * from './room.service';
+export * from './Lookup.service';

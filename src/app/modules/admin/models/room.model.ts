@@ -35,12 +35,33 @@ export class CustomerModel {
     }
 }
 
+export class ServiceModel {
+    id: number;
+    serviceId: number;
+    price: number;
+    quantity: number;
+    amount: number;
+
+    public constructor(init?: Partial<ServiceModel>) {
+        Object.assign(this, init);
+    }
+}
+
 export class FloorModel {
     id: number;
     name: string;
     rooms: RoomModel[];
 
     public constructor(init?: Partial<FloorModel>) {
+        Object.assign(this, init);
+    }
+}
+
+export class ServiceBaseLookup {
+    id: number;
+    name: string;
+
+    public constructor(init?: Partial<ServiceModel>) {
         Object.assign(this, init);
     }
 }

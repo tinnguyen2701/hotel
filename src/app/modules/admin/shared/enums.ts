@@ -7,7 +7,7 @@ export enum RoomStatus {
 
 export enum RoomType {
     Single = 1,
-    Double = 2
+    Double = 2,
 }
 
 export enum ActionType {
@@ -15,4 +15,8 @@ export enum ActionType {
     Checkin = 1,
     Checkout = 2,
     Edit = 3,
+}
+
+export enum AppLookupDataType {
+    Services = "Services",
 }

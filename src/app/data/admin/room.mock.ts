@@ -1,7 +1,12 @@
 import * as faker from "faker";
 import { random } from "lodash";
 //
-import { RoomModel, FloorModel } from "@app/modules/admin/models/room.model";
+import {
+    RoomModel,
+    FloorModel,
+    ServiceBaseLookup,
+    ServiceModel,
+} from "@app/modules/admin/models/room.model";
 import { RoomStatus } from "@app/modules/admin/shared/enums";
 
 export function randomFloors(count: number): FloorModel[] {
@@ -41,14 +46,14 @@ export function randomRooms(count: number, floor: number): RoomModel[] {
                 prepay: 0,
                 note: faker.lorem.sentence(),
                 peopleNumber: 0,
-                customerInfomation: null
+                customerInfomation: null,
             };
         });
 }
 
 export function randomRoom(roomId: number, type: number): RoomModel {
-
-    if (type === 1) { // booking now
+    if (type === 1) {
+        // booking now
         return {
             id: roomId,
             status: RoomStatus.Available,
@@ -61,7 +66,7 @@ export function randomRoom(roomId: number, type: number): RoomModel {
             prepay: 0,
             note: faker.lorem.sentence(),
             peopleNumber: 0,
-            customerInfomation: null
+            customerInfomation: null,
         };
     }
     const statusRoom = random(2, 4);
@@ -86,6 +91,40 @@ export function randomRoom(roomId: number, type: number): RoomModel {
         prepay: 0,
         note: faker.lorem.sentence(),
         peopleNumber: 0,
-        customerInfomation: null
+        customerInfomation: null,
     };
+}
+
+export function randomServiceLookup(): ServiceBaseLookup[] {
+    return [
+        {
+            id: 1,
+            name: "bò húc",
+        },
+        {
+            id: 2,
+            name: "coca",
+        },
+        {
+            id: 3,
+            name: "mì hảo hảo",
+        },
+    ];
+}
+
+export function randomServices(count: number): ServiceModel[] {
+    return Array(count)
+        .fill({})
+        .map((item: ServiceModel, index) => {
+            const price = random(1, 10) * 10000;
+            const quantity = random(1, 10);
+
+            return new ServiceModel({
+                id: index + 1,
+                serviceId: random(1, 3),
+                price,
+                quantity,
+                amount: price * quantity,
+            });
+        });
 }

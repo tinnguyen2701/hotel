@@ -1,4 +1,4 @@
-import {StatusBooking} from '@app/modules/admin/shared/enums';
+import {RoomStatus} from '@app/modules/admin/shared/enums';
 import {ISearchDataInterface} from '@app/modules/admin/models/search.model';
 
 export class BookingModel {
@@ -17,7 +17,7 @@ export class BookingModel {
     boatName: string;
     activities: string[];
     price: number;
-    status: StatusBooking;
+    status: RoomStatus;
     discountApplied: number;
     income: number;
     overnightN?: number;

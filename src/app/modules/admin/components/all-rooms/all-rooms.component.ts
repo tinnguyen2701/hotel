@@ -5,7 +5,7 @@ import { RoomService } from '../../services';
 import { FloorModel, RoomModel } from '../../models/room.model';
 import { RoomStatus, ActionType } from '../../shared/enums';
 import { ROOM_STATUS_TYPE } from '../../shared/constant';
-import { SetListRoomCheckin, AppState, SetListRoomCheckout, SetActionType } from '../../store';
+import { SetListRoomCheckin, AppState, SetListRoomCheckout, SetActionType, SetEditRoom } from '../../store';
 import { SelectSnapshot } from '@ngxs-labs/select-snapshot';
 
 export enum ActionNavigationType {
@@ -109,7 +109,7 @@ export class AllRoomsComponent implements OnInit {
                         break;
                     case ActionNavigationType.Edit:
                         this.store.dispatch(new SetActionType(ActionType.Edit));
-                        this.store.dispatch(new SetListRoomCheckin(this.selectedRoom));
+                        this.store.dispatch(new SetEditRoom(this.selectedRoom));
                         break;
                     case ActionNavigationType.AddToCheckoutList:
                             this.store.dispatch(new SetListRoomCheckout(this.selectedRoom));

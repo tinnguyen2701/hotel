@@ -7,41 +7,51 @@ import {
     Output,
     EventEmitter,
     DoCheck,
-} from '@angular/core';
-import {cloneDeep, isEqual} from 'lodash';
-import {Store} from '@ngxs/store';
-import {DxDataGridComponent} from 'devextreme-angular';
+    OnDestroy,
+} from "@angular/core";
+import { cloneDeep, isEqual } from "lodash";
+import { Store } from "@ngxs/store";
+import { DxDataGridComponent } from "devextreme-angular";
+import { Subscription } from "rxjs";
 //
-import {AppState, SetFloor, SetActionType, SetEmptyListRoom} from '@app/modules/admin/store';
-import {RoomModel, CustomerModel} from '@app/modules/admin/models';
-import {PopoverConfirmBoxComponent} from '..';
+import {
+    AppState,
+    SetFloor,
+    SetActionType,
+    SetEmptyListRoom,
+} from "@app/modules/admin/store";
+import {
+    RoomModel,
+    CustomerModel,
+    ServiceBaseLookup,
+} from "@app/modules/admin/models";
+import { PopoverConfirmBoxComponent } from "..";
 import {
     ROOM_TYPE,
     ROOM_STATUS_TYPE,
-} from '@app/modules/admin/shared/constant';
-import {RoomStatus, ActionType} from '@app/modules/admin/shared/enums';
-import {AppNotify} from '@app/utilities';
-import {RoomService} from '@app/modules/admin/services';
-import {SelectSnapshot} from '@ngxs-labs/select-snapshot';
+} from "@app/modules/admin/shared/constant";
+import { RoomStatus, ActionType } from "@app/modules/admin/shared/enums";
+import { AppNotify } from "@app/utilities";
+import { RoomService, AppLookupService } from "@app/modules/admin/services";
+import { SelectSnapshot } from "@ngxs-labs/select-snapshot";
 
 @Component({
-    selector: 'app-popup-list-rooms',
-    templateUrl: './popup-list-rooms.component.html',
-    styleUrls: ['./popup-list-rooms.component.scss'],
+    selector: "app-popup-list-rooms",
+    templateUrl: "./popup-list-rooms.component.html",
+    styleUrls: ["./popup-list-rooms.component.scss"],
 })
-export class PopupListRoomsComponent implements OnInit, DoCheck {
+export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
     @SelectSnapshot(AppState.actionType) actionType: ActionType;
 
-    @ViewChild('dxDataGridRoom', {static: true})
+    @ViewChild("dxDataGridRoom", { static: true })
     dxDataGridRoom: DxDataGridComponent;
-    @ViewChild('dxDataGridCustomer', {static: true})
+    @ViewChild("dxDataGridCustomer", { static: true })
     dxDataGridCustomer: DxDataGridComponent;
-    @ViewChild('deleteDetailConfirmPopover', {static: true})
+    @ViewChild("deleteDetailConfirmPopover", { static: true })
     confirmDeleteDetailPopover: PopoverConfirmBoxComponent;
 
     @Input() listRooms: RoomModel[];
     @Input() isGroup: boolean = true;
-
     @Input() isShowListRoom: boolean = false;
 
     @Output() onSuccess = new EventEmitter();
@@ -58,19 +68,28 @@ export class PopupListRoomsComponent implements OnInit, DoCheck {
     customerOriginals: CustomerModel[] = [];
     listRoomOriginals: RoomModel[] = [];
     gender = [
-        {value: 0, text: 'Female'},
-        {value: 1, text: 'Male'},
+        { value: 0, text: "Female" },
+        { value: 1, text: "Male" },
     ];
+    subscription: Subscription = new Subscription();
+    serviceSource: ServiceBaseLookup[] = [];
 
     constructor(
         private roomService: RoomService,
         private store: Store,
-        private changeDetectorRef: ChangeDetectorRef
-    ) {
-    }
+        private changeDetectorRef: ChangeDetectorRef,
+        private appLookupService: AppLookupService
+    ) {}
 
     ngOnInit() {
+        this.subscription.add(
+            this.appLookupService.appLookup.subscribe((lookup) => {
+                this.serviceSource = lookup.services;
+            })
+        );
+
         console.log(this.isGroup);
+
         this.roomStatusTypes = this.roomStatusTypes.slice(2, 4);
         this.listRoomOriginals = cloneDeep(this.listRooms);
         this.customerOriginals = cloneDeep(this.customers);
@@ -78,13 +97,12 @@ export class PopupListRoomsComponent implements OnInit, DoCheck {
 
     handleTitlePopup() {
         if (this.actionType === ActionType.Checkin) {
-            return 'List checkin rooms';
+            return "List checkin rooms";
         } else if (this.actionType === ActionType.Checkout) {
-            return 'List checkout rooms';
+            return "List checkout rooms";
         } else if (this.actionType === ActionType.Edit) {
-            return 'Edit room';
+            return "Edit room";
         }
-
     }
 
     onHiding() {
@@ -140,8 +158,8 @@ export class PopupListRoomsComponent implements OnInit, DoCheck {
 
     onHandleCancel() {
         if (this.isFormDirty) {
-            const confirmTitle = 'Confirm Popup Title';
-            const confirmQuestion = 'Cancel Editing Confirm Question';
+            const confirmTitle = "Confirm Popup Title";
+            const confirmQuestion = "Cancel Editing Confirm Question";
             AppNotify.confirm(confirmQuestion, confirmTitle).then((result) => {
                 if (result) {
                     // this.isShowListRoom = false;
@@ -160,10 +178,15 @@ export class PopupListRoomsComponent implements OnInit, DoCheck {
         }
 
         this.roomService
-            .updateRoom(this.listRooms, this.customers, this.status, this.totalPeoples)
+            .updateRoom(
+                this.listRooms,
+                this.customers,
+                this.status,
+                this.totalPeoples
+            )
             .subscribe(
                 (account) => {
-                    AppNotify.success('UpdatedSuccessMessage');
+                    AppNotify.success("UpdatedSuccessMessage");
                     this.store.dispatch(new SetEmptyListRoom());
                     this.store.dispatch(new SetActionType(ActionType.None));
                     this.refesh();
@@ -191,12 +214,17 @@ export class PopupListRoomsComponent implements OnInit, DoCheck {
             (result) => {
                 this.store.dispatch(new SetFloor(result));
             },
-            (err) => {
-            }
+            (err) => {}
         );
     }
 
     ngDoCheck() {
-        this.isFormDirty = !isEqual(this.listRooms, this.listRoomOriginals) || !isEqual(this.customers, this.customerOriginals);
+        this.isFormDirty =
+            !isEqual(this.listRooms, this.listRoomOriginals) ||
+            !isEqual(this.customers, this.customerOriginals);
+    }
+
+    ngOnDestroy() {
+        this.subscription.unsubscribe();
     }
 }
