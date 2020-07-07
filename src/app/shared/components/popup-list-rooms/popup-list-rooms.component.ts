@@ -101,8 +101,11 @@ export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
         this.subscription.add(
             this.appLookupService.appLookup.subscribe((lookup) => {
                 this.serviceSource = lookup.services;
+                console.log(this.serviceSource);
+
             })
         );
+
 
         console.log(this.isGroup);
 

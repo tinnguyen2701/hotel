@@ -5,7 +5,6 @@ import {HttpClientModule} from '@angular/common/http';
 import {JwtModule} from '@auth0/angular-jwt';
 import {NgxPermissionsModule} from 'ngx-permissions';
 
-import {ThemeModule} from '@app/theme';
 import {SharedModule} from '@app/shared/shared.module';
 import {AUTH_SCHEME, ACCESS_TOKEN_KEY} from '@app/shared/constants';
 import {AppLoadService} from '@app/modules/core/services';
@@ -16,6 +15,7 @@ import {NgxsModule} from '@ngxs/store';
 import {NgxsSelectSnapshotModule} from '@ngxs-labs/select-snapshot';
 import {NgxsReduxDevtoolsPluginModule} from '@ngxs/devtools-plugin';
 import {environment} from '@environment';
+import { RoomService } from './modules/admin/services';
 
 export function initializeApp(injector: Injector) {
     return (): Promise<any> => {
@@ -70,7 +70,8 @@ export const STATES = [
             useFactory: initializeApp,
             deps: [Injector],
             multi: true
-        }
+        },
+        RoomService
     ],
     bootstrap: [AppComponent]
 })

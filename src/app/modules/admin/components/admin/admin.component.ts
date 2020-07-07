@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { RoomModel, AppLookupModel } from "../../models";
-import { AppState, SetFloor } from "../../store";
+import { AppState, SetFloor, SetListRoomCheckinAndCheckout } from "../../store";
 import { SelectSnapshot } from "@ngxs-labs/select-snapshot";
 import { RoomService, AppLookupService } from "../../services";
 import { Store } from "@ngxs/store";
@@ -11,6 +11,7 @@ import { ActionType } from "../../shared/enums";
     templateUrl: "./admin.component.html",
     styleUrls: ["./admin.component.scss"],
 })
+
 export class AdminComponent implements OnInit {
     @SelectSnapshot(AppState.actionType) actionType: ActionType;
     @SelectSnapshot(AppState.listRoomsCheckin) listRoomsCheckin: RoomModel[];
@@ -21,7 +22,9 @@ export class AdminComponent implements OnInit {
         private roomService: RoomService,
         private store: Store,
         private appLookupService: AppLookupService
-    ) {}
+    ) {
+        this.store.dispatch(new SetListRoomCheckinAndCheckout());
+    }
 
     ngOnInit() {
         this.loadFloor();

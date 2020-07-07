@@ -2,6 +2,7 @@ import { Observable, of } from 'rxjs';
 import { RoomModel, FloorModel, CustomerModel } from '../models';
 import { environment } from '@environment';
 import { randomFloors, randomRoom } from '@app/data/admin/room.mock';
+import { ActionType } from '../shared/enums';
 
 export class RoomService {
     getFloors(): Observable<FloorModel[]> {
@@ -26,5 +27,21 @@ export class RoomService {
         }
 
         return of('B-100');
+    }
+
+    addListRoom(rooms: RoomModel[], status: ActionType): Observable<RoomModel[]> {
+        if (environment.debug) {
+            console.log('API: addListRoom');
+        }
+
+        return of(rooms);
+    }
+
+    getListRoom(rooms: RoomModel[], status: ActionType): Observable<{listRoomCheckin: RoomModel[], listRoomCheckout: RoomModel[]}> {
+        if (environment.debug) {
+            console.log('API: getListRoom');
+        }
+
+        return of({listRoomCheckin: [randomRoom(102, 1)], listRoomCheckout: []});
     }
 }

@@ -1,8 +1,10 @@
 import {FloorModel, RoomModel} from '@app/modules/admin/models';
 import {Action, Selector, State, StateContext} from '@ngxs/store';
 import {Injectable} from '@angular/core';
-import {SetActionType, SetEmptyListRoom, SetFloor, SetListRoomCheckin, SetListRoomCheckout, SetEditRoom} from '../actions/app.action';
+import {SetActionType, SetEmptyListRoom, SetFloor, SetListRoomCheckin, SetListRoomCheckout, SetEditRoom, SetListRoomCheckinAndCheckout} from '../actions/app.action';
 import {ActionType} from '../../shared/enums';
+import { RoomService } from '../../services';
+import { AppNotify } from '@app/utilities';
 
 export interface AppStateModel {
     listFloors: FloorModel[] | [];
@@ -27,7 +29,7 @@ const appStateDefaults: AppStateModel = {
 
 @Injectable()
 export class AppState {
-    constructor() {
+    constructor(private roomService: RoomService) {
     }
 
     @Selector()
@@ -69,9 +71,13 @@ export class AppState {
         const listRoomsCheckin: RoomModel[] = sc.getState().listRoomsCheckin;
 
         if (listRoomsCheckin.findIndex(_ => _.id === action.payload.id) === -1) {
-            sc.setState({
-                ...sc.getState(),
-                listRoomsCheckin: [...sc.getState().listRoomsCheckin, action.payload]
+            this.roomService.addListRoom([...listRoomsCheckin, action.payload], ActionType.Checkin).subscribe((rooms) => {
+                sc.setState({
+                    ...sc.getState(),
+                    listRoomsCheckin: rooms
+                });
+            }, (error) => {
+                AppNotify.error('Add List Room Error');
             });
         }
     }
@@ -81,9 +87,13 @@ export class AppState {
         const listRoomsCheckout: RoomModel[] = sc.getState().listRoomsCheckout;
 
         if (listRoomsCheckout.findIndex(_ => _.id === action.payload.id) === -1) {
-            sc.setState({
-                ...sc.getState(),
-                listRoomsCheckout: [...sc.getState().listRoomsCheckout, action.payload]
+            this.roomService.addListRoom([...listRoomsCheckout, action.payload], ActionType.Checkout).subscribe((rooms) => {
+                sc.setState({
+                    ...sc.getState(),
+                    listRoomsCheckout: rooms
+                });
+            }, (error) => {
+                AppNotify.error('Add List Room Error');
             });
         }
     }
@@ -99,16 +109,24 @@ export class AppState {
     @Action(SetEmptyListRoom)
     SetEmptyListRoom(sc: StateContext<AppStateModel>) {
         if (sc.getState().actionType === ActionType.Checkin) {
-            sc.setState({
-                ...sc.getState(),
-                listRoomsCheckin: []
+            this.roomService.addListRoom([], ActionType.Checkout).subscribe((rooms) => {
+                sc.setState({
+                    ...sc.getState(),
+                    listRoomsCheckin: []
+                });
+            }, (error) => {
+                AppNotify.error('Add List Room Error');
             });
         }
 
         if (sc.getState().actionType === ActionType.Checkout) {
-            sc.setState({
-                ...sc.getState(),
-                listRoomsCheckout: []
+            this.roomService.addListRoom([], ActionType.Checkout).subscribe((rooms) => {
+                sc.setState({
+                    ...sc.getState(),
+                    listRoomsCheckout: []
+                });
+            }, (error) => {
+                AppNotify.error('Add List Room Error');
             });
         }
     }
@@ -119,4 +137,18 @@ export class AppState {
             ...sc.getState(),
             editRoom: [action.payload]
         });
-    }}
+    }
+
+    @Action(SetListRoomCheckinAndCheckout)
+    SetListRoomCheckinAndCheckout(sc: StateContext<AppStateModel>) {
+        this.roomService.getListRoom([], ActionType.Checkout).subscribe((result) => {
+            sc.setState({
+                ...sc.getState(),
+                listRoomsCheckin: result.listRoomCheckin,
+                listRoomsCheckout: result.listRoomCheckout
+            });
+        }, (error) => {
+            AppNotify.error('Get List Room Error');
+        });
+    }
+}
