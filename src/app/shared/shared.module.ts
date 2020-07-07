@@ -19,6 +19,8 @@ import { PopupListRoomsComponent } from "./components/popup-list-rooms/popup-lis
 import { AppState } from "@app/modules/admin/store";
 import { NgxsModule } from "@ngxs/store";
 import { TabComponent } from './components/tab/tab.component';
+import { CustomersComponent } from './components/customers/customers.component';
+import { ServicesComponent } from './components/services/services.component';
 
 const PROVIDERS = [
     //
@@ -44,7 +46,7 @@ export const STATES = [AppState];
 
 @NgModule({
     imports: [ThemeModule, NgxsModule.forFeature([...STATES])],
-    declarations: [...COMPONENTS],
+    declarations: [...COMPONENTS, CustomersComponent, ServicesComponent],
     exports: [...COMPONENTS],
 })
 export class SharedModule {

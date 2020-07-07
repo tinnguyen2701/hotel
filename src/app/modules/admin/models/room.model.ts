@@ -19,6 +19,7 @@ export  interface RoomModel {
 }
 
 export class CustomerModel {
+    id: number;
     name: string;
     address: string;
     sex: boolean;

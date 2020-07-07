@@ -43,12 +43,8 @@ import {SelectSnapshot} from '@ngxs-labs/select-snapshot';
 export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
     @SelectSnapshot(AppState.actionType) actionType: ActionType;
 
-    @ViewChild('dxDataGridRoom', {static: true})
-    dxDataGridRoom: DxDataGridComponent;
-    @ViewChild('dxDataGridCustomer', {static: true})
-    dxDataGridCustomer: DxDataGridComponent;
-    @ViewChild('deleteDetailConfirmPopover', {static: true})
-    confirmDeleteDetailPopover: PopoverConfirmBoxComponent;
+    @ViewChild('dxDataGridRoom', {static: true}) dxDataGridRoom: DxDataGridComponent;
+    @ViewChild('deleteDetailConfirmPopover', {static: true}) confirmDeleteDetailPopover: PopoverConfirmBoxComponent;
 
     @Input() listRooms: RoomModel[];
     @Input() isGroup: boolean = true;
