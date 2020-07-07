@@ -266,7 +266,16 @@
                     </dx-data-grid>
                 </ng-container>
 
-                <ng-container>
+                <app-tab
+                    [tabs]="menuTabs"
+                    [displayExpr]="'text'"
+                    [valueExpr]="'value'"
+                    [selectedTab]="currentTab"
+                    [showCloseIcon]="false"
+                    (onSelectionChanged)="changeTab($event)">
+                </app-tab>
+
+                <ng-container *ngIf="currentTab.value === Customer">
                     <p class="mt-4">Customer Infomation</p>
                     <dx-data-grid
                         #dxDataGridCustomer
@@ -524,7 +533,7 @@
                     </dx-data-grid>
                 </ng-container>
 
-                <ng-container>
+                <ng-container *ngIf="currentTab.value === Service">
                     <p class="mt-4">Services</p>
                     <dx-data-grid
                         #dxDataGridServices

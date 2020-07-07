@@ -18,6 +18,7 @@ import { PopoverTitleComponent } from "@app/shared/components/popover-title/popo
 import { PopupListRoomsComponent } from "./components/popup-list-rooms/popup-list-rooms.component";
 import { AppState } from "@app/modules/admin/store";
 import { NgxsModule } from "@ngxs/store";
+import { TabComponent } from './components/tab/tab.component';
 
 const PROVIDERS = [
     //
@@ -36,6 +37,7 @@ const COMPONENTS = [
     PopoverConfirmBoxComponent,
     PopoverTitleComponent,
     PopupListRoomsComponent,
+    TabComponent
 ];
 
 export const STATES = [AppState];

@@ -8,46 +8,46 @@ import {
     EventEmitter,
     DoCheck,
     OnDestroy,
-} from "@angular/core";
-import { cloneDeep, isEqual } from "lodash";
-import { Store } from "@ngxs/store";
-import { DxDataGridComponent } from "devextreme-angular";
-import { Subscription } from "rxjs";
+} from '@angular/core';
+import {cloneDeep, isEqual} from 'lodash';
+import {Store} from '@ngxs/store';
+import {DxDataGridComponent, DxTabsComponent} from 'devextreme-angular';
+import {Subscription} from 'rxjs';
 //
 import {
     AppState,
     SetFloor,
     SetActionType,
     SetEmptyListRoom,
-} from "@app/modules/admin/store";
+} from '@app/modules/admin/store';
 import {
     RoomModel,
     CustomerModel,
     ServiceBaseLookup,
-} from "@app/modules/admin/models";
-import { PopoverConfirmBoxComponent } from "..";
+} from '@app/modules/admin/models';
+import {PopoverConfirmBoxComponent} from '..';
 import {
     ROOM_TYPE,
     ROOM_STATUS_TYPE,
-} from "@app/modules/admin/shared/constant";
-import { RoomStatus, ActionType } from "@app/modules/admin/shared/enums";
-import { AppNotify } from "@app/utilities";
-import { RoomService, AppLookupService } from "@app/modules/admin/services";
-import { SelectSnapshot } from "@ngxs-labs/select-snapshot";
+} from '@app/modules/admin/shared/constant';
+import {RoomStatus, ActionType} from '@app/modules/admin/shared/enums';
+import {AppNotify} from '@app/utilities';
+import {RoomService, AppLookupService} from '@app/modules/admin/services';
+import {SelectSnapshot} from '@ngxs-labs/select-snapshot';
 
 @Component({
-    selector: "app-popup-list-rooms",
-    templateUrl: "./popup-list-rooms.component.html",
-    styleUrls: ["./popup-list-rooms.component.scss"],
+    selector: 'app-popup-list-rooms',
+    templateUrl: './popup-list-rooms.component.html',
+    styleUrls: ['./popup-list-rooms.component.scss'],
 })
 export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
     @SelectSnapshot(AppState.actionType) actionType: ActionType;
 
-    @ViewChild("dxDataGridRoom", { static: true })
+    @ViewChild('dxDataGridRoom', {static: true})
     dxDataGridRoom: DxDataGridComponent;
-    @ViewChild("dxDataGridCustomer", { static: true })
+    @ViewChild('dxDataGridCustomer', {static: true})
     dxDataGridCustomer: DxDataGridComponent;
-    @ViewChild("deleteDetailConfirmPopover", { static: true })
+    @ViewChild('deleteDetailConfirmPopover', {static: true})
     confirmDeleteDetailPopover: PopoverConfirmBoxComponent;
 
     @Input() listRooms: RoomModel[];
@@ -68,18 +68,38 @@ export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
     customerOriginals: CustomerModel[] = [];
     listRoomOriginals: RoomModel[] = [];
     gender = [
-        { value: 0, text: "Female" },
-        { value: 1, text: "Male" },
+        {value: 0, text: 'Female'},
+        {value: 1, text: 'Male'},
     ];
+
     subscription: Subscription = new Subscription();
     serviceSource: ServiceBaseLookup[] = [];
+
+    Customer = 1;
+    Service = 2;
+    menuTabs = [
+        {
+            value: this.Customer,
+            text: 'Customer',
+            enableHistory: true,
+            visited: true,
+        },
+        {
+            value: this.Service,
+            text: 'Service',
+            enableHistory: true,
+            visited: true,
+        },
+    ];
+    currentTab = this.menuTabs[0];
 
     constructor(
         private roomService: RoomService,
         private store: Store,
         private changeDetectorRef: ChangeDetectorRef,
         private appLookupService: AppLookupService
-    ) {}
+    ) {
+    }
 
     ngOnInit() {
         this.subscription.add(
@@ -95,13 +115,17 @@ export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
         this.customerOriginals = cloneDeep(this.customers);
     }
 
+    changeTab(tab) {
+        this.currentTab = tab;
+    }
+
     handleTitlePopup() {
         if (this.actionType === ActionType.Checkin) {
-            return "List checkin rooms";
+            return 'List checkin rooms';
         } else if (this.actionType === ActionType.Checkout) {
-            return "List checkout rooms";
+            return 'List checkout rooms';
         } else if (this.actionType === ActionType.Edit) {
-            return "Edit room";
+            return 'Edit room';
         }
     }
 
@@ -158,8 +182,8 @@ export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
 
     onHandleCancel() {
         if (this.isFormDirty) {
-            const confirmTitle = "Confirm Popup Title";
-            const confirmQuestion = "Cancel Editing Confirm Question";
+            const confirmTitle = 'Confirm Popup Title';
+            const confirmQuestion = 'Cancel Editing Confirm Question';
             AppNotify.confirm(confirmQuestion, confirmTitle).then((result) => {
                 if (result) {
                     // this.isShowListRoom = false;
@@ -186,7 +210,7 @@ export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
             )
             .subscribe(
                 (account) => {
-                    AppNotify.success("UpdatedSuccessMessage");
+                    AppNotify.success('UpdatedSuccessMessage');
                     this.store.dispatch(new SetEmptyListRoom());
                     this.store.dispatch(new SetActionType(ActionType.None));
                     this.refesh();
@@ -214,7 +238,8 @@ export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
             (result) => {
                 this.store.dispatch(new SetFloor(result));
             },
-            (err) => {}
+            (err) => {
+            }
         );
     }
 

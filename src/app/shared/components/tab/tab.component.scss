@@ -1,0 +1,74 @@
+@import "variables";
+
+.custom-tab {
+    ::ng-deep > dx-tabs {
+        border: none;
+        max-width: 100%;
+
+        > div.dx-tabs-scrollable{
+            height: 100%;
+        }
+
+        > div.dx-tabs-nav-button > .dx-button-content > i {
+            color: $main-color;
+        }
+
+        div.dx-tabs-wrapper {
+            border: none;
+
+            > div.dx-tab {
+                background-color: transparent;
+                padding-top: 7px;
+                padding-bottom: 7px;
+
+                .tab-icon{
+                    margin-top: 3px;
+                    margin-right: 6px;
+                }
+
+                .wiki-info {
+                    display: none;
+                }
+
+                &.dx-tab-selected {
+                    border-bottom-color: $main-color;
+                    color: $main-color;
+                    -webkit-border-radius: 3px;
+                    -moz-border-radius: 3px;
+                    border-radius: 3px;
+
+                    .wiki-info {
+                        display: block;
+                    }
+                }
+
+                &:after,
+                &.dx-tab-selected:after {
+                    border-top: none;
+                    border-left: none;
+                    border-right: none;
+                    border-bottom: 2px solid $main-color;
+                    top: 0;
+                    right: 0;
+                    bottom: 0;
+                    left: 0;
+                }
+
+                .dx-tab-text {
+                    line-height: 1.35715;
+                }
+            }
+
+            i.dx-icon.fas {
+                margin-right: 0;
+                margin-left: 5px;
+                font-size: 16px;
+                color: #d2d2d2;
+
+                &:hover {
+                    color: $main-color;
+                }
+            }
+        }
+    }
+}

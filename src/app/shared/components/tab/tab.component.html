@@ -1,0 +1,21 @@
+<p>tab works!</p>
+<div class="custom-tab">
+    <dx-tabs #tab width="auto"
+             [dataSource]="tabs"
+             [selectedItem]="selectedTab"
+             [itemTemplate]="'tabTemplate'"
+             [height]="height"
+             [scrollByContent]="true"
+             (onSelectionChanged)=changeTab($event)>
+        <div *dxTemplate="let tab of 'tabTemplate'">
+            <div class="d-flex">
+                <i *ngIf="iconExpr" class="{{tab[iconExpr]}} tab-icon"></i>
+                <b class="dx-tab-text" *ngIf="bolderTitleTab">{{ tab[displayExpr]}}</b>
+                <span class="dx-tab-text" *ngIf="!bolderTitleTab">{{ tab[displayExpr]}}</span>
+                <i (click)="closingTab(tab[valueExpr])"
+                   [class.d-none]="(showCloseIcon && tab[valueExpr] < 0) || tab['iconClose'] === false || !showCloseIcon"
+                   class="dx-icon fas fa-times-circle"></i>
+            </div>
+        </div>
+    </dx-tabs>
+</div>
