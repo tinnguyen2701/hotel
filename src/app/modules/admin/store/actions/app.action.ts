@@ -37,6 +37,12 @@ export class SetEmptyListRoom {
     constructor() {}
 }
 
+export class SetEmptyEditRoom {
+    static readonly type = '[App] Set empty room';
+
+    constructor() {}
+}
+
 export class SetEditRoom {
     static readonly type = '[App] Set edit room';
 

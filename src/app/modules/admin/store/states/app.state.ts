@@ -1,7 +1,7 @@
 import {FloorModel, RoomModel} from '@app/modules/admin/models';
 import {Action, Selector, State, StateContext} from '@ngxs/store';
 import {Injectable} from '@angular/core';
-import {SetActionType, SetEmptyListRoom, SetFloor, SetListRoomCheckin, SetListRoomCheckout, SetEditRoom, SetListRoomCheckinAndCheckout} from '../actions/app.action';
+import {SetActionType, SetEmptyListRoom, SetFloor, SetListRoomCheckin, SetListRoomCheckout, SetEditRoom, SetListRoomCheckinAndCheckout, SetEmptyEditRoom} from '../actions/app.action';
 import {ActionType} from '../../shared/enums';
 import { RoomService } from '../../services';
 import { AppNotify } from '@app/utilities';
@@ -129,6 +129,14 @@ export class AppState {
                 AppNotify.error('Add List Room Error');
             });
         }
+    }
+
+    @Action(SetEmptyEditRoom)
+    SetEmptyEditRoom(sc: StateContext<AppStateModel>) {
+        sc.setState({
+            ...sc.getState(),
+            editRoom: []
+        });
     }
 
     @Action(SetEditRoom)

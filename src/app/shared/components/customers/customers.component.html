@@ -1,6 +1,7 @@
 <dx-data-grid
     #dxDataGridCustomer
-    height="auto"
+    class="w-100"
+    height="600"
     [(dataSource)]="customers"
     [showRowLines]="true"
     [showBorders]="true"
@@ -8,8 +9,7 @@
     [hoverStateEnabled]="true"
     [columnAutoWidth]="false"
     [allowColumnResizing]="true"
-    [allowColumnReordering]="false"
->
+    [allowColumnReordering]="false">
     <dxo-editing mode="row" [allowUpdating]="true" [allowDeleting]="true">
         <dxo-texts [confirmDeleteMessage]="null"></dxo-texts>
     </dxo-editing>
@@ -26,8 +26,7 @@
         [width]="60"
         [fixed]="true"
         headerCellTemplate="indexHeaderCellTemplate"
-        cellTemplate="indexCellTemplate"
-    >
+        cellTemplate="indexCellTemplate">
         <div *dxTemplate="let row of 'indexHeaderCellTemplate'">
             <dx-button
                 type="default"
@@ -35,8 +34,7 @@
                 class="btn-add-row-circle"
                 [stylingMode]="'outlined'"
                 [hint]="'Add'"
-                (onClick)="dxDataGridCustomer.instance.addRow()"
-            >
+                (onClick)="dxDataGridCustomer.instance.addRow()">
             </dx-button>
         </div>
         <div *dxTemplate="let cell of 'indexCellTemplate'">
@@ -49,46 +47,43 @@
     <dxi-column
         dataField="name"
         caption="Name"
-        [width]="210"
-        [width]="100"
-        alignment="right"
-    >
+        [width]="150"
+        [allowEditing]="false"
+        [allowSorting]="false"
+        alignment="right">
         <dxi-validation-rule
             type="required"
-            [message]="'This field is required'"
-        >
+            [message]="'This field is required'">
         </dxi-validation-rule>
     </dxi-column>
 
     <dxi-column
         dataField="address"
         caption="Address"
-        [width]="210"
-        [width]="100"
-        alignment="right"
-    >
+        [width]="180"
+        [allowEditing]="false"
+        [allowSorting]="false"
+        alignment="right">
         <dxi-validation-rule
             type="required"
-            [message]="'This field is required'"
-        >
+            [message]="'This field is required'">
         </dxi-validation-rule>
     </dxi-column>
 
     <dxi-column
         dataField="sex"
         caption="Sex"
-        [width]="210"
         [width]="100"
+        [allowEditing]="false"
+        [allowSorting]="false"
         alignment="right"
         cellTemplate="cellTemplate"
-        editCellTemplate="editCellTemplate"
-    >
+        editCellTemplate="editCellTemplate">
         <div *dxTemplate="let cell of 'cellTemplate'">
             <dx-switch
                 [(value)]="cell.value"
                 [switchedOnText]="'Male'"
-                [switchedOffText]="'Female'"
-            >
+                [switchedOffText]="'Female'">
             </dx-switch>
         </div>
         <div *dxTemplate="let cell of 'editCellTemplate'">
@@ -96,8 +91,7 @@
                 width="80"
                 [(value)]="cell.value"
                 [switchedOnText]="'Male'"
-                [switchedOffText]="'Female'"
-            >
+                [switchedOffText]="'Female'">
             </dx-switch>
         </div>
     </dxi-column>
@@ -105,14 +99,13 @@
     <dxi-column
         dataField="email"
         caption="Email"
-        [width]="210"
-        [width]="100"
-        alignment="right"
-    >
+        [width]="130"
+        [allowEditing]="false"
+        [allowSorting]="false"
+        alignment="right">
         <dxi-validation-rule
             type="required"
-            [message]="'This field is required'"
-        >
+            [message]="'This field is required'">
         </dxi-validation-rule>
     </dxi-column>
 
@@ -121,73 +114,70 @@
         dataField="date"
         alignment="center"
         [minWidth]="130"
+        [allowEditing]="false"
+        [allowSorting]="false"
         format="dd/MM/yyyy"
         dataType="date"
         caption="Date"
         [editorOptions]="{
             pickerType: 'rollers'
-        }"
-    >
+        }">
         <dxi-validation-rule
             type="required"
-            [message]="'This field is required'"
-        >
+            [message]="'This field is required'">
         </dxi-validation-rule>
     </dxi-column>
 
     <dxi-column
         dataField="cmnd"
         caption="Cmnd"
-        [width]="210"
-        [width]="100"
-        alignment="right"
-    >
+        [width]="13."
+        [allowEditing]="false"
+        [allowSorting]="false"
+        alignment="right">
         <dxi-validation-rule
             type="required"
-            [message]="'This field is required'"
-        >
+            [message]="'This field is required'">
         </dxi-validation-rule>
     </dxi-column>
 
     <dxi-column
         dataField="phone"
         caption="Phone"
-        [width]="210"
-        [width]="100"
-        alignment="right"
-    >
+        [width]="110"
+        [allowEditing]="false"
+        [allowSorting]="false"
+        alignment="right">
         <dxi-validation-rule
             type="required"
-            [message]="'This field is required'"
-        >
+            [message]="'This field is required'">
         </dxi-validation-rule>
     </dxi-column>
 
     <dxi-column
         dataField="nationally"
         caption="Nationally"
-        [width]="210"
-        [width]="100"
-        alignment="right"
-    >
+        [width]="110"
+        [allowEditing]="false"
+        [allowSorting]="false"
+        alignment="right">
         <dxi-validation-rule
             type="required"
-            [message]="'This field is required'"
-        >
+            [message]="'This field is required'">
         </dxi-validation-rule>
     </dxi-column>
 
     <dxi-column
         dataField="peopleNumber"
         [minWidth]="130"
+        [allowEditing]="false"
+        [allowSorting]="false"
         alignment="right"
         dataType="number"
-        caption="People Number"
-    >
+        caption="People Number">
         <dxi-validation-rule
             type="required"
-            [message]="'This field is required'"
-        >
+            [message]="'This field is required'">
         </dxi-validation-rule>
     </dxi-column>
 
@@ -195,9 +185,9 @@
         dataField="note"
         caption="Note"
         [width]="210"
-        [width]="100"
-        alignment="right"
-    >
+        [allowEditing]="false"
+        [allowSorting]="false"
+        alignment="right">
     </dxi-column>
     <dxi-column caption="Action" type="buttons" alignment="center" [width]="80">
         <dxi-button
@@ -205,32 +195,28 @@
             icon="save"
             [text]="''"
             [hint]="'Save'"
-            [onClick]="onSaveSkill"
-        >
+            [onClick]="onSaveSkill">
         </dxi-button>
         <dxi-button
             name="cancel"
             icon="revert"
             [text]="''"
             [hint]="'Cancel'"
-            [onClick]="onRevertDxGridRow"
-        >
+            [onClick]="onRevertDxGridRow">
         </dxi-button>
         <dxi-button
             name="edit"
             icon="fas fa-pencil-alt edit-icon"
             [text]="''"
             [hint]="'Edit'"
-            [onClick]="updateLookupData"
-        >
+            [onClick]="updateLookupData">
         </dxi-button>
         <dxi-button
             name="delete"
             [cssClass]="'far fa-trash-alt delete-icon'"
             [hint]="'Delete'"
             [text]="''"
-            [onClick]="onDeleteSkill"
-        >
+            [onClick]="onDeleteSkill">
         </dxi-button>
     </dxi-column>
 </dx-data-grid>
@@ -238,6 +224,5 @@
 <app-popover-confirm-box
     #deleteDetailConfirmPopover
     [message]="'Are you want to remove it out of list'"
-    (onConfirm)="deleteRoom()"
->
+    (onConfirm)="deleteRoom()">
 </app-popover-confirm-box>

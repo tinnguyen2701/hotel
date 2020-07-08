@@ -72,7 +72,7 @@ export class ServiceBaseLookup {
     id: number;
     name: string;
 
-    public constructor(init?: Partial<ServiceModel>) {
+    public constructor(init?: Partial<ServiceBaseLookup>) {
         Object.assign(this, init);
     }
 }

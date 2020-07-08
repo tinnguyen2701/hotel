@@ -105,18 +105,20 @@ export class AllRoomsComponent implements OnInit {
                         break;
                     case ActionNavigationType.BookingNow:
                         this.store.dispatch(new SetActionType(ActionType.Checkin));
-                        this.store.dispatch(new SetListRoomCheckin(this.selectedRoom));
+                        this.store.dispatch(new SetEditRoom(this.selectedRoom));
+                        // this.store.dispatch(new SetListRoomCheckin(this.selectedRoom));
                         break;
                     case ActionNavigationType.Edit:
                         this.store.dispatch(new SetActionType(ActionType.Edit));
                         this.store.dispatch(new SetEditRoom(this.selectedRoom));
                         break;
                     case ActionNavigationType.AddToCheckoutList:
-                            this.store.dispatch(new SetListRoomCheckout(this.selectedRoom));
-                            break;
+                        this.store.dispatch(new SetListRoomCheckout(this.selectedRoom));
+                        break;
                     case ActionNavigationType.CheckoutNow:
                         this.store.dispatch(new SetActionType(ActionType.Checkout));
-                        this.store.dispatch(new SetListRoomCheckout(this.selectedRoom));
+                        // this.store.dispatch(new SetListRoomCheckout(this.selectedRoom));
+                        this.store.dispatch(new SetEditRoom(this.selectedRoom));
                         break;
                     default:
                         break;

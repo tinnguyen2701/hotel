@@ -19,6 +19,7 @@ import {
     SetFloor,
     SetActionType,
     SetEmptyListRoom,
+    SetEmptyEditRoom,
 } from '@app/modules/admin/store';
 import {
     RoomModel,
@@ -47,7 +48,6 @@ export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
     @ViewChild('deleteDetailConfirmPopover', {static: true}) confirmDeleteDetailPopover: PopoverConfirmBoxComponent;
 
     @Input() listRooms: RoomModel[];
-    @Input() isGroup: boolean = true;
     @Input() isShowListRoom: boolean = false;
 
     @Output() onSuccess = new EventEmitter();
@@ -98,17 +98,6 @@ export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
     }
 
     ngOnInit() {
-        this.subscription.add(
-            this.appLookupService.appLookup.subscribe((lookup) => {
-                this.serviceSource = lookup.services;
-                console.log(this.serviceSource);
-
-            })
-        );
-
-
-        console.log(this.isGroup);
-
         this.roomStatusTypes = this.roomStatusTypes.slice(2, 4);
         this.listRoomOriginals = cloneDeep(this.listRooms);
         this.customerOriginals = cloneDeep(this.customers);
@@ -129,11 +118,8 @@ export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
     }
 
     onHiding() {
-        if (this.isGroup) {
-            this.store.dispatch(new SetActionType(ActionType.None));
-        } else {
-            this.isShowListRoom = !this.isShowListRoom;
-        }
+        this.store.dispatch(new SetActionType(ActionType.None));
+        this.store.dispatch(new SetEmptyEditRoom());
     }
 
     onSaveSkill = (e) => {
@@ -185,14 +171,13 @@ export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
             const confirmQuestion = 'Cancel Editing Confirm Question';
             AppNotify.confirm(confirmQuestion, confirmTitle).then((result) => {
                 if (result) {
-                    // this.isShowListRoom = false;
                     this.store.dispatch(new SetActionType(ActionType.None));
                 }
             });
         } else {
-            // this.isShowListRoom = false;
             this.store.dispatch(new SetActionType(ActionType.None));
         }
+        this.store.dispatch(new SetEmptyEditRoom());
     }
 
     onHandleSaving() {
@@ -211,10 +196,9 @@ export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
                 (account) => {
                     AppNotify.success('UpdatedSuccessMessage');
                     this.store.dispatch(new SetEmptyListRoom());
+                    this.store.dispatch(new SetEmptyEditRoom());
                     this.store.dispatch(new SetActionType(ActionType.None));
                     this.refesh();
-                    // this.onSuccess.emit();
-                    // this.isShowListRoom = false;
                 },
                 (error) => {
                     AppNotify.error(error);
