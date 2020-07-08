@@ -1,72 +1,55 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { PopoverConfirmBoxComponent } from '..';
 import { DxDataGridComponent } from 'devextreme-angular';
-import { CustomerModel } from '@app/modules/admin/models';
+import {cloneDeep} from 'lodash';
 
 @Component({
   selector: 'app-services',
   templateUrl: './services.component.html',
   styleUrls: ['./services.component.scss']
 })
-export class ServicesComponent implements OnInit {
-    @ViewChild('dxDataGridCustomer', {static: true}) dxDataGridCustomer: DxDataGridComponent;
-    @ViewChild('deleteDetailConfirmPopover', {static: true}) confirmDeleteDetailPopover: PopoverConfirmBoxComponent;
+export class ServicesComponent {
+    @ViewChild('dxDataGrid', {static: false}) dxExpenseAccountGrid: DxDataGridComponent;
+    @ViewChild('deleteGridRowConfirmPopover', {static: false}) confirmPopover: PopoverConfirmBoxComponent;
 
-    isLoading: boolean = false;
-    isProcessing: boolean = false;
-    selectedRoomId: number = null;
-    isFormDirty: boolean = false;
-    customers: CustomerModel[] = [];
-    gender = [
-        {value: 0, text: 'Female'},
-        {value: 1, text: 'Male'},
-    ];
+    selectedRowId: number;
 
-    constructor(
-    ) {
+    constructor() {}
+
+    onDxGridRowUpdated(e: any) {
+        e.data.isUpdated = true;
     }
 
-    ngOnInit() {
+    onDxGridRowInserted(e: any) {
+        e.data.isInserted = true;
     }
 
-    onSaveSkill = (e) => {
-        this.customers.reverse();
-        e.event.preventDefault();
-        e.component.saveEditData();
-        this.customers.reverse();
-    };
 
-    onRevertDxGridRow = (e) => {
-        e.event.preventDefault();
-        e.component.cancelEditData();
-        e.component.refresh();
-    };
+    onAddExpenseAccount() {
+        this.dxExpenseAccountGrid.instance.addRow();
+        this.autoFocusAddingRow();
+    }
 
-    updateLookupData = (e) => {
-        e.component.editRow(e.row.dataIndex);
-    };
+    autoFocusAddingRow(rowIndex = 0, cellIndex = 1, isFocusRow = false) {
+        const editCell = this.dxExpenseAccountGrid.instance.getCellElement(rowIndex, cellIndex);
+        this.dxExpenseAccountGrid.instance.focus(editCell);
+        if (isFocusRow) {
+            this.dxExpenseAccountGrid.instance.editRow(rowIndex);
+        }
+        this.dxExpenseAccountGrid.instance.editCell(rowIndex, cellIndex);
+    }
 
-    onDeleteSkill = (e) => {
+    onDeleteDxGridRow = (e) => {
         e.event.preventDefault();
         const data = e.row.data;
-        if (!Boolean(data.id)) {
-            this.dxDataGridCustomer.instance.deleteRow(
-                this.dxDataGridCustomer.instance.getRowIndexByKey(data)
-            );
-        } else {
-            this.selectedRoomId = this.customers.findIndex((detail) => detail.id === data.id
-            );
-            if (this.confirmDeleteDetailPopover) {
-                this.confirmDeleteDetailPopover.show(e.event.currentTarget);
-            }
+        this.selectedRowId = data.id;
+        if (this.confirmPopover) {
+            this.confirmPopover.show(e.event.currentTarget);
         }
-    };
+    }
 
-    deleteRoom() {
-        if (this.selectedRoomId !== null) {
-            this.customers.splice(this.selectedRoomId, 1);
-            this.dxDataGridCustomer.instance.refresh(true);
-            this.selectedRoomId = null;
-        }
+    onDeleteExpenseAccount() {
+        // this.expenseAccounts = this.expenseAccounts.filter(account => account.id !== this.selectedRowId);
+        // this.onRemovedRow.emit(this.selectedRowId);
     }
 }

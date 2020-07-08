@@ -1,4 +1,4 @@
-export  interface RoomModel {
+export interface RoomModel {
     id: number;
     status: number;
     name: string;
@@ -31,6 +31,11 @@ export class CustomerModel {
     peopleNumber: number;
     note: string;
 
+    // UI only
+    isUpdated: boolean;
+    isDeleted: boolean;
+    isInserted: boolean;
+
     public constructor(init?: Partial<CustomerModel>) {
         Object.assign(this, init);
     }
@@ -42,6 +47,11 @@ export class ServiceModel {
     price: number;
     quantity: number;
     amount: number;
+
+    // UI only
+    isUpdated: boolean;
+    isDeleted: boolean;
+    isInserted: boolean;
 
     public constructor(init?: Partial<ServiceModel>) {
         Object.assign(this, init);
