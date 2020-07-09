@@ -21,7 +21,7 @@ export class RoomService {
         return of(randomBooked(roomId, status));
     }
 
-    updateRoom(rooms: RoomModel[], customers: CustomerModel[], status: number, totalPeople: number): Observable<string> {
+    updateBook(book: BookedModel, status: number, totalPeople: number): Observable<string> {
         if (environment.debug) {
             console.log('API: updateRoom');
         }
@@ -29,19 +29,19 @@ export class RoomService {
         return of('B-100');
     }
 
-    addListRoom(rooms: RoomModel[], status: ActionType): Observable<RoomModel[]> {
+    addBook(book: BookedModel, status: ActionType): Observable<BookedModel> {
         if (environment.debug) {
-            console.log('API: addListRoom');
+            console.log('API: addBook');
         }
 
-        return of(rooms);
+        return of(book);
     }
 
-    getListRoom(rooms: RoomModel[], status: ActionType): Observable<{listRoomCheckin: RoomModel[], listRoomCheckout: RoomModel[]}> {
+    getBookCheckinAndCheckout(): Observable<{bookCheckin: BookedModel, bookCheckout: BookedModel}> {
         if (environment.debug) {
-            console.log('API: getListRoom');
+            console.log('API: getBookCheckinAndCheckout');
         }
 
-        return of({listRoomCheckin: [randomRoom(102, 1)], listRoomCheckout: []});
+        return of({bookCheckin: new BookedModel({rooms: [randomRoom(102, 1)]}), bookCheckout: new BookedModel()});
     }
 }

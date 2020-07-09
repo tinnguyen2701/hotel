@@ -42,9 +42,9 @@
             location="after"
             locateInMenu="auto">
             <div *dxTemplate="let data of 'item'">
-                <dx-button type="success" *ngIf='listRoomCheckin.length > 0' (onClick)="showPopUpCheckin()" [text]="numberRoomCheckin()">
+                <dx-button type="success" *ngIf='bookCheckin.rooms.length > 0' (onClick)="showPopUpCheckin()" [text]="numberRoomCheckin()">
                 </dx-button>
-                <dx-button class="ml-2" type="danger" *ngIf='listRoomCheckout.length > 0' (onClick)="showPopUpCheckout()" [text]="numberRoomCheckout()">
+                <dx-button class="ml-2" type="danger" *ngIf='bookCheckout.rooms.length > 0' (onClick)="showPopUpCheckout()" [text]="numberRoomCheckout()">
                 </dx-button>
                 <dx-button
                     class="user-button"

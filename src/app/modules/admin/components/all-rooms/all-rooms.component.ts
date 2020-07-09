@@ -1,12 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import { Store } from '@ngxs/store';
+import {Component, OnInit} from '@angular/core';
+import {SelectSnapshot} from '@ngxs-labs/select-snapshot';
+import {Store} from '@ngxs/store';
 //
-import { RoomService } from '../../services';
+import {RoomService} from '../../services';
 import {BookedModel, FloorModel, RoomModel} from '../../models/room.model';
 import {RoomStatus, ActionType, ActionNavigationType} from '../../shared/enums';
-import { ROOM_STATUS_TYPE } from '../../shared/constant';
-import { SetListRoomCheckin, AppState, SetListRoomCheckout, SetActionType, SetEditRoom } from '../../store';
-import { SelectSnapshot } from '@ngxs-labs/select-snapshot';
+import {ROOM_STATUS_TYPE} from '../../shared/constant';
+import {AppState, SetActionType, SetBookCheckin, SetBookCheckout, SetEditBooking} from '../../store';
 
 @Component({
     selector: 'app-admin-all-rooms',
@@ -23,7 +23,6 @@ export class AllRoomsComponent implements OnInit {
     checkoutDate: Date = null;
     selectedRoom: RoomModel = {} as RoomModel;
     selectedBooked: BookedModel = new BookedModel();
-    showBookingNow: boolean = false;
     visible: boolean = false;
     menus = [];
 
@@ -55,7 +54,8 @@ export class AllRoomsComponent implements OnInit {
         },
     ];
 
-    constructor(private roomService: RoomService, private store: Store) {}
+    constructor(private roomService: RoomService, private store: Store) {
+    }
 
     ngOnInit() {
     }
@@ -94,22 +94,22 @@ export class AllRoomsComponent implements OnInit {
 
                 switch (item.value) {
                     case ActionNavigationType.AddToBookingList:
-                        this.store.dispatch(new SetListRoomCheckin(this.selectedRoom));
+                        this.store.dispatch(new SetBookCheckin(this.selectedBooked));
                         break;
                     case ActionNavigationType.BookingNow:
                         this.store.dispatch(new SetActionType(ActionType.Checkin));
-                        this.store.dispatch(new SetEditRoom(this.selectedRoom));
+                        this.store.dispatch(new SetEditBooking(this.selectedBooked));
                         break;
                     case ActionNavigationType.Edit:
                         this.store.dispatch(new SetActionType(ActionType.Edit));
-                        this.store.dispatch(new SetEditRoom(this.selectedRoom));
+                        this.store.dispatch(new SetEditBooking(this.selectedBooked));
                         break;
                     case ActionNavigationType.AddToCheckoutList:
-                        this.store.dispatch(new SetListRoomCheckout(this.selectedRoom));
+                        this.store.dispatch(new SetBookCheckout(this.selectedBooked));
                         break;
                     case ActionNavigationType.CheckoutNow:
                         this.store.dispatch(new SetActionType(ActionType.Checkout));
-                        this.store.dispatch(new SetEditRoom(this.selectedRoom));
+                        this.store.dispatch(new SetEditBooking(this.selectedBooked));
                         break;
                     default:
                         break;
@@ -117,7 +117,8 @@ export class AllRoomsComponent implements OnInit {
                 this.visible = false;
 
             },
-            (err) => {}
+            (err) => {
+            }
         );
     }
 }

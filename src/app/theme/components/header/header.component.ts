@@ -4,7 +4,7 @@ import {SelectSnapshot} from '@ngxs-labs/select-snapshot';
 //
 import {ADMIN_MENU} from '@app/modules/admin/shared/constant';
 import {AppState, SetActionType} from '@app/modules/admin/store';
-import {RoomModel} from '@app/modules/admin/models';
+import {BookedModel, RoomModel} from '@app/modules/admin/models';
 import { ActionType } from '@app/modules/admin/shared/enums';
 
 @Component({
@@ -15,8 +15,8 @@ import { ActionType } from '@app/modules/admin/shared/enums';
 
 export class HeaderComponent implements OnInit {
     @SelectSnapshot(AppState.actionType) actionType: ActionType;
-    @SelectSnapshot(AppState.listRoomsCheckin) listRoomCheckin: RoomModel[];
-    @SelectSnapshot(AppState.listRoomsCheckout) listRoomCheckout: RoomModel[];
+    @SelectSnapshot(AppState.bookCheckin) bookCheckin: BookedModel;
+    @SelectSnapshot(AppState.bookCheckout) bookCheckout: BookedModel;
 
     @Input() menuToggleEnabled: boolean = false;
     @Input() showHeaderMenu: boolean = false;
@@ -48,15 +48,15 @@ export class HeaderComponent implements OnInit {
         this.store.dispatch(new SetActionType(ActionType.Checkin));
     }
 
-    numberRoomCheckin() {
-        return this.listRoomCheckin.length + ' room' + (this.listRoomCheckin.length > 1 ? 's' : '') + ' checkin';
-    }
-
     showPopUpCheckout() {
         this.store.dispatch(new SetActionType(ActionType.Checkout));
     }
 
+    numberRoomCheckin() {
+        return this.bookCheckin.rooms.length + ' room' + (this.bookCheckin.rooms.length > 1 ? 's' : '') + ' checkin';
+    }
+
     numberRoomCheckout() {
-        return this.listRoomCheckout.length + ' room' + (this.listRoomCheckout.length > 1 ? 's' : '') + ' checkout';
+        return this.bookCheckout.rooms.length + ' room' + (this.bookCheckout.rooms.length > 1 ? 's' : '') + ' checkout';
     }
 }

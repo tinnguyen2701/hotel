@@ -11,20 +11,18 @@ import {
 } from '@angular/core';
 import {cloneDeep, isEqual} from 'lodash';
 import {Store} from '@ngxs/store';
-import {DxDataGridComponent, DxTabsComponent} from 'devextreme-angular';
+import {DxDataGridComponent} from 'devextreme-angular';
 import {Subscription} from 'rxjs';
 //
 import {
     AppState,
     SetFloor,
-    SetActionType,
-    SetEmptyListRoom,
-    SetEmptyEditRoom,
+    SetActionType, SetEmptyEditBooking, SetEmptyBooking
 } from '@app/modules/admin/store';
 import {
     RoomModel,
     CustomerModel,
-    BaseLookup,
+    BaseLookup, BookedModel, ServiceModel,
 } from '@app/modules/admin/models';
 import {PopoverConfirmBoxComponent} from '..';
 import {
@@ -47,10 +45,8 @@ export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
     @ViewChild('dxDataGridRoom', {static: true}) dxDataGridRoom: DxDataGridComponent;
     @ViewChild('deleteDetailConfirmPopover', {static: true}) confirmDeleteDetailPopover: PopoverConfirmBoxComponent;
 
-    @Input() listRooms: RoomModel[];
+    @Input() book: BookedModel;
     @Input() isShowListRoom: boolean = false;
-
-    @Output() onSuccess = new EventEmitter();
 
     isLoading: boolean = false;
     isProcessing: boolean = false;
@@ -60,16 +56,8 @@ export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
     roomStatusTypes = ROOM_STATUS_TYPE;
     totalPeoples: number;
     isFormDirty: boolean = false;
-    customers: CustomerModel[] = [];
-    customerOriginals: CustomerModel[] = [];
-    listRoomOriginals: RoomModel[] = [];
-    gender = [
-        {value: 0, text: 'Female'},
-        {value: 1, text: 'Male'},
-    ];
-
+    bookOriginal: BookedModel;
     subscription: Subscription = new Subscription();
-    serviceSource: BaseLookup[] = [];
 
     Customer = 1;
     Service = 2;
@@ -93,14 +81,12 @@ export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
         private roomService: RoomService,
         private store: Store,
         private changeDetectorRef: ChangeDetectorRef,
-        private appLookupService: AppLookupService
     ) {
     }
 
     ngOnInit() {
         this.roomStatusTypes = this.roomStatusTypes.slice(2, 4);
-        this.listRoomOriginals = cloneDeep(this.listRooms);
-        this.customerOriginals = cloneDeep(this.customers);
+        this.bookOriginal = cloneDeep(this.book);
     }
 
     changeTab(tab) {
@@ -119,14 +105,14 @@ export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
 
     onHiding() {
         this.store.dispatch(new SetActionType(ActionType.None));
-        this.store.dispatch(new SetEmptyEditRoom());
+        this.store.dispatch(new SetEmptyEditBooking());
     }
 
     onSaveSkill = (e) => {
-        this.listRooms.reverse();
+        this.book.rooms.reverse();
         e.event.preventDefault();
         e.component.saveEditData();
-        this.listRooms.reverse();
+        this.book.rooms.reverse();
     };
 
     onRevertDxGridRow = (e) => {
@@ -147,7 +133,7 @@ export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
                 this.dxDataGridRoom.instance.getRowIndexByKey(data)
             );
         } else {
-            this.selectedRoomId = this.listRooms.findIndex(
+            this.selectedRoomId = this.book.rooms.findIndex(
                 (detail) => detail.id === data.id
             );
             if (this.confirmDeleteDetailPopover) {
@@ -159,7 +145,7 @@ export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
     deleteRoom() {
         this.changeDetectorRef.markForCheck();
         if (this.selectedRoomId !== null) {
-            this.listRooms.splice(this.selectedRoomId, 1);
+            this.book.rooms.splice(this.selectedRoomId, 1);
             this.dxDataGridRoom.instance.refresh(true);
             this.selectedRoomId = null;
         }
@@ -177,7 +163,7 @@ export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
         } else {
             this.store.dispatch(new SetActionType(ActionType.None));
         }
-        this.store.dispatch(new SetEmptyEditRoom());
+        this.store.dispatch(new SetEmptyEditBooking());
     }
 
     onHandleSaving() {
@@ -186,17 +172,16 @@ export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
         }
 
         this.roomService
-            .updateRoom(
-                this.listRooms,
-                this.customers,
+            .updateBook(
+                this.book,
                 this.status,
                 this.totalPeoples
             )
             .subscribe(
                 (account) => {
                     AppNotify.success('UpdatedSuccessMessage');
-                    this.store.dispatch(new SetEmptyListRoom());
-                    this.store.dispatch(new SetEmptyEditRoom());
+                    this.store.dispatch(new SetEmptyBooking());
+                    this.store.dispatch(new SetEmptyEditBooking());
                     this.store.dispatch(new SetActionType(ActionType.None));
                     this.refesh();
                 },
@@ -227,9 +212,7 @@ export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
     }
 
     ngDoCheck() {
-        this.isFormDirty =
-            !isEqual(this.listRooms, this.listRoomOriginals) ||
-            !isEqual(this.customers, this.customerOriginals);
+        this.isFormDirty = !isEqual(this.bookOriginal, this.book);
     }
 
     ngOnDestroy() {

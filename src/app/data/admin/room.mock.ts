@@ -1,12 +1,7 @@
 import * as faker from 'faker';
 import {random} from 'lodash';
 //
-import {
-    RoomModel,
-    FloorModel,
-    BaseLookup,
-    ServiceModel, BookedModel,
-} from '@app/modules/admin/models/room.model';
+import {BaseLookup, BookedModel, CustomerModel, FloorModel, RoomModel, ServiceModel,} from '@app/modules/admin/models/room.model';
 import {ActionNavigationType, RoomStatus} from '@app/modules/admin/shared/enums';
 
 export function randomFloors(count: number): FloorModel[] {
@@ -51,6 +46,7 @@ export function randomRooms(count: number, floor: number): RoomModel[] {
         });
 }
 
+// TODO remove type
 export function randomRoom(roomId: number, type: number): RoomModel {
     if (type === 1) {
         // booking now
@@ -72,7 +68,7 @@ export function randomRoom(roomId: number, type: number): RoomModel {
 
     return {
         id: roomId,
-        status: RoomStatus.Available,
+        status: statusRoom,
         name: random(1, 5) + '0' + random(1, 5),
         checkinDate:
             statusRoom === RoomStatus.Booking ||
@@ -127,8 +123,62 @@ export function randomServices(count: number): ServiceModel[] {
         });
 }
 
+export function randomCustomers(count: number): CustomerModel[] {
+    return Array(count)
+        .fill({})
+        .map((item: CustomerModel, index) => {
+            return new CustomerModel({
+                id: index + 1,
+                name: `customer ${index + 1}`,
+                address: faker.address.streetAddress()
+            });
+        });
+}
+
 export function randomBooked(roomId: number, status: ActionNavigationType): BookedModel {
-    return new BookedModel({
-    })
+    switch (status) {
+        case ActionNavigationType.BookingNow:
+            return new BookedModel({
+                id: null,
+                rooms: [randomRoom(roomId, 1)],
+                customers: [],
+                services: []
+            });
+            break;
+        case ActionNavigationType.AddToBookingList:
+            return new BookedModel({
+                id: null,
+                rooms: [randomRoom(roomId, 1)],
+                customers: [],
+                services: []
+            });
+            break;
+        case ActionNavigationType.Edit:
+            return new BookedModel({
+                id: roomId,
+                rooms: [randomRoom(roomId, 2)],
+                customers: randomCustomers(random(0, 2)),
+                services: randomServices(random(0, 3))
+            });
+            break;
+        case ActionNavigationType.AddToCheckoutList:
+            return new BookedModel({
+                id: roomId,
+                rooms: [randomRoom(roomId, 2)],
+                customers: randomCustomers(random(0, 2)),
+                services: randomServices(random(0, 3))
+            });
+            break;
+        case ActionNavigationType.CheckoutNow:
+            return new BookedModel({
+                id: roomId,
+                rooms: [randomRoom(roomId, 2)],
+                customers: randomCustomers(random(0, 2)),
+                services: randomServices(random(0, 3))
+            });
+            break;
+        default:
+            break;
+    }
 }
 

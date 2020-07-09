@@ -1,5 +1,5 @@
 
-import { RoomModel, FloorModel } from '@app/modules/admin/models';
+import {RoomModel, FloorModel, BookedModel} from '@app/modules/admin/models';
 import { ActionType } from '../../shared/enums';
 
 
@@ -10,17 +10,17 @@ export class SetFloor {
     }
 }
 
-export class SetListRoomCheckin {
-    static readonly type = '[App] Set list room checkin';
+export class SetBookCheckin {
+    static readonly type = '[App] Set book checkin';
 
-    constructor(public payload: RoomModel) {
+    constructor(public payload: BookedModel) {
     }
 }
 
-export class SetListRoomCheckout {
-    static readonly type = '[App] Set list room checkout';
+export class SetBookCheckout {
+    static readonly type = '[App] Set book checkout';
 
-    constructor(public payload: RoomModel) {
+    constructor(public payload: BookedModel) {
     }
 }
 
@@ -30,28 +30,29 @@ export class SetActionType {
     constructor(public payload: ActionType) {}
 }
 
-
-export class SetEmptyListRoom {
-    static readonly type = '[App] Set empty list room';
-
-    constructor() {}
-}
-
-export class SetEmptyEditRoom {
-    static readonly type = '[App] Set empty room';
+export class SetEmptyBooking {
+    static readonly type = '[App] Set empty booking';
 
     constructor() {}
 }
 
-export class SetEditRoom {
-    static readonly type = '[App] Set edit room';
 
-    constructor(public payload: RoomModel) {
+export class SetEmptyEditBooking {
+    static readonly type = '[App] Set empty edit booking';
+
+    constructor() {}
+}
+
+
+export class SetEditBooking {
+    static readonly type = '[App] Set edit booking';
+
+    constructor(public payload: BookedModel) {
     }
 }
 
-export class SetListRoomCheckinAndCheckout {
-    static readonly type = '[App] Set empty list room';
+export class SetBookCheckinAndCheckout {
+    static readonly type = '[App] Set book checkin and checkout';
 
     constructor() {}
 }
