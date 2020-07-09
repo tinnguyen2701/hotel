@@ -18,5 +18,13 @@ export enum ActionType {
 }
 
 export enum AppLookupDataType {
-    Services = "Services",
+    Services = 'Services',
+}
+
+export enum ActionNavigationType {
+    Edit,
+    AddToBookingList,
+    AddToCheckoutList,
+    BookingNow,
+    CheckoutNow,
 }

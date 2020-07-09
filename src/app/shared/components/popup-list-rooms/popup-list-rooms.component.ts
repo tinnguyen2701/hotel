@@ -24,7 +24,7 @@ import {
 import {
     RoomModel,
     CustomerModel,
-    ServiceBaseLookup,
+    BaseLookup,
 } from '@app/modules/admin/models';
 import {PopoverConfirmBoxComponent} from '..';
 import {
@@ -69,7 +69,7 @@ export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
     ];
 
     subscription: Subscription = new Subscription();
-    serviceSource: ServiceBaseLookup[] = [];
+    serviceSource: BaseLookup[] = [];
 
     Customer = 1;
     Service = 2;

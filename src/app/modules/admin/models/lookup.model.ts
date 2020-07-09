@@ -1,7 +1,7 @@
-import { ServiceBaseLookup } from "./room.model";
+import { BaseLookup } from "./room.model";
 
 export class AppLookupModel {
-    services: ServiceBaseLookup[] = [];
+    services: BaseLookup[] = [];
 
     constructor(init?: Partial<AppLookupModel>) {
         Object.assign(this, init);

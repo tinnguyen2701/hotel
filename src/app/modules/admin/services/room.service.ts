@@ -1,8 +1,8 @@
 import { Observable, of } from 'rxjs';
-import { RoomModel, FloorModel, CustomerModel } from '../models';
+import {RoomModel, FloorModel, CustomerModel, BookedModel} from '../models';
 import { environment } from '@environment';
-import { randomFloors, randomRoom } from '@app/data/admin/room.mock';
-import { ActionType } from '../shared/enums';
+import {randomBooked, randomFloors, randomRoom} from '@app/data/admin/room.mock';
+import {ActionNavigationType, ActionType} from '../shared/enums';
 
 export class RoomService {
     getFloors(): Observable<FloorModel[]> {
@@ -13,12 +13,12 @@ export class RoomService {
         return of(randomFloors(7));
     }
 
-    getRoom(roomId: number): Observable<RoomModel> {
+    getBookRoom(roomId: number, status: ActionNavigationType): Observable<BookedModel> {
         if (environment.debug) {
-            console.log('API: getRoom');
+            console.log('API: getBookRoom');
         }
 
-        return of(randomRoom(roomId, 1));
+        return of(randomBooked(roomId, status));
     }
 
     updateRoom(rooms: RoomModel[], customers: CustomerModel[], status: number, totalPeople: number): Observable<string> {

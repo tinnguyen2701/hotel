@@ -11,8 +11,6 @@ export interface RoomModel {
     note: string;
     peopleNumber: number;
 
-    customerInfomation: CustomerModel;
-
     // public constructor(init?: Partial<RoomModel>) {
     //     Object.assign(this, init);
     // }
@@ -68,12 +66,23 @@ export class FloorModel {
     }
 }
 
-export class ServiceBaseLookup {
+export class BaseLookup {
     id: number;
     name: string;
 
-    public constructor(init?: Partial<ServiceBaseLookup>) {
+    public constructor(init?: Partial<BaseLookup>) {
         Object.assign(this, init);
     }
 }
 
+export class BookedModel {
+    id: number;
+    rooms: RoomModel[] = [];
+    customers: CustomerModel[] = [];
+    services: ServiceModel[] = [];
+
+
+    public constructor(init?: Partial<BookedModel>) {
+        Object.assign(this, init);
+    }
+}

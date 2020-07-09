@@ -4,7 +4,7 @@ import { DxDataGridComponent } from "devextreme-angular";
 import { cloneDeep } from "lodash";
 import { Subscription } from "rxjs";
 import { AppLookupService } from "@app/modules/admin/services";
-import { ServiceBaseLookup, ServiceModel } from "@app/modules/admin/models";
+import { BaseLookup, ServiceModel } from "@app/modules/admin/models";
 
 @Component({
     selector: "app-services",
@@ -19,7 +19,7 @@ export class ServicesComponent implements OnInit, OnDestroy {
 
     selectedRowId: number;
     subscription: Subscription = new Subscription();
-    serviceSource: ServiceBaseLookup[] = [];
+    serviceSource: BaseLookup[] = [];
     services: ServiceModel[] = [];
 
     constructor(private appLookupService: AppLookupService) {}
