@@ -25,6 +25,7 @@ export class AllRoomsComponent implements OnInit {
     selectedBooked: BookedModel = new BookedModel();
     visible: boolean = false;
     menus = [];
+    isShowPopupTransferRoom: boolean = false;
 
     totalMenus = [
         {
@@ -52,6 +53,11 @@ export class AllRoomsComponent implements OnInit {
             name: 'Edit infomation',
             icon: 'fas fa-pencil-alt',
         },
+        {
+            value: ActionNavigationType.TransferRoom,
+            name: 'Transfer room',
+            icon: 'far fa-paper-plane',
+        },
     ];
 
     constructor(private roomService: RoomService, private store: Store) {
@@ -73,13 +79,17 @@ export class AllRoomsComponent implements OnInit {
                 ];
                 break;
             case RoomStatus.Booking:
-                this.menus = [this.totalMenus[4]];
+                this.menus = [
+                    this.totalMenus[4],
+                    this.totalMenus[5]
+                ];
                 break;
             case RoomStatus.Checkin:
                 this.menus = [
                     this.totalMenus[2],
                     this.totalMenus[3],
                     this.totalMenus[4],
+                    this.totalMenus[5]
                 ];
                 break;
             default:
@@ -111,6 +121,9 @@ export class AllRoomsComponent implements OnInit {
                         this.store.dispatch(new SetActionType(ActionType.Checkout));
                         this.store.dispatch(new SetEditBooking(this.selectedBooked));
                         break;
+                    case ActionNavigationType.TransferRoom:
+                        this.isShowPopupTransferRoom = true;
+                        break;
                     default:
                         break;
                 }
@@ -120,5 +133,9 @@ export class AllRoomsComponent implements OnInit {
             (err) => {
             }
         );
+    }
+
+    showTransferRoomPopup() {
+        this.isShowPopupTransferRoom = true;
     }
 }

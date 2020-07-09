@@ -1,5 +1,5 @@
 <div class="wrapper p-10">
-    <div class="row">
+    <div class="row d-flex align-items-center">
         <div class="col-md-8 d-flex align-items-center p-0">
             <div class="field col-md-3 p-0">
                 <div class="field-lable">Tìm kiếm theo trạng thái</div>
@@ -8,8 +8,8 @@
                         [dataSource]="roomStatusType"
                         displayExpr="name"
                         valueExpr="value"
-                        [(value)]="selectedStatus"
-                    ></dx-select-box>
+                        [(value)]="selectedStatus">
+                    </dx-select-box>
                 </div>
             </div>
             <div class="field col-md-3">
@@ -21,8 +21,7 @@
                         [useMaskBehavior]="true"
                         displayFormat="dd/MM/yyyy"
                         [showClearButton]="true"
-                        type="date"
-                    >
+                        type="date">
                     </dx-date-box>
                 </div>
             </div>
@@ -35,13 +34,19 @@
                         [useMaskBehavior]="true"
                         displayFormat="dd/MM/yyyy"
                         [showClearButton]="true"
-                        type="date"
-                    >
+                        type="date">
                     </dx-date-box>
                 </div>
             </div>
         </div>
-        <div class="col-md-4"></div>
+        <div class="col-md-4 text-right">
+            <dx-button
+                type="default"
+                icon="far fa-paper-plane"
+                text="transfer room"
+                (onClick)="showTransferRoomPopup()">
+            </dx-button>
+        </div>
     </div>
 
     <div class="list-room">
@@ -67,8 +72,7 @@
                             : false
                 }"
                 (onClick)="onClickRoom(room)"
-                [text]="room.name"
-            >
+                [text]="room.name">
             </dx-button>
         </div>
     </div>
@@ -81,7 +85,7 @@
     [(visible)]="visible">
     <dx-list [dataSource]="menus" itemTemplate="itemTemplate">
         <div *dxTemplate="let item of 'itemTemplate'" (click)="onClickItem(item)"
-            class="d-flex align-items-center">
+             class="d-flex align-items-center">
             <div class="icon-style">
                 <i *ngIf="!!item.icon" class="{{item.icon}}"></i>
             </div>
@@ -89,3 +93,11 @@
         </div>
     </dx-list>
 </dx-popover>
+
+<ng-container *ngIf="isShowPopupTransferRoom">
+    <app-popup-container title="Transfer room"
+                         [width]="300"
+                         [(visible)]="isShowPopupTransferRoom"
+                         [height]="'auto'">
+    </app-popup-container>
+</ng-container>

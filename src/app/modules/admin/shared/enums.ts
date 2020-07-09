@@ -27,4 +27,5 @@ export enum ActionNavigationType {
     AddToCheckoutList,
     BookingNow,
     CheckoutNow,
+    TransferRoom
 }
