@@ -6,7 +6,7 @@ import {RoomService} from '../../services';
 import {BaseLookup, BookedModel, FloorModel, RoomModel} from '../../models/room.model';
 import {RoomStatus, ActionType, ActionNavigationType} from '../../shared/enums';
 import {ROOM_STATUS_TYPE, TRANSFER_ROOM_TYPE} from '../../shared/constant';
-import {AppState, SetActionType, SetBookCheckin, SetBookCheckout, SetEditBooking} from '../../store';
+import {AppState, SetActionType, SetBookCheckin, SetBookCheckout, SetEditBooking, SetFloor} from '../../store';
 import {AppNotify} from '@app/utilities';
 
 @Component({
@@ -136,13 +136,13 @@ export class AllRoomsComponent implements OnInit {
                 this.visible = false;
             },
             (err) => {
-                AppNotify.error();
+                AppNotify.error('Get book went wrong!');
             }
         );
     }
 
     showTransferRoomPopup() {
-        this.fromRoom = {id: null, name: ''};
+        this.initTransferRoom();
         this.isShowPopupTransferRoom = true;
     }
 
@@ -153,9 +153,38 @@ export class AllRoomsComponent implements OnInit {
 
         this.roomService.transferRoom(this.fromRoom, this.toRoom).subscribe(rs => {
             this.isShowPopupTransferRoom = false;
+            AppNotify.success('Transfer room success message');
+            this.refresh();
         }, err => {
             this.isShowPopupTransferRoom = false;
-            AppNotify.error();
+            AppNotify.error('Can not transfer room!');
         });
+        this.initTransferRoom(true);
+    }
+
+    refresh() {
+        setTimeout(() => {
+            this.loadFloors();
+        });
+    }
+
+    loadFloors() {
+        this.roomService.getFloors().subscribe(
+            (result) => {
+                console.log(result);
+                this.store.dispatch(new SetFloor(result));
+            },
+            (err) => {
+                AppNotify.error(err);
+            }
+        );
+    }
+
+    private initTransferRoom(isInitFromRoom = false) {
+        if (isInitFromRoom) {
+            this.fromRoom = {id: null, name: ''};
+        }
+        this.toRoom = {id: null, name: ''};
+        this.transferOption = null;
     }
 }
