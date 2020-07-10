@@ -96,8 +96,65 @@
 
 <ng-container *ngIf="isShowPopupTransferRoom">
     <app-popup-container title="Transfer room"
-                         [width]="300"
+                         [width]="700"
                          [(visible)]="isShowPopupTransferRoom"
                          [height]="'auto'">
+        <div class="dx-field">
+            <div class="dx-field-label">From room</div>
+            <div class="dx-field-value">
+                <dx-select-box class="w-100"
+                               [dataSource]="roomSource"
+                               [(value)]="fromRoom"
+                               valueExpr="id"
+                               displayExpr="name"
+                               [showClearButton]="true">
+                    <dx-validator>
+                        <dxi-validation-rule type="required" message="field is required"></dxi-validation-rule>
+                    </dx-validator>
+                </dx-select-box>
+            </div>
+        </div>
+
+        <div class="dx-field">
+            <div class="dx-field-label">To room</div>
+            <div class="dx-field-value">
+                <dx-select-box class="w-100"
+                               [dataSource]="roomSource"
+                               [(value)]="toRoom"
+                               valueExpr="id"
+                               displayExpr="name"
+                               [showClearButton]="true">
+                    <dx-validator>
+                        <dxi-validation-rule type="required" message="field is required"></dxi-validation-rule>
+                    </dx-validator>
+                </dx-select-box>
+            </div>
+        </div>
+
+        <div class="dx-field">
+            <div class="dx-field-label">Options transfer room</div>
+            <div class="dx-field-value">
+                <dx-select-box class="w-100"
+                               [dataSource]="transferRoomType"
+                               [(value)]="transferOption"
+                               valueExpr="value"
+                               displayExpr="name">
+                    <dx-validator>
+                        <dxi-validation-rule type="required" message="field is required"></dxi-validation-rule>
+                    </dx-validator>
+                </dx-select-box>
+            </div>
+        </div>
+
+        <div class="row">
+            <dx-button
+                class="ml-auto text-right"
+                type="default"
+                [text]="'Save'"
+                [disabled]="!fromRoom || !toRoom || !transferOption"
+                [useSubmitBehavior]="false"
+                (onClick)="onHandleTransfer()">
+            </dx-button>
+        </div>
     </app-popup-container>
 </ng-container>

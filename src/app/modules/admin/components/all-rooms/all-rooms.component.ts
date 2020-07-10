@@ -3,10 +3,11 @@ import {SelectSnapshot} from '@ngxs-labs/select-snapshot';
 import {Store} from '@ngxs/store';
 //
 import {RoomService} from '../../services';
-import {BookedModel, FloorModel, RoomModel} from '../../models/room.model';
+import {BaseLookup, BookedModel, FloorModel, RoomModel} from '../../models/room.model';
 import {RoomStatus, ActionType, ActionNavigationType} from '../../shared/enums';
-import {ROOM_STATUS_TYPE} from '../../shared/constant';
+import {ROOM_STATUS_TYPE, TRANSFER_ROOM_TYPE} from '../../shared/constant';
 import {AppState, SetActionType, SetBookCheckin, SetBookCheckout, SetEditBooking} from '../../store';
+import {AppNotify} from '@app/utilities';
 
 @Component({
     selector: 'app-admin-all-rooms',
@@ -26,7 +27,11 @@ export class AllRoomsComponent implements OnInit {
     visible: boolean = false;
     menus = [];
     isShowPopupTransferRoom: boolean = false;
-
+    fromRoom: BaseLookup;
+    toRoom: BaseLookup;
+    roomSource: BaseLookup[] = [];
+    transferOption: number;
+    transferRoomType = TRANSFER_ROOM_TYPE;
     totalMenus = [
         {
             value: ActionNavigationType.BookingNow,
@@ -64,6 +69,7 @@ export class AllRoomsComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.floors.map(_ => _.rooms.map(x => this.roomSource.push({id: x.id, name: x.name})));
     }
 
     onClickRoom(room: RoomModel) {
@@ -81,7 +87,6 @@ export class AllRoomsComponent implements OnInit {
             case RoomStatus.Booking:
                 this.menus = [
                     this.totalMenus[4],
-                    this.totalMenus[5]
                 ];
                 break;
             case RoomStatus.Checkin:
@@ -123,19 +128,34 @@ export class AllRoomsComponent implements OnInit {
                         break;
                     case ActionNavigationType.TransferRoom:
                         this.isShowPopupTransferRoom = true;
+                        this.fromRoom = {id: this.selectedBooked.rooms[0].id, name: this.selectedBooked.rooms[0].name};
                         break;
                     default:
                         break;
                 }
                 this.visible = false;
-
             },
             (err) => {
+                AppNotify.error();
             }
         );
     }
 
     showTransferRoomPopup() {
+        this.fromRoom = {id: null, name: ''};
         this.isShowPopupTransferRoom = true;
+    }
+
+    onHandleTransfer() {
+        if (!this.fromRoom || !this.toRoom || !this.transferOption) {
+            return;
+        }
+
+        this.roomService.transferRoom(this.fromRoom, this.toRoom).subscribe(rs => {
+            this.isShowPopupTransferRoom = false;
+        }, err => {
+            this.isShowPopupTransferRoom = false;
+            AppNotify.error();
+        });
     }
 }

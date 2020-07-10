@@ -178,6 +178,12 @@ export function randomBooked(roomId: number, status: ActionNavigationType): Book
             });
             break;
         default:
+            return new BookedModel({
+                id: roomId,
+                rooms: [randomRoom(roomId, 2)],
+                customers: randomCustomers(random(0, 2)),
+                services: randomServices(random(0, 3))
+            });
             break;
     }
 }

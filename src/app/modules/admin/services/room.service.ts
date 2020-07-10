@@ -1,6 +1,6 @@
-import { Observable, of } from 'rxjs';
-import {RoomModel, FloorModel, CustomerModel, BookedModel} from '../models';
-import { environment } from '@environment';
+import {Observable, of} from 'rxjs';
+import {RoomModel, FloorModel, CustomerModel, BookedModel, BaseLookup} from '../models';
+import {environment} from '@environment';
 import {randomBooked, randomFloors, randomRoom} from '@app/data/admin/room.mock';
 import {ActionNavigationType, ActionType} from '../shared/enums';
 
@@ -37,7 +37,15 @@ export class RoomService {
         return of(book);
     }
 
-    getBookCheckinAndCheckout(): Observable<{bookCheckin: BookedModel, bookCheckout: BookedModel}> {
+    transferRoom(fromRoom: BaseLookup, toRoom: BaseLookup): Observable<true> {
+        if (environment.debug) {
+            console.log('API: transferRoom');
+        }
+
+        return of(true);
+    }
+
+    getBookCheckinAndCheckout(): Observable<{ bookCheckin: BookedModel, bookCheckout: BookedModel }> {
         if (environment.debug) {
             console.log('API: getBookCheckinAndCheckout');
         }

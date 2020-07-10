@@ -21,6 +21,11 @@ export enum AppLookupDataType {
     Services = 'Services',
 }
 
+export enum TransferOption {
+    SeparateAndMerge = 1,
+    CaculatedFromBegining= 2
+}
+
 export enum ActionNavigationType {
     Edit,
     AddToBookingList,

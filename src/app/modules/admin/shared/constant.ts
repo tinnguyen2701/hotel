@@ -1,4 +1,4 @@
-import {RoomStatus, RoomType} from '@app/modules/admin/shared/enums';
+import {RoomStatus, RoomType, TransferOption} from '@app/modules/admin/shared/enums';
 
 export const ADMIN_MENU = [
     {
@@ -23,4 +23,9 @@ export const ROOM_STATUS_TYPE: { value: RoomStatus, name: string }[] = [
 export const ROOM_TYPE: { value: RoomType, name: string }[] = [
     {value: RoomType.Single, name: 'Phòng đơn'},
     {value: RoomType.Double, name: 'Phòng đôi'},
+];
+
+export const TRANSFER_ROOM_TYPE: { value: number, name: string }[] = [
+    {value: TransferOption.SeparateAndMerge, name: 're-calculate from the beginning according to the room transfer price'},
+    {value: TransferOption.CaculatedFromBegining, name: 'Separate the old room bill and merge it into the room that will move in'}
 ];
