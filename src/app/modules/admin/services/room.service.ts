@@ -1,5 +1,5 @@
 import {Observable, of} from 'rxjs';
-import {RoomModel, FloorModel, CustomerModel, BookedModel, BaseLookup} from '../models';
+import {RoomModel, FloorModel, CustomerModel, BookedModel, BaseLookup, TransferRoom} from '../models';
 import {environment} from '@environment';
 import {randomBooked, randomFloors, randomRoom} from '@app/data/admin/room.mock';
 import {ActionNavigationType, ActionType} from '../shared/enums';
@@ -21,7 +21,7 @@ export class RoomService {
         return of(randomBooked(roomId, status));
     }
 
-    updateBook(book: BookedModel, status: number, totalPeople: number): Observable<string> {
+    updateBook(book: BookedModel): Observable<string> {
         if (environment.debug) {
             console.log('API: updateRoom');
         }
@@ -37,7 +37,7 @@ export class RoomService {
         return of(book);
     }
 
-    transferRoom(fromRoom: BaseLookup, toRoom: BaseLookup): Observable<true> {
+    transferRoom(transferRoom: TransferRoom): Observable<true> {
         if (environment.debug) {
             console.log('API: transferRoom');
         }
@@ -51,5 +51,13 @@ export class RoomService {
         }
 
         return of({bookCheckin: new BookedModel({rooms: [randomRoom(102, 1)]}), bookCheckout: new BookedModel()});
+    }
+
+    checkoutBook(booked: BookedModel): Observable<true> {
+        if (environment.debug) {
+            console.log('API: checkoutBook');
+        }
+
+        return of(true);
     }
 }

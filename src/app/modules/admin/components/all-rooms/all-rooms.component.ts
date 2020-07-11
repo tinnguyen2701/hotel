@@ -3,7 +3,7 @@ import {SelectSnapshot} from '@ngxs-labs/select-snapshot';
 import {Store} from '@ngxs/store';
 //
 import {RoomService} from '../../services';
-import {BaseLookup, BookedModel, FloorModel, RoomModel} from '../../models/room.model';
+import {BaseLookup, BookedModel, FloorModel, RoomModel, TransferRoom} from '../../models/room.model';
 import {RoomStatus, ActionType, ActionNavigationType} from '../../shared/enums';
 import {ROOM_STATUS_TYPE, TRANSFER_ROOM_TYPE} from '../../shared/constant';
 import {AppState, SetActionType, SetBookCheckin, SetBookCheckout, SetEditBooking, SetFloor} from '../../store';
@@ -27,10 +27,8 @@ export class AllRoomsComponent implements OnInit {
     visible: boolean = false;
     menus = [];
     isShowPopupTransferRoom: boolean = false;
-    fromRoom: BaseLookup;
-    toRoom: BaseLookup;
+    transferRoom = new TransferRoom();
     roomSource: BaseLookup[] = [];
-    transferOption: number;
     transferRoomType = TRANSFER_ROOM_TYPE;
     totalMenus = [
         {
@@ -128,7 +126,7 @@ export class AllRoomsComponent implements OnInit {
                         break;
                     case ActionNavigationType.TransferRoom:
                         this.isShowPopupTransferRoom = true;
-                        this.fromRoom = {id: this.selectedBooked.rooms[0].id, name: this.selectedBooked.rooms[0].name};
+                        this.transferRoom.fromRoomId = this.selectedBooked.rooms[0].id;
                         break;
                     default:
                         break;
@@ -142,16 +140,16 @@ export class AllRoomsComponent implements OnInit {
     }
 
     showTransferRoomPopup() {
-        this.initTransferRoom();
+        this.transferRoom = new TransferRoom();
         this.isShowPopupTransferRoom = true;
     }
 
     onHandleTransfer() {
-        if (!this.fromRoom || !this.toRoom || !this.transferOption) {
+        if (!this.transferRoom.fromRoomId || !this.transferRoom.toRoomId || !this.transferRoom.option) {
             return;
         }
 
-        this.roomService.transferRoom(this.fromRoom, this.toRoom).subscribe(rs => {
+        this.roomService.transferRoom(this.transferRoom).subscribe(rs => {
             this.isShowPopupTransferRoom = false;
             AppNotify.success('Transfer room success message');
             this.refresh();
@@ -159,7 +157,7 @@ export class AllRoomsComponent implements OnInit {
             this.isShowPopupTransferRoom = false;
             AppNotify.error('Can not transfer room!');
         });
-        this.initTransferRoom(true);
+        this.transferRoom = new TransferRoom();
     }
 
     refresh() {
@@ -178,13 +176,5 @@ export class AllRoomsComponent implements OnInit {
                 AppNotify.error(err);
             }
         );
-    }
-
-    private initTransferRoom(isInitFromRoom = false) {
-        if (isInitFromRoom) {
-            this.fromRoom = {id: null, name: ''};
-        }
-        this.toRoom = {id: null, name: ''};
-        this.transferOption = null;
     }
 }

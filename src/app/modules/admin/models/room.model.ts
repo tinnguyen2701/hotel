@@ -77,12 +77,25 @@ export class BaseLookup {
 
 export class BookedModel {
     id: number;
+    bookType: number; // just need booking and checkin
     rooms: RoomModel[] = [];
     customers: CustomerModel[] = [];
     services: ServiceModel[] = [];
-
+    paymentType: number;
+    note: string;
 
     public constructor(init?: Partial<BookedModel>) {
+        Object.assign(this, init);
+    }
+}
+
+export class TransferRoom {
+    fromRoomId: number;
+    toRoomId: number;
+    option: number;
+
+
+    public constructor(init?: Partial<TransferRoom>) {
         Object.assign(this, init);
     }
 }

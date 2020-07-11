@@ -4,8 +4,6 @@ import {
     Input,
     ViewChild,
     ChangeDetectorRef,
-    Output,
-    EventEmitter,
     DoCheck,
     OnDestroy,
 } from '@angular/core';
@@ -54,7 +52,6 @@ export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
     status: RoomStatus;
     roomTypes = ROOM_TYPE;
     roomStatusTypes = ROOM_STATUS_TYPE;
-    totalPeoples: number;
     isFormDirty: boolean = false;
     bookOriginal: BookedModel;
     subscription: Subscription = new Subscription();
@@ -76,6 +73,10 @@ export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
         },
     ];
     currentTab = this.menuTabs[0];
+    saveAction = {
+        Booking: 1,
+        Checkin: 2
+    };
 
     constructor(
         private roomService: RoomService,
@@ -166,17 +167,14 @@ export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
         this.store.dispatch(new SetEmptyEditBooking());
     }
 
-    onHandleSaving() {
-        if (this.isEmptyInfomation()) {
+    onHandleSaving(saveAction: number) {
+        this.book.bookType = saveAction;
+        if (this.isEmptyInformation()) {
             return;
         }
 
         this.roomService
-            .updateBook(
-                this.book,
-                this.status,
-                this.totalPeoples
-            )
+            .updateBook(this.book)
             .subscribe(
                 (account) => {
                     AppNotify.success('UpdatedSuccessMessage');
@@ -191,9 +189,36 @@ export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
             );
     }
 
-    isEmptyInfomation() {
-        return false;
+
+    onHandleCheckout() {
+        if (this.isEmptyInformation()) {
+            return;
+        }
+
+        this.roomService.checkoutBook(this.book)
+            .subscribe(() => {
+                    AppNotify.success('Checkout success');
+                    this.store.dispatch(new SetEmptyBooking());
+                    this.store.dispatch(new SetEmptyEditBooking());
+                    this.store.dispatch(new SetActionType(ActionType.None));
+                    this.refesh();
+                }, (error) => {
+                    AppNotify.error('Checkout error!');
+                }
+            );
     }
+
+    isShowBookCheckin() {
+        return this.actionType === ActionType.Checkin;
+    }
+
+    isShowBookCheckout() {
+        return this.actionType === ActionType.Checkout;
+    }
+
+    // isEditRoom() {
+    //     return this.actionType === ActionType.Edit;
+    // }
 
     refesh() {
         setTimeout(() => {
@@ -209,6 +234,11 @@ export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
             (err) => {
             }
         );
+    }
+
+
+    isEmptyInformation() {
+        return false;
     }
 
     ngDoCheck() {
