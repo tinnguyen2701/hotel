@@ -48,10 +48,13 @@ export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
 
     isLoading: boolean = false;
     isProcessing: boolean = false;
-    selectedRoomId: number = null;
+
     status: RoomStatus;
     roomTypes = ROOM_TYPE;
+    selectedRoomId: number = null;
     roomStatusTypes = ROOM_STATUS_TYPE;
+    isShowBookCodeField: boolean = false;
+
     isFormDirty: boolean = false;
     bookOriginal: BookedModel;
     subscription: Subscription = new Subscription();
@@ -88,6 +91,12 @@ export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
     ngOnInit() {
         this.roomStatusTypes = this.roomStatusTypes.slice(2, 4);
         this.bookOriginal = cloneDeep(this.book);
+    }
+
+    //
+    // List room action
+    toggleShowBookCodeField() {
+        this.isShowBookCodeField = !this.isShowBookCodeField;
     }
 
     changeTab(tab) {

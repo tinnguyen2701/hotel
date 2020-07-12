@@ -21,8 +21,8 @@ export const ROOM_STATUS_TYPE: { value: RoomStatus, name: string }[] = [
 ];
 
 export const ROOM_TYPE: { value: RoomType, name: string }[] = [
-    {value: RoomType.Single, name: 'Phòng đơn'},
-    {value: RoomType.Double, name: 'Phòng đôi'},
+    {value: RoomType.Single, name: 'Single Room'},
+    {value: RoomType.Double, name: 'Double Room'},
 ];
 
 export const TRANSFER_ROOM_TYPE: { value: number, name: string }[] = [
