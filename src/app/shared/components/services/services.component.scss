@@ -1,0 +1,9 @@
+.grid-service {
+    ::ng-deep .dx-button-has-icon .dx-button-content {
+        padding: 0 !important;
+    }
+
+    ::ng-deep .dx-button .dx-button-content {
+        padding: 0 !important;
+    }
+}

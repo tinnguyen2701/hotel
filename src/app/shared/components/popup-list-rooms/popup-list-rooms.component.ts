@@ -11,6 +11,7 @@ import {cloneDeep, isEqual} from 'lodash';
 import {Store} from '@ngxs/store';
 import {DxDataGridComponent} from 'devextreme-angular';
 import {Subscription} from 'rxjs';
+import {SelectSnapshot} from '@ngxs-labs/select-snapshot';
 //
 import {
     AppState,
@@ -18,9 +19,7 @@ import {
     SetActionType, SetEmptyEditBooking, SetEmptyBooking
 } from '@app/modules/admin/store';
 import {
-    RoomModel,
-    CustomerModel,
-    BaseLookup, BookedModel, ServiceModel,
+    RoomModel, BookedModel
 } from '@app/modules/admin/models';
 import {PopoverConfirmBoxComponent} from '..';
 import {
@@ -29,8 +28,7 @@ import {
 } from '@app/modules/admin/shared/constant';
 import {RoomStatus, ActionType} from '@app/modules/admin/shared/enums';
 import {AppNotify} from '@app/utilities';
-import {RoomService, AppLookupService} from '@app/modules/admin/services';
-import {SelectSnapshot} from '@ngxs-labs/select-snapshot';
+import {RoomService} from '@app/modules/admin/services';
 
 @Component({
     selector: 'app-popup-list-rooms',
@@ -40,7 +38,7 @@ import {SelectSnapshot} from '@ngxs-labs/select-snapshot';
 export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
     @SelectSnapshot(AppState.actionType) actionType: ActionType;
 
-    @ViewChild('dxDataGridRoom', {static: true}) dxDataGridRoom: DxDataGridComponent;
+    @ViewChild('dxDataGridRoom', {static: false}) dxDataGridRoom: DxDataGridComponent;
     @ViewChild('deleteDetailConfirmPopover', {static: true}) confirmDeleteDetailPopover: PopoverConfirmBoxComponent;
 
     @Input() book: BookedModel;
@@ -141,7 +139,7 @@ export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
                 }
 
                 if (columns[i].dataField === 'checkoutDate') {
-                    if (!this.shouldValueCheckinSmallerThanCheckout(e, newData.checkinDate, newData.checkoutDate, columns[i].caption)) {
+                    if (!this.shouldValueCheckinSmallerThanCheckout(e, newData.checkinDate, newData.checkoutDate, columns[i])) {
                         return;
                     }
                 }
@@ -150,8 +148,8 @@ export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
     }
 
     shouldValueCheckinSmallerThanCheckout(e: any, checkinDate: Date, checkoutDate: Date, column: any) {
-        if (checkinDate > checkoutDate) {
-            const message = `${column.caption.toUpperCase()} must be than checkin date`;
+        if (checkinDate.getTime() > checkoutDate.getTime()) {
+            const message = `${column.caption.toUpperCase()} must be than CHECKIN DATE`;
             this.setRowInvalid(e, message, column.index);
             return false;
         }
@@ -174,7 +172,7 @@ export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
         this.focusCell(e.component.getRowIndexByKey(e.key), columnIndex, false);
     }
 
-    private focusCell(rowIndex = 0, cellIndex = 3, isFocusedRow = true) {
+    private focusCell(rowIndex = 0, cellIndex, isFocusedRow = true) {
         if (isFocusedRow) {
             this.dxDataGridRoom.instance.editRow(rowIndex);
         }
@@ -183,12 +181,9 @@ export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
         this.dxDataGridRoom.instance.focus(cell);
     }
 
-    onSaveSkill = (e) => {
-        this.book.rooms.reverse();
-        e.event.preventDefault();
-        e.component.saveEditData();
-        this.book.rooms.reverse();
-    };
+    onRowRoomUpdated(e) {
+        e.data.isUpdated = true;
+    }
 
     onRevertDxGridRow = (e) => {
         e.event.preventDefault();
@@ -196,24 +191,18 @@ export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
         e.component.refresh();
     };
 
-    updateLookupData = (e) => {
+    onUpdateRoom = (e) => {
         e.component.editRow(e.row.dataIndex);
     };
 
-    onDeleteSkill = (e) => {
+    onDeleteRoom = (e) => {
         e.event.preventDefault();
         const data = e.row.data;
-        if (!Boolean(data.id)) {
-            this.dxDataGridRoom.instance.deleteRow(
-                this.dxDataGridRoom.instance.getRowIndexByKey(data)
-            );
-        } else {
-            this.selectedRoomId = this.book.rooms.findIndex(
-                (detail) => detail.id === data.id
-            );
-            if (this.confirmDeleteDetailPopover) {
-                this.confirmDeleteDetailPopover.show(e.event.currentTarget);
-            }
+        this.selectedRoomId = this.book.rooms.findIndex(
+            (detail) => detail.id === data.id
+        );
+        if (this.confirmDeleteDetailPopover) {
+            this.confirmDeleteDetailPopover.show(e.event.currentTarget);
         }
     };
 
@@ -226,6 +215,9 @@ export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
         }
     }
 
+
+    //
+    //
     onHandleCancel() {
         if (this.isFormDirty) {
             const confirmTitle = 'Confirm Popup Title';
@@ -255,14 +247,13 @@ export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
                     this.store.dispatch(new SetEmptyBooking());
                     this.store.dispatch(new SetEmptyEditBooking());
                     this.store.dispatch(new SetActionType(ActionType.None));
-                    this.refesh();
+                    this.refresh();
                 },
                 (error) => {
                     AppNotify.error(error);
                 }
             );
     }
-
 
     onHandleCheckout() {
         if (this.isEmptyInformation()) {
@@ -275,7 +266,7 @@ export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
                     this.store.dispatch(new SetEmptyBooking());
                     this.store.dispatch(new SetEmptyEditBooking());
                     this.store.dispatch(new SetActionType(ActionType.None));
-                    this.refesh();
+                    this.refresh();
                 }, (error) => {
                     AppNotify.error('Checkout error!');
                 }
@@ -290,11 +281,7 @@ export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
         return this.actionType === ActionType.Checkout;
     }
 
-    // isEditRoom() {
-    //     return this.actionType === ActionType.Edit;
-    // }
-
-    refesh() {
+    refresh() {
         setTimeout(() => {
             this.loadFloor();
         });

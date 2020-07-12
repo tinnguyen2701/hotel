@@ -1,134 +1,125 @@
-<div id="dx-data-grid">
-    <dx-data-grid
-        #dxDataGrid
-        class="w-100"
-        [height]="200"
-        [dataSource]="services"
-        [showBorders]="true"
-        [showRowLines]="true"
-        [columnAutoWidth]="true"
-        (onRowUpdated)="onDxGridRowUpdated($event)"
-        (onRowInserted)="onDxGridRowInserted($event)">
-        <dxo-editing
-            mode="row"
-            [allowUpdating]="true"
-            [allowDeleting]="true"
-            [useIcons]="false">
-            <dxo-texts [confirmDeleteMessage]="null"></dxo-texts>
-        </dxo-editing>
+<dx-data-grid
+    #dxDataGrid
+    class="w-100 mt-3 grid-service"
+    [height]="200"
+    [dataSource]="services"
+    [showBorders]="true"
+    [showRowLines]="true"
+    [columnAutoWidth]="true"
+    (onRowInserted)="onRowInserted($event)"
+    (onRowUpdated)="onRowUpdated($event)"
+    (onRowRemoved)="onRowRemoving($event)">
+    <dxo-editing
+        mode="row"
+        [allowUpdating]="true"
+        [allowDeleting]="true"
+        [useIcons]="false">
+        <dxo-texts [confirmDeleteMessage]="null"></dxo-texts>
+    </dxo-editing>
 
-        <dxi-column
-            caption="#"
-            alignment="center"
-            [allowEditing]="false"
-            [allowSorting]="false"
-            [width]="60"
-            [fixed]="true"
-            fixedPosition="left"
-            headerCellTemplate="indexHeaderCellTemplate"
-            cellTemplate="indexCellTemplate">
-            <div *dxTemplate="let row of 'indexHeaderCellTemplate'">
-                <dx-button
-                    type="default"
-                    icon="plus"
-                    class="btn-add-row-circle"
-                    [stylingMode]="'outlined'"
-                    [hint]="'AddRow'"
-                    (onClick)="onAddExpenseAccount()">
-                </dx-button>
-            </div>
-            <div *dxTemplate="let cell of 'indexCellTemplate'">
-                <span *ngIf="!cell.row.isNewRow">{{ cell.rowIndex + 1 }}</span>
-                <span *ngIf="cell.row.isNewRow"></span>
-            </div>
-        </dxi-column>
+    <dxi-column
+        caption="#"
+        alignment="center"
+        [allowEditing]="false"
+        [allowSorting]="false"
+        [width]="60"
+        [fixed]="true"
+        fixedPosition="left"
+        headerCellTemplate="indexHeaderCellTemplate"
+        cellTemplate="indexCellTemplate">
+        <div *dxTemplate="let row of 'indexHeaderCellTemplate'">
+            <dx-button
+                type="default"
+                icon="plus"
+                class="btn-add-row-circle border-0 p-0"
+                [stylingMode]="'outlined'"
+                [hint]="'AddRow'"
+                (onClick)="dxDataGrid.instance.addRow()">
+            </dx-button>
+        </div>
+        <div *dxTemplate="let cell of 'indexCellTemplate'">
+            <span *ngIf="!cell.row.isNewRow">{{ cell.rowIndex + 1 }}</span>
+            <span *ngIf="cell.row.isNewRow"></span>
+        </div>
+    </dxi-column>
 
-        <dxi-column
-            dataField="serviceId"
-            editCellTemplate="serviceTemplate"
-            alignment="left"
-            [minWidth]="130"
-            [allowEditing]="false"
-            [allowSorting]="false"
-            caption="Service name">
-            <dxo-lookup
+    <dxi-column
+        dataField="serviceId"
+        editCellTemplate="serviceTemplate"
+        alignment="left"
+        [minWidth]="130"
+        caption="Service name">
+        <dxo-lookup
+            [dataSource]="serviceSource"
+            displayExpr="name"
+            valueExpr="id">
+        </dxo-lookup>
+        <div *dxTemplate="let cell of 'serviceTemplate'">
+            <dx-select-box
                 [dataSource]="serviceSource"
-                displayExpr="name"
-                valueExpr="id">
-            </dxo-lookup>
-            <div *dxTemplate="let cell of 'serviceTemplate'">
-                <dx-select-box
-                    [dataSource]="serviceSource"
-                    (onValueChanged)="onServiceChanged(cell, $event)"
-                    [(value)]="cell.value"
-                    valueExpr="id"
-                    displayExpr="name">
-                </dx-select-box>
-            </div>
-        </dxi-column>
+                (onValueChanged)="onServiceChanged(cell, $event)"
+                [(value)]="cell.value"
+                valueExpr="id"
+                displayExpr="name">
+            </dx-select-box>
+        </div>
+    </dxi-column>
 
-        <dxi-column
-            dataField="price"
-            [minWidth]="130"
-            [allowEditing]="false"
-            [allowSorting]="false"
-            alignment="right"
-            dataType="number"
-            caption="Price">
-            <dxi-validation-rule
-                type="required"
-                [message]="'This field is required'">
-            </dxi-validation-rule>
-        </dxi-column>
+    <dxi-column
+        dataField="price"
+        [minWidth]="130"
+        alignment="right"
+        dataType="number"
+        caption="Price">
+        <dxi-validation-rule
+            type="required"
+            [message]="'This field is required'">
+        </dxi-validation-rule>
+    </dxi-column>
 
-        <dxi-column
-            dataField="quantity"
-            [minWidth]="130"
-            [allowEditing]="false"
-            [allowSorting]="false"
-            alignment="right"
-            dataType="number"
-            caption="Quantity">
-            <dxi-validation-rule
-                type="required"
-                [message]="'This field is required'">
-            </dxi-validation-rule>
-        </dxi-column>
+    <dxi-column
+        dataField="quantity"
+        [minWidth]="130"
+        alignment="right"
+        dataType="number"
+        caption="Quantity">
+        <dxi-validation-rule
+            type="required"
+            [message]="'This field is required'">
+        </dxi-validation-rule>
+    </dxi-column>
 
-        <dxi-column
-            dataField="amount"
-            [minWidth]="130"
-            [allowEditing]="false"
-            [allowSorting]="false"
-            alignment="right"
-            dataType="number"
-            caption="Amount">
-            <dxi-validation-rule
-                type="required"
-                [message]="'This field is required'">
-            </dxi-validation-rule>
-        </dxi-column>
+    <dxi-column
+        dataField="amount"
+        [minWidth]="130"
+        alignment="right"
+        dataType="number"
+        caption="Amount">
+        <dxi-validation-rule
+            type="required"
+            [message]="'This field is required'">
+        </dxi-validation-rule>
+    </dxi-column>
 
-        <dxi-column type="buttons" alignment="center" [width]="100">
-            <dxi-button name="save" [text]="''" icon="save"> </dxi-button>
-            <dxi-button name="cancel" [text]="''" icon="revert"> </dxi-button>
-            <dxi-button
-                name="edit"
-                [text]="''"
-                icon="fas fa-pencil-alt edit-icon">
-            </dxi-button>
-            <dxi-button
-                name="delete"
-                [cssClass]="'far fa-trash-alt delete-icon'"
-                [text]="''"
-                [onClick]="onDeleteDxGridRow">
-            </dxi-button>
-        </dxi-column>
-    </dx-data-grid>
-</div>
+    <dxi-column type="buttons" alignment="center" [width]="100">
+        <dxi-button name="save" [text]="''" icon="save"></dxi-button>
+        <dxi-button name="cancel" [text]="''" icon="revert"></dxi-button>
+        <dxi-button
+            name="edit"
+            [text]="''"
+            icon="fas fa-pencil-alt edit-icon">
+        </dxi-button>
+        <dxi-button
+            name="delete"
+            [cssClass]="'far fa-trash-alt delete-icon'"
+            [text]="''"
+            [onClick]="onDeleteDxGridRow">
+        </dxi-button>
+    </dxi-column>
+</dx-data-grid>
 
 <app-popover-confirm-box
     #deleteGridRowConfirmPopover
     [message]="'Delete Record Confirm Question'"
-    (onConfirm)="onDeleteExpenseAccount()">
+    (onConfirm)="deleteService()">
 </app-popover-confirm-box>

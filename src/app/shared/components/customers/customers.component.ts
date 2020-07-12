@@ -1,40 +1,40 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { DxDataGridComponent } from 'devextreme-angular';
-import { PopoverConfirmBoxComponent } from '..';
-import { CustomerModel } from '@app/modules/admin/models';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {DxDataGridComponent} from 'devextreme-angular';
+//
+import {PopoverConfirmBoxComponent} from '..';
+import {CustomerModel} from '@app/modules/admin/models';
 
 @Component({
-  selector: 'app-customers',
-  templateUrl: './customers.component.html',
-  styleUrls: ['./customers.component.scss']
+    selector: 'app-customers',
+    templateUrl: './customers.component.html',
+    styleUrls: ['./customers.component.scss']
 })
 export class CustomersComponent implements OnInit {
     @ViewChild('dxDataGridCustomer', {static: true}) dxDataGridCustomer: DxDataGridComponent;
     @ViewChild('deleteDetailConfirmPopover', {static: true}) confirmDeleteDetailPopover: PopoverConfirmBoxComponent;
 
-    isLoading: boolean = false;
-    isProcessing: boolean = false;
-    selectedRoomId: number = null;
-    isFormDirty: boolean = false;
-    customers: CustomerModel[] = [];
-    gender = [
-        {value: 0, text: 'Female'},
-        {value: 1, text: 'Male'},
-    ];
+    @Input() customers: CustomerModel[] = [];
 
-    constructor(
-    ) {
+    selectedCustomerId: number = null;
+
+    constructor() {
     }
 
     ngOnInit() {
     }
 
-    onSaveSkill = (e) => {
-        this.customers.reverse();
-        e.event.preventDefault();
-        e.component.saveEditData();
-        this.customers.reverse();
-    };
+    // customer action
+    onRowUpdated(e: any) {
+        e.data.isUpdated = true;
+    }
+
+    onRowInserted(e: any) {
+        e.data.isInserted = true;
+    }
+
+    onRowRemoving(e: any) {
+        e.data.isDeleted = true;
+    }
 
     onRevertDxGridRow = (e) => {
         e.event.preventDefault();
@@ -42,11 +42,7 @@ export class CustomersComponent implements OnInit {
         e.component.refresh();
     };
 
-    updateLookupData = (e) => {
-        e.component.editRow(e.row.dataIndex);
-    };
-
-    onDeleteSkill = (e) => {
+    onDeleteCustomer = (e) => {
         e.event.preventDefault();
         const data = e.row.data;
         if (!Boolean(data.id)) {
@@ -54,7 +50,7 @@ export class CustomersComponent implements OnInit {
                 this.dxDataGridCustomer.instance.getRowIndexByKey(data)
             );
         } else {
-            this.selectedRoomId = this.customers.findIndex((detail) => detail.id === data.id
+            this.selectedCustomerId = this.customers.findIndex((detail) => detail.id === data.id
             );
             if (this.confirmDeleteDetailPopover) {
                 this.confirmDeleteDetailPopover.show(e.event.currentTarget);
@@ -62,11 +58,11 @@ export class CustomersComponent implements OnInit {
         }
     };
 
-    deleteRoom() {
-        if (this.selectedRoomId !== null) {
-            this.customers.splice(this.selectedRoomId, 1);
+    deleteCustomer() {
+        if (this.selectedCustomerId !== null) {
+            this.customers.splice(this.selectedCustomerId, 1);
             this.dxDataGridCustomer.instance.refresh(true);
-            this.selectedRoomId = null;
+            this.selectedCustomerId = null;
         }
     }
 }

@@ -13,11 +13,6 @@ export interface RoomModel {
     bookCode: string;
     // only UI
     isUpdated: boolean;
-    isDeleted: boolean;
-
-    // public constructor(init?: Partial<RoomModel>) {
-    //     Object.assign(this, init);
-    // }
 }
 
 export class CustomerModel {

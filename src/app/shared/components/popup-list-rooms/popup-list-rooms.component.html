@@ -40,7 +40,8 @@
                         [columnAutoWidth]="false"
                         [allowColumnResizing]="true"
                         [allowColumnReordering]="false"
-                        (onRowValidating)="onListRoomValidation($event)">
+                        (onRowValidating)="onListRoomValidation($event)"
+                        (onRowUpdated)="onRowRoomUpdated($event)">
                         <dxo-editing
                             mode="row"
                             [allowUpdating]="true"
@@ -90,6 +91,7 @@
                                     alignment="center"
                                     caption="Checkin date"
                                     cellTemplate="checkinTemplate"
+                                    format="dd/MM/yyyy hh:mm a"
                                     editCellTemplate="editCheckinTemplate">
                             <div *dxTemplate="let cell of 'checkinTemplate'">
                                 {{cell.value | DateTimeDisplay}}
@@ -111,6 +113,7 @@
                                     [width]="160"
                                     alignment="center"
                                     caption="Checkout date"
+                                    format="dd/MM/yyyy hh:mm a"
                                     cellTemplate="checkoutTemplate"
                                     editCellTemplate="editCheckoutTemplate">
                             <div *dxTemplate="let cell of 'checkoutTemplate'">
@@ -205,8 +208,7 @@
                             <dxi-button name="save"
                                         icon="save"
                                         [text]="''"
-                                        [hint]="'Save'"
-                                        [onClick]="onSaveSkill">
+                                        [hint]="'Save'">
                             </dxi-button>
                             <dxi-button name="cancel"
                                         icon="revert"
@@ -218,33 +220,32 @@
                                         icon="fas fa-pencil-alt edit-icon"
                                         [text]="''"
                                         [hint]="'Edit'"
-                                        [onClick]="updateLookupData">
+                                        [onClick]="onUpdateRoom">
                             </dxi-button>
                             <dxi-button name="delete"
                                         [cssClass]="'far fa-trash-alt delete-icon'"
                                         [hint]="'Delete'"
                                         [text]="''"
-                                        [onClick]="onDeleteSkill">
+                                        [onClick]="onDeleteRoom">
                             </dxi-button>
                         </dxi-column>
                     </dx-data-grid>
                 </ng-container>
 
-                <app-tab
-                    [tabs]="menuTabs"
-                    [displayExpr]="'text'"
-                    [valueExpr]="'value'"
-                    [selectedTab]="currentTab"
-                    [showCloseIcon]="false"
-                    (onSelectionChanged)="changeTab($event)">
+                <app-tab [tabs]="menuTabs"
+                         [displayExpr]="'text'"
+                         [valueExpr]="'value'"
+                         [selectedTab]="currentTab"
+                         [showCloseIcon]="false"
+                         (onSelectionChanged)="changeTab($event)">
                 </app-tab>
 
                 <ng-container *ngIf="currentTab.value === Customer">
-                    <app-customers></app-customers>
+                    <app-customers [customers]="book.customers"></app-customers>
                 </ng-container>
 
                 <ng-container *ngIf="currentTab.value === Service">
-                    <app-services></app-services>
+                    <app-services [services]="book.services"></app-services>
                 </ng-container>
 
 

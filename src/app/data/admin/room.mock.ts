@@ -66,8 +66,7 @@ export function randomRoom(roomId: number, type: number): RoomModel {
             note: faker.lorem.sentence(),
             peopleNumber: 0,
             bookCode: null,
-            isUpdated: false,
-            isDeleted: false
+            isUpdated: false
         };
     }
     const statusRoom = random(2, 4);
@@ -93,8 +92,7 @@ export function randomRoom(roomId: number, type: number): RoomModel {
         note: faker.lorem.sentence(),
         peopleNumber: 0,
         bookCode: '123',
-        isUpdated: false,
-        isDeleted: false
+        isUpdated: false
     };
 }
 
