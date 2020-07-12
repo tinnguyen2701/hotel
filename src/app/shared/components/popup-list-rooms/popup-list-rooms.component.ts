@@ -93,12 +93,6 @@ export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
         this.bookOriginal = cloneDeep(this.book);
     }
 
-    //
-    // List room action
-    toggleShowBookCodeField() {
-        this.isShowBookCodeField = !this.isShowBookCodeField;
-    }
-
     changeTab(tab) {
         this.currentTab = tab;
     }
@@ -116,6 +110,77 @@ export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
     onHiding() {
         this.store.dispatch(new SetActionType(ActionType.None));
         this.store.dispatch(new SetEmptyEditBooking());
+    }
+
+    //
+    // List room action
+    setValueCheckin(cell: any, e: any) {
+        cell.setValue(e.value);
+    }
+
+    setValueCheckout(cell: any, e: any) {
+        cell.setValue(e.value);
+    }
+
+    onListRoomValidation(e: any) {
+        if (!e.isValid || !e.newData) {
+            return false;
+        }
+
+        let newData: RoomModel = cloneDeep(e.newData);
+        const oldData: RoomModel = cloneDeep(e.oldData);
+        if (oldData) {
+            newData = Object.assign(oldData, newData);
+        }
+
+        const columns = e.component.getVisibleColumns();
+        for (let i = 0; i < columns.length; i++) {
+            if (columns[i].allowEditing) {
+                if (!this.hasCellData(e, newData, columns[i])) {
+                    return;
+                }
+
+                if (columns[i].dataField === 'checkoutDate') {
+                    if (!this.shouldValueCheckinSmallerThanCheckout(e, newData.checkinDate, newData.checkoutDate, columns[i].caption)) {
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
+    shouldValueCheckinSmallerThanCheckout(e: any, checkinDate: Date, checkoutDate: Date, column: any) {
+        if (checkinDate > checkoutDate) {
+            const message = `${column.caption.toUpperCase()} must be than checkin date`;
+            this.setRowInvalid(e, message, column.index);
+            return false;
+        }
+        return true;
+    }
+
+    private hasCellData(e: any, data: RoomModel, column: any): boolean {
+        if (column.dataField !== 'prepay' && column.dataField !== 'price'
+            && column.dataField !== 'deduct' && column.dataField !== 'peopleNumber' && !data[column.dataField]) {
+            const message = `This column ${column.caption.toUpperCase()} is required`;
+            this.setRowInvalid(e, message, column.index);
+            return false;
+        }
+        return true;
+    }
+
+    private setRowInvalid(e: any, message, columnIndex) {
+        e.isValid = false;
+        e.errorText = message;
+        this.focusCell(e.component.getRowIndexByKey(e.key), columnIndex, false);
+    }
+
+    private focusCell(rowIndex = 0, cellIndex = 3, isFocusedRow = true) {
+        if (isFocusedRow) {
+            this.dxDataGridRoom.instance.editRow(rowIndex);
+        }
+        const cell = this.dxDataGridRoom.instance.getCellElement(rowIndex, cellIndex);
+        this.dxDataGridRoom.instance.editCell(rowIndex, cellIndex);
+        this.dxDataGridRoom.instance.focus(cell);
     }
 
     onSaveSkill = (e) => {
