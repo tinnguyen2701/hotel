@@ -7,7 +7,7 @@
 <ng-container *ngIf="!isLoading">
     <app-popup-container
         [width]="1000"
-        [height]="600"
+        [height]="650"
         [(visible)]="isShowListRoom"
         (onHiding)="onHiding()"
         [title]="handleTitlePopup()"
@@ -232,13 +232,19 @@
                     </dx-data-grid>
                 </ng-container>
 
-                <app-tab [tabs]="menuTabs"
-                         [displayExpr]="'text'"
-                         [valueExpr]="'value'"
-                         [selectedTab]="currentTab"
-                         [showCloseIcon]="false"
-                         (onSelectionChanged)="changeTab($event)">
-                </app-tab>
+                <div class="row mt-3 mx-2 d-flex align-items-center justify-content-between">
+                    <app-tab [tabs]="menuTabs"
+                             [displayExpr]="'text'"
+                             [valueExpr]="'value'"
+                             [selectedTab]="currentTab"
+                             [showCloseIcon]="false"
+                             (onSelectionChanged)="changeTab($event)">
+                    </app-tab>
+                    <dx-button *ngIf="currentTab.value === Service"
+                               text="Manage services"
+                                (onClick)="showPopupManageServices()">
+                    </dx-button>
+                </div>
 
                 <ng-container *ngIf="currentTab.value === Customer">
                     <app-customers [customers]="book.customers"></app-customers>
@@ -295,3 +301,91 @@
     [message]="'Are you want to remove it out of list'"
     (onConfirm)="deleteRoom()">
 </app-popover-confirm-box>
+
+
+<ng-container *ngIf="isShowManageServices">
+    <app-popup-container title="Transfer room"
+                         [width]="700"
+                         [(visible)]="isShowManageServices"
+                         [height]="'auto'">
+        <div class="d-flex flex-row-reverse mb-2">
+            <dx-button type="default" icon="plus" class="btn-add-row"
+                       [stylingMode]="'outlined'"
+                       [text]="'Add Row'"
+                       (onClick)="onNewRow()">
+            </dx-button>
+        </div>
+        <dx-data-grid #dxDataGridManageServices
+                      [dataSource]="services"
+                      [height]="300"
+                      [showColumnLines]="true"
+                      [showRowLines]="true"
+                      [hoverStateEnabled]="true"
+                      [columnAutoWidth]="true"
+                      [showBorders]="true"
+                      (onRowInserting)="onDxGridRowInserting($event)"
+                      (onRowUpdating)="onDxGridRowUpdating($event)">
+            <dxo-editing mode="row"
+                         [allowUpdating]="true"
+                         [allowDeleting]="true">
+                <dxo-texts [confirmDeleteMessage]="null"></dxo-texts>
+            </dxo-editing>
+
+            <dxi-column caption="#" alignment="center"
+                        [formItem]="{visible: false}"
+                        [width]="40"
+                        [fixed]="true"
+                        cellTemplate="indexCellTemplate">
+                <div *dxTemplate="let cell of 'indexCellTemplate'">
+                    <ng-container>
+                        {{cell.rowIndex + 1}}
+                    </ng-container>
+                </div>
+            </dxi-column>
+            <dxi-column dataField="name"
+                        caption="Name"
+                        [minWidth]="250">
+                <dxi-validation-rule type="required"
+                                     message="This field is required">
+                </dxi-validation-rule>
+                <dxi-validation-rule type="custom" [validationCallback]="duplicationName"
+                                     message="Name must be different">
+                </dxi-validation-rule>
+            </dxi-column>
+
+            <dxi-column type="buttons" alignment="center">
+                <dxi-button name="save"
+                            [text]="''"
+                            hint="Save"
+                            [onClick]="onUpdateServiceRow"
+                            icon="save">
+                </dxi-button>
+                <dxi-button name="cancel"
+                            [text]="''"
+                            hint="Cancel"
+                            [visible]="isRevertButtonVisible"
+                            icon="revert"
+                            [onClick]="onRevertDxGridRow">
+                </dxi-button>
+                <dxi-button name="edit"
+                            icon="fas fa-pencil-alt edit-icon"
+                            [onClick]="onEditSeriviceRow"
+                            [text]="''"
+                            hint="Edit">
+                </dxi-button>
+                <dxi-button name="delete"
+                            [cssClass]="'far fa-trash-alt delete-icon'"
+                            [text]="''"
+                            [onClick]="onDelete"
+                            hint="Delete">
+                </dxi-button>
+            </dxi-column>
+
+        </dx-data-grid>
+
+        <app-popover-confirm-box #confirmDeleteServiceDetailPopover
+                                 [message]="'DeleteRecordConfirmQuestion'"
+                                 (onConfirm)="onConfirmDeleteService()">
+        </app-popover-confirm-box>
+    </app-popup-container>
+</ng-container>

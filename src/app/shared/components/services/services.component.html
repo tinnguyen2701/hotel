@@ -48,7 +48,8 @@
         editCellTemplate="serviceTemplate"
         alignment="left"
         [minWidth]="130"
-        caption="Service name">
+        caption="Service name"
+        [setCellValue]="setPriceColumnValue">
         <dxo-lookup
             [dataSource]="serviceSource"
             displayExpr="name"
@@ -68,6 +69,7 @@
     <dxi-column
         dataField="price"
         [minWidth]="130"
+        [allowEditing]="false"
         alignment="right"
         dataType="number"
         caption="Price">
@@ -82,7 +84,9 @@
         [minWidth]="130"
         alignment="right"
         dataType="number"
-        caption="Quantity">
+        caption="Quantity"
+        [editorOptions]="{min: 1}"
+        [setCellValue]="onChangeQuantity">
         <dxi-validation-rule
             type="required"
             [message]="'This field is required'">
@@ -92,6 +96,7 @@
     <dxi-column
         dataField="amount"
         [minWidth]="130"
+        [allowEditing]="false"
         alignment="right"
         dataType="number"
         caption="Amount">

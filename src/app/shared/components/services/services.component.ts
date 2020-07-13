@@ -4,7 +4,7 @@ import {Subscription} from 'rxjs';
 //
 import {PopoverConfirmBoxComponent} from '..';
 import {AppLookupService} from '@app/modules/admin/services';
-import {BaseLookup, ServiceModel} from '@app/modules/admin/models';
+import {BaseService, ServiceModel} from '@app/modules/admin/models';
 
 @Component({
     selector: 'app-services',
@@ -19,7 +19,7 @@ export class ServicesComponent implements OnInit, OnDestroy {
 
     selectedServiceId: number;
     subscription: Subscription = new Subscription();
-    serviceSource: BaseLookup[] = [];
+    serviceSource: BaseService[] = [];
 
     constructor(private appLookupService: AppLookupService) {
     }
@@ -33,6 +33,22 @@ export class ServicesComponent implements OnInit, OnDestroy {
     }
 
     // customer action
+    setPriceColumnValue = (newData: ServiceModel, value: number, currentRowData) => {
+        this.setPriceData(newData, value);
+    };
+
+    onChangeQuantity = (newData: ServiceModel, value: number, currentRowData) => {
+        newData.quantity = value;
+        newData.amount = newData.quantity * currentRowData.price;
+    };
+
+    private setPriceData(rowData: ServiceModel, value: number) {
+        rowData.serviceId = value;
+        rowData.price = this.serviceSource.find(_ => _.id === value)?.price || 0;
+        rowData.quantity = 1;
+        rowData.amount = rowData.quantity * rowData.price;
+    }
+
     onRowUpdated(e: any) {
         e.data.isUpdated = true;
     }

@@ -19,7 +19,7 @@ import {
     SetActionType, SetEmptyEditBooking, SetEmptyBooking
 } from '@app/modules/admin/store';
 import {
-    RoomModel, BookedModel
+    RoomModel, BookedModel, ServiceModel
 } from '@app/modules/admin/models';
 import {PopoverConfirmBoxComponent} from '..';
 import {
@@ -29,6 +29,7 @@ import {
 import {RoomStatus, ActionType} from '@app/modules/admin/shared/enums';
 import {AppNotify} from '@app/utilities';
 import {RoomService} from '@app/modules/admin/services';
+import {finalize} from 'rxjs/operators';
 
 @Component({
     selector: 'app-popup-list-rooms',
@@ -40,6 +41,8 @@ export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
 
     @ViewChild('dxDataGridRoom', {static: false}) dxDataGridRoom: DxDataGridComponent;
     @ViewChild('deleteDetailConfirmPopover', {static: true}) confirmDeleteDetailPopover: PopoverConfirmBoxComponent;
+    @ViewChild('dxDataGridManageServices', {static: false}) dxDataGridManageServices: DxDataGridComponent;
+    @ViewChild('confirmDeleteServiceDetailPopover', {static: true}) confirmDeleteServiceDetailPopover: PopoverConfirmBoxComponent;
 
     @Input() book: BookedModel;
     @Input() isShowListRoom: boolean = false;
@@ -52,6 +55,11 @@ export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
     selectedRoomId: number = null;
     roomStatusTypes = ROOM_STATUS_TYPE;
     isShowBookCodeField: boolean = false;
+
+    isShowManageServices: boolean = false;
+    services: ServiceModel[] = [];
+    selectedService: ServiceModel;
+    selectedItemServiceIndex: number;
 
     isFormDirty: boolean = false;
     bookOriginal: BookedModel;
@@ -215,6 +223,82 @@ export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
         }
     }
 
+    //
+    // manage services
+    showPopupManageServices() {
+        this.isShowManageServices = true;
+    }
+
+    duplicationName = (params) => {
+        return this.services.findIndex(x => x.name === params.value.trim() && x.id !== params.data.id) < 0;
+    };
+
+    onNewRow() {
+        this.dxDataGridManageServices.instance.addRow();
+    }
+
+    isRevertButtonVisible = (e) => {
+        return e.row.isEditing;
+    };
+
+    onEditSeriviceRow = (e) => {
+        this.selectedItemServiceIndex = e.row.rowIndex;
+        e.component.instance().editRow(e.row.rowIndex);
+    };
+
+    onUpdateServiceRow = (e) => {
+        e.event.preventDefault();
+        e.component.saveEditData();
+    };
+
+    onDxGridRowInserting(e) {
+        this.selectedService = e.data;
+        this.updateSourceOfOpportunity();
+    }
+
+    onDxGridRowUpdating(e) {
+        if (e.oldData.id) {
+            this.selectedService = new ServiceModel({
+                ...e.oldData,
+                ...e.newData
+            });
+            this.updateSourceOfOpportunity();
+        }
+    }
+
+    onDelete = (e) => {
+        const id = e.row.data.id;
+        if (!(id)) {
+            this.services.splice(e.row.rowIndex, 1);
+        } else {
+            this.selectedService = e.row.data;
+            this.confirmDeleteServiceDetailPopover.show(e.event.currentTarget);
+        }
+    };
+
+    updateSourceOfOpportunity() {
+        let message = '';
+        this.roomService.saveService(this.selectedService).subscribe(() => {
+                if (this.selectedService.id) {
+                    message = 'Updated success';
+                } else {
+                    message = 'Created success';
+                }
+                AppNotify.success(message);
+            }, err => {
+            AppNotify.error('Update error');
+        });
+    }
+
+    onConfirmDeleteService() {
+        if (!this.selectedService.id) {
+            return false;
+        }
+        this.roomService.deleteService(this.selectedService.id).subscribe(() => {
+                AppNotify.success('Deleted success message');
+                this.selectedService = null;
+            });
+    }
 
     //
     //
@@ -243,7 +327,7 @@ export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
             .updateBook(this.book)
             .subscribe(
                 (account) => {
-                    AppNotify.success('UpdatedSuccessMessage');
+                    AppNotify.success('Updated success');
                     this.store.dispatch(new SetEmptyBooking());
                     this.store.dispatch(new SetEmptyEditBooking());
                     this.store.dispatch(new SetActionType(ActionType.None));

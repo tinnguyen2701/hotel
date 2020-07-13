@@ -3,11 +3,12 @@ import {SelectSnapshot} from '@ngxs-labs/select-snapshot';
 import {Store} from '@ngxs/store';
 //
 import {RoomService} from '../../services';
-import {BaseLookup, BookedModel, FloorModel, RoomModel, TransferRoom} from '../../models/room.model';
+import {BookedModel, FloorModel, RoomModel, TransferRoom} from '../../models/room.model';
 import {RoomStatus, ActionType, ActionNavigationType} from '../../shared/enums';
 import {ROOM_STATUS_TYPE, TRANSFER_ROOM_TYPE} from '../../shared/constant';
 import {AppState, SetActionType, SetBookCheckin, SetBookCheckout, SetEditBooking, SetFloor} from '../../store';
 import {AppNotify} from '@app/utilities';
+import {BaseLookup} from '@app/modules/admin/models';
 
 @Component({
     selector: 'app-admin-all-rooms',

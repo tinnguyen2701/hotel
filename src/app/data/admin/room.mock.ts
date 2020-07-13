@@ -1,7 +1,7 @@
 import * as faker from 'faker';
 import {random} from 'lodash';
 //
-import {BaseLookup, BookedModel, CustomerModel, FloorModel, RoomModel, ServiceModel,} from '@app/modules/admin/models/room.model';
+import {BaseService, BookedModel, CustomerModel, FloorModel, RoomModel, ServiceModel,} from '@app/modules/admin/models/room.model';
 import {ActionNavigationType, RoomStatus} from '@app/modules/admin/shared/enums';
 
 export function randomFloors(count: number): FloorModel[] {
@@ -96,19 +96,22 @@ export function randomRoom(roomId: number, type: number): RoomModel {
     };
 }
 
-export function randomServiceLookup(): BaseLookup[] {
+export function randomServiceLookup(): BaseService[] {
     return [
         {
             id: 1,
             name: 'bò húc',
+            price: 10000,
         },
         {
             id: 2,
             name: 'coca',
+            price: 7000,
         },
         {
             id: 3,
             name: 'mì hảo hảo',
+            price: 3000,
         },
     ];
 }

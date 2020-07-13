@@ -44,6 +44,7 @@ export class ServiceModel {
     price: number;
     quantity: number;
     amount: number;
+    name: string;
 
     // UI only
     isUpdated: boolean;
@@ -65,11 +66,12 @@ export class FloorModel {
     }
 }
 
-export class BaseLookup {
+export class BaseService {
     id: number;
     name: string;
+    price: number;
 
-    public constructor(init?: Partial<BaseLookup>) {
+    public constructor(init?: Partial<BaseService>) {
         Object.assign(this, init);
     }
 }
