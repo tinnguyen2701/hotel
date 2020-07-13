@@ -241,8 +241,8 @@
                              (onSelectionChanged)="changeTab($event)">
                     </app-tab>
                     <dx-button *ngIf="currentTab.value === Service"
-                               text="Manage services"
-                                (onClick)="showPopupManageServices()">
+                               text="Services manage"
+                               (onClick)="showPopupManageServices()">
                     </dx-button>
                 </div>
 
@@ -304,8 +304,8 @@
 
 
 <ng-container *ngIf="isShowManageServices">
-    <app-popup-container title="Transfer room"
-                         [width]="700"
+    <app-popup-container title="Services Manage"
+                         [width]="500"
                          [(visible)]="isShowManageServices"
                          [height]="'auto'">
         <div class="d-flex flex-row-reverse mb-2">
@@ -344,12 +344,20 @@
             </dxi-column>
             <dxi-column dataField="name"
                         caption="Name"
-                        [minWidth]="250">
+                        [minWidth]="200">
                 <dxi-validation-rule type="required"
                                      message="This field is required">
                 </dxi-validation-rule>
                 <dxi-validation-rule type="custom" [validationCallback]="duplicationName"
                                      message="Name must be different">
+                </dxi-validation-rule>
+            </dxi-column>
+
+            <dxi-column dataField="price"
+                        caption="Price"
+                        [minWidth]="110">
+                <dxi-validation-rule type="required"
+                                     message="This field is required">
                 </dxi-validation-rule>
             </dxi-column>
 
@@ -369,7 +377,7 @@
                 </dxi-button>
                 <dxi-button name="edit"
                             icon="fas fa-pencil-alt edit-icon"
-                            [onClick]="onEditSeriviceRow"
+                            [onClick]="onEditServiceRow"
                             [text]="''"
                             hint="Edit">
                 </dxi-button>
@@ -384,7 +392,7 @@
         </dx-data-grid>
 
         <app-popover-confirm-box #confirmDeleteServiceDetailPopover
-                                 [message]="'DeleteRecordConfirmQuestion'"
+                                 [message]="'Are you sure delete this service'"
                                  (onConfirm)="onConfirmDeleteService()">
         </app-popover-confirm-box>
     </app-popup-container>

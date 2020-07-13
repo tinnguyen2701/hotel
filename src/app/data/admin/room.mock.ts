@@ -129,6 +129,7 @@ export function randomServices(count: number): ServiceModel[] {
                 price,
                 quantity,
                 amount: price * quantity,
+                name: ['bò húc', 'coca', 'hảo hảo'][random(0, 2)]
             });
         });
 }

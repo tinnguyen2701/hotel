@@ -1,7 +1,7 @@
 import {Observable, of} from 'rxjs';
 import {RoomModel, FloorModel, CustomerModel, BookedModel, BaseService, TransferRoom, ServiceModel} from '../models';
 import {environment} from '@environment';
-import {randomBooked, randomFloors, randomRoom} from '@app/data/admin/room.mock';
+import {randomBooked, randomFloors, randomRoom, randomServices} from '@app/data/admin/room.mock';
 import {ActionNavigationType, ActionType} from '../shared/enums';
 
 export class RoomService {
@@ -75,5 +75,13 @@ export class RoomService {
         }
 
         return of(true);
+    }
+
+    getServices(): Observable<ServiceModel[]> {
+        if (environment.debug) {
+            console.log('API: getServices');
+        }
+
+        return of(randomServices(3));
     }
 }

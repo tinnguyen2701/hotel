@@ -42,7 +42,7 @@ export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
     @ViewChild('dxDataGridRoom', {static: false}) dxDataGridRoom: DxDataGridComponent;
     @ViewChild('deleteDetailConfirmPopover', {static: true}) confirmDeleteDetailPopover: PopoverConfirmBoxComponent;
     @ViewChild('dxDataGridManageServices', {static: false}) dxDataGridManageServices: DxDataGridComponent;
-    @ViewChild('confirmDeleteServiceDetailPopover', {static: true}) confirmDeleteServiceDetailPopover: PopoverConfirmBoxComponent;
+    @ViewChild('confirmDeleteServiceDetailPopover', {static: false}) confirmDeleteServiceDetailPopover: PopoverConfirmBoxComponent;
 
     @Input() book: BookedModel;
     @Input() isShowListRoom: boolean = false;
@@ -227,6 +227,7 @@ export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
     // manage services
     showPopupManageServices() {
         this.isShowManageServices = true;
+        this.getServices();
     }
 
     duplicationName = (params) => {
@@ -241,7 +242,7 @@ export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
         return e.row.isEditing;
     };
 
-    onEditSeriviceRow = (e) => {
+    onEditServiceRow = (e) => {
         this.selectedItemServiceIndex = e.row.rowIndex;
         e.component.instance().editRow(e.row.rowIndex);
     };
@@ -253,7 +254,7 @@ export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
 
     onDxGridRowInserting(e) {
         this.selectedService = e.data;
-        this.updateSourceOfOpportunity();
+        this.saveService();
     }
 
     onDxGridRowUpdating(e) {
@@ -262,7 +263,7 @@ export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
                 ...e.oldData,
                 ...e.newData
             });
-            this.updateSourceOfOpportunity();
+            this.saveService();
         }
     }
 
@@ -276,17 +277,36 @@ export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
         }
     };
 
-    updateSourceOfOpportunity() {
+    saveService() {
         let message = '';
         this.roomService.saveService(this.selectedService).subscribe(() => {
-                if (this.selectedService.id) {
-                    message = 'Updated success';
-                } else {
-                    message = 'Created success';
-                }
-                AppNotify.success(message);
-            }, err => {
+            if (this.selectedService.id) {
+                message = 'Updated success';
+            } else {
+                message = 'Created success';
+            }
+            AppNotify.success(message);
+            this.refreshServices();
+        }, err => {
             AppNotify.error('Update error');
+            this.refreshServices();
+        });
+    }
+
+    getServices() {
+        this.isLoading = true;
+        this.roomService.getServices().subscribe((rs) => {
+            this.services = rs;
+            this.isLoading = false;
+        }, err => {
+            this.isLoading = false;
+            AppNotify.error('Get error');
+        });
+    }
+
+    refreshServices() {
+        setTimeout(() => {
+            this.getServices();
         });
     }
 
@@ -295,9 +315,12 @@ export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
             return false;
         }
         this.roomService.deleteService(this.selectedService.id).subscribe(() => {
-                AppNotify.success('Deleted success message');
-                this.selectedService = null;
-            });
+            AppNotify.success('Deleted success message');
+            this.selectedService = null;
+            this.refreshServices();
+        }, err => {
+            AppNotify.error('Delete error');
+        });
     }
 
     //
