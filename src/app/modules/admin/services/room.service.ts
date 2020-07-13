@@ -45,17 +45,29 @@ export class RoomService {
         return of(true);
     }
 
-    getBookCheckinAndCheckout(): Observable<{ bookCheckin: BookedModel, bookCheckout: BookedModel }> {
+    getBookCheckinAndCheckout(): Observable<{ bookAvailable: BookedModel, bookCheckin: BookedModel, bookCheckout: BookedModel }> {
         if (environment.debug) {
             console.log('API: getBookCheckinAndCheckout');
         }
 
-        return of({bookCheckin: new BookedModel({rooms: [randomRoom(102, 1)]}), bookCheckout: new BookedModel()});
+        return of({
+            bookAvailable: new BookedModel({rooms: [randomRoom(102, 1)]})
+            , bookCheckin: new BookedModel()
+            , bookCheckout: new BookedModel()
+        });
     }
 
     checkoutBook(booked: BookedModel): Observable<boolean> {
         if (environment.debug) {
             console.log('API: checkoutBook');
+        }
+
+        return of(true);
+    }
+
+    saveBookEditing(booked: BookedModel): Observable<boolean> {
+        if (environment.debug) {
+            console.log('API: saveBookEditing');
         }
 
         return of(true);

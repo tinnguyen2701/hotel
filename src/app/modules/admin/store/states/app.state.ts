@@ -3,13 +3,12 @@ import {Action, Selector, State, StateContext} from '@ngxs/store';
 import {Injectable} from '@angular/core';
 import {
     SetActionType,
-    SetBookCheckin,
     SetBookCheckout,
     SetFloor,
     SetEmptyBooking,
     SetEmptyEditBooking,
     SetEditBooking,
-    SetBookCheckinAndCheckout
+    SetBookAvailable, SetBookAvailableAndCheckinAndCheckout, SetBookCheckin
 } from '../actions/app.action';
 import {ActionType} from '../../shared/enums';
 import {RoomService} from '../../services';
@@ -17,6 +16,7 @@ import {AppNotify} from '@app/utilities';
 
 export interface AppStateModel {
     listFloors: FloorModel[] | [];
+    bookAvailable: BookedModel;
     bookCheckin: BookedModel;
     bookCheckout: BookedModel;
     actionType: ActionType;
@@ -25,6 +25,7 @@ export interface AppStateModel {
 
 const appStateDefaults: AppStateModel = {
     listFloors: [],
+    bookAvailable: new BookedModel(),
     bookCheckin: new BookedModel(),
     bookCheckout: new BookedModel(),
     actionType: ActionType.None,
@@ -47,10 +48,14 @@ export class AppState {
     }
 
     @Selector()
+    static bookAvailable(state: AppStateModel) {
+        return state.bookAvailable;
+    }
+
+    @Selector()
     static bookCheckin(state: AppStateModel) {
         return state.bookCheckin;
     }
-
 
     @Selector()
     static bookCheckout(state: AppStateModel) {
@@ -75,6 +80,27 @@ export class AppState {
         });
     }
 
+    @Action(SetBookAvailable)
+    SetBookAvailable(sc: StateContext<AppStateModel>, action: SetBookAvailable) {
+        const rooms: RoomModel[] = sc.getState().bookAvailable.rooms;
+
+        if (rooms.findIndex(_ => _.id === action.payload.rooms[0].id) === -1) {
+            this.roomService.addBook(action.payload, ActionType.Available).subscribe(booked => {
+                sc.setState({
+                    ...sc.getState(),
+                    bookAvailable: {
+                        ...sc.getState().bookAvailable,
+                        rooms: [...sc.getState().bookAvailable.rooms, ...action.payload.rooms],
+                        customers: [...sc.getState().bookAvailable.customers, ...action.payload.customers],
+                        services: [...sc.getState().bookAvailable.services, ...action.payload.services]
+                    }
+                });
+            }, (error) => {
+                AppNotify.error('Add book error');
+            });
+        }
+    }
+
     @Action(SetBookCheckin)
     SetBookCheckin(sc: StateContext<AppStateModel>, action: SetBookCheckin) {
         const rooms: RoomModel[] = sc.getState().bookCheckin.rooms;
@@ -91,7 +117,7 @@ export class AppState {
                     }
                 });
             }, (error) => {
-                AppNotify.error('Add book error');
+                AppNotify.error('Add book checkin error');
             });
         }
     }
@@ -127,25 +153,32 @@ export class AppState {
 
     @Action(SetEmptyBooking)
     SetEmptyBooking(sc: StateContext<AppStateModel>) {
-        if (sc.getState().actionType === ActionType.Checkin) {
+        if (sc.getState().actionType === ActionType.Available) {
+            this.roomService.addBook(new BookedModel(), ActionType.Available).subscribe((rooms) => {
+                sc.setState({
+                    ...sc.getState(),
+                    bookAvailable: new BookedModel()
+                });
+            }, (error) => {
+                AppNotify.error('Set empty book available error');
+            });
+        } else if (sc.getState().actionType === ActionType.Checkin) {
             this.roomService.addBook(new BookedModel(), ActionType.Checkin).subscribe((rooms) => {
                 sc.setState({
                     ...sc.getState(),
                     bookCheckin: new BookedModel()
                 });
             }, (error) => {
-                AppNotify.error('Set empty book error');
+                AppNotify.error('Set empty book checkin error');
             });
-        }
-
-        if (sc.getState().actionType === ActionType.Checkout) {
+        } else if (sc.getState().actionType === ActionType.Checkout) {
             this.roomService.addBook(new BookedModel(), ActionType.Checkout).subscribe((rooms) => {
                 sc.setState({
                     ...sc.getState(),
                     bookCheckout: new BookedModel()
                 });
             }, (error) => {
-                AppNotify.error('Set empty book error');
+                AppNotify.error('Set empty book checkout error');
             });
         }
     }
@@ -166,16 +199,17 @@ export class AppState {
         });
     }
 
-    @Action(SetBookCheckinAndCheckout)
-    SetBookCheckinAndCheckout(sc: StateContext<AppStateModel>) {
+    @Action(SetBookAvailableAndCheckinAndCheckout)
+    SetBookAvailableAndCheckinAndCheckout(sc: StateContext<AppStateModel>) {
         this.roomService.getBookCheckinAndCheckout().subscribe((result) => {
             sc.setState({
                 ...sc.getState(),
+                bookAvailable: result.bookAvailable,
                 bookCheckin: result.bookCheckin,
                 bookCheckout: result.bookCheckout
             });
         }, (error) => {
-            AppNotify.error('Get book checkin and checkout error');
+            AppNotify.error('Get book available and checkin and checkout error');
         });
     }
 }

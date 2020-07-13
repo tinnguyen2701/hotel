@@ -1,5 +1,5 @@
 
-import {RoomModel, FloorModel, BookedModel} from '@app/modules/admin/models';
+import {FloorModel, BookedModel} from '@app/modules/admin/models';
 import { ActionType } from '../../shared/enums';
 
 
@@ -7,6 +7,13 @@ export class SetFloor {
     static readonly type = '[App] Set list floor';
 
     constructor(public payload: FloorModel[]) {
+    }
+}
+
+export class SetBookAvailable {
+    static readonly type = '[App] Set book available';
+
+    constructor(public payload: BookedModel) {
     }
 }
 
@@ -51,8 +58,8 @@ export class SetEditBooking {
     }
 }
 
-export class SetBookCheckinAndCheckout {
-    static readonly type = '[App] Set book checkin and checkout';
+export class SetBookAvailableAndCheckinAndCheckout {
+    static readonly type = '[App] Set book available and checkin and checkout';
 
     constructor() {}
 }

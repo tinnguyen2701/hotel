@@ -264,7 +264,16 @@
                             (onClick)="onHandleCancel()">
                         </dx-button>
 
-                        <div class="action-group" *ngIf="isShowBookCheckin()">
+                        <dx-button
+                            *ngIf="isShowBookEdit()"
+                            class="ml-auto"
+                            type="default"
+                            [disabled]="!isFormDirty"
+                            [text]="'Save'"
+                            (onClick)="onHandleSaveBookEditing()">
+                        </dx-button>
+
+                        <div class="action-group" *ngIf="isShowBookAvailable()">
                             <dx-drop-down-button
                                 [splitButton]="true"
                                 [useSelectMode]="false"

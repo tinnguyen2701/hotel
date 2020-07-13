@@ -6,7 +6,7 @@ import {RoomService} from '../../services';
 import {BookedModel, FloorModel, RoomModel, TransferRoom} from '../../models/room.model';
 import {RoomStatus, ActionType, ActionNavigationType} from '../../shared/enums';
 import {ROOM_STATUS_TYPE, TRANSFER_ROOM_TYPE} from '../../shared/constant';
-import {AppState, SetActionType, SetBookCheckin, SetBookCheckout, SetEditBooking, SetFloor} from '../../store';
+import {AppState, SetActionType, SetBookAvailable, SetBookCheckin, SetBookCheckout, SetEditBooking, SetFloor} from '../../store';
 import {AppNotify} from '@app/utilities';
 import {BaseLookup} from '@app/modules/admin/models';
 
@@ -58,6 +58,11 @@ export class AllRoomsComponent implements OnInit {
             icon: 'fas fa-pencil-alt',
         },
         {
+            value: ActionNavigationType.AddToCheckinList,
+            name: 'Add to list checkin',
+            icon: 'fas fa-pencil-alt',
+        },
+        {
             value: ActionNavigationType.TransferRoom,
             name: 'Transfer room',
             icon: 'far fa-paper-plane',
@@ -85,7 +90,9 @@ export class AllRoomsComponent implements OnInit {
                 break;
             case RoomStatus.Booking:
                 this.menus = [
+                    this.totalMenus[5],
                     this.totalMenus[4],
+                    this.totalMenus[6],
                 ];
                 break;
             case RoomStatus.Checkin:
@@ -93,7 +100,7 @@ export class AllRoomsComponent implements OnInit {
                     this.totalMenus[2],
                     this.totalMenus[3],
                     this.totalMenus[4],
-                    this.totalMenus[5]
+                    this.totalMenus[6]
                 ];
                 break;
             default:
@@ -108,10 +115,10 @@ export class AllRoomsComponent implements OnInit {
 
                 switch (item.value) {
                     case ActionNavigationType.AddToBookingList:
-                        this.store.dispatch(new SetBookCheckin(this.selectedBooked));
+                        this.store.dispatch(new SetBookAvailable(this.selectedBooked));
                         break;
                     case ActionNavigationType.BookingNow:
-                        this.store.dispatch(new SetActionType(ActionType.Checkin));
+                        this.store.dispatch(new SetActionType(ActionType.Available));
                         this.store.dispatch(new SetEditBooking(this.selectedBooked));
                         break;
                     case ActionNavigationType.Edit:
@@ -124,6 +131,9 @@ export class AllRoomsComponent implements OnInit {
                     case ActionNavigationType.CheckoutNow:
                         this.store.dispatch(new SetActionType(ActionType.Checkout));
                         this.store.dispatch(new SetEditBooking(this.selectedBooked));
+                        break;
+                    case ActionNavigationType.AddToCheckinList:
+                        this.store.dispatch(new SetBookCheckin(this.selectedBooked));
                         break;
                     case ActionNavigationType.TransferRoom:
                         this.isShowPopupTransferRoom = true;

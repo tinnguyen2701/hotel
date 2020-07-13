@@ -29,7 +29,6 @@ import {
 import {RoomStatus, ActionType} from '@app/modules/admin/shared/enums';
 import {AppNotify} from '@app/utilities';
 import {RoomService} from '@app/modules/admin/services';
-import {finalize} from 'rxjs/operators';
 
 @Component({
     selector: 'app-popup-list-rooms',
@@ -104,7 +103,9 @@ export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
     }
 
     handleTitlePopup() {
-        if (this.actionType === ActionType.Checkin) {
+        if (this.actionType === ActionType.Available) {
+            return 'List available rooms';
+        } else if (this.actionType === ActionType.Checkin) {
             return 'List checkin rooms';
         } else if (this.actionType === ActionType.Checkout) {
             return 'List checkout rooms';
@@ -380,8 +381,30 @@ export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
             );
     }
 
-    isShowBookCheckin() {
-        return this.actionType === ActionType.Checkin;
+
+    onHandleSaveBookEditing() {
+        if (this.isEmptyInformation()) {
+            return;
+        }
+
+        this.roomService.saveBookEditing(this.book)
+            .subscribe(() => {
+                    AppNotify.success('Update success');
+                    this.store.dispatch(new SetEmptyEditBooking());
+                    this.store.dispatch(new SetActionType(ActionType.None));
+                    this.refresh();
+                }, (error) => {
+                    AppNotify.error('Update error!');
+                }
+            );
+    }
+
+    isShowBookAvailable() {
+        return this.actionType === ActionType.Available;
+    }
+
+    isShowBookEdit() {
+        return this.actionType === ActionType.Edit;
     }
 
     isShowBookCheckout() {

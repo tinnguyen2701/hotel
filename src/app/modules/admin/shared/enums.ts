@@ -12,9 +12,10 @@ export enum RoomType {
 
 export enum ActionType {
     None = 0,
-    Checkin = 1,
-    Checkout = 2,
-    Edit = 3,
+    Available = 1,
+    Checkin = 2,
+    Checkout = 3,
+    Edit = 4,
 }
 
 export enum AppLookupDataType {
@@ -32,5 +33,6 @@ export enum ActionNavigationType {
     AddToCheckoutList,
     BookingNow,
     CheckoutNow,
-    TransferRoom
+    TransferRoom,
+    AddToCheckinList
 }

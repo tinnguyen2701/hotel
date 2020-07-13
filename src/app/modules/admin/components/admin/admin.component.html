@@ -2,6 +2,11 @@
     <router-outlet></router-outlet>
 </app-layout-default>
 
+<app-popup-list-rooms *ngIf='isShowListRoomAvailable()'
+                      [book]="editBooking && editBooking.rooms.length === 1 ? editBooking : bookAvailable"
+                      [isShowListRoom]="true">
+</app-popup-list-rooms>
+
 <app-popup-list-rooms *ngIf='isShowListRoomCheckin()'
                       [book]="editBooking && editBooking.rooms.length === 1 ? editBooking : bookCheckin"
                       [isShowListRoom]="true">

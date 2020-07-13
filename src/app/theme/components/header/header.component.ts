@@ -15,6 +15,7 @@ import { ActionType } from '@app/modules/admin/shared/enums';
 
 export class HeaderComponent implements OnInit {
     @SelectSnapshot(AppState.actionType) actionType: ActionType;
+    @SelectSnapshot(AppState.bookAvailable) bookAvailable: BookedModel;
     @SelectSnapshot(AppState.bookCheckin) bookCheckin: BookedModel;
     @SelectSnapshot(AppState.bookCheckout) bookCheckout: BookedModel;
 
@@ -44,12 +45,20 @@ export class HeaderComponent implements OnInit {
         this.menuToggle.emit();
     }
 
+    showPopUpAvailable() {
+        this.store.dispatch(new SetActionType(ActionType.Available));
+    }
+
     showPopUpCheckin() {
         this.store.dispatch(new SetActionType(ActionType.Checkin));
     }
 
     showPopUpCheckout() {
         this.store.dispatch(new SetActionType(ActionType.Checkout));
+    }
+
+    numberRoomAvailable() {
+        return this.bookAvailable.rooms.length + ' room' + (this.bookAvailable.rooms.length > 1 ? 's' : '') + ' booking';
     }
 
     numberRoomCheckin() {
