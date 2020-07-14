@@ -242,6 +242,7 @@
                     </app-tab>
                     <dx-button *ngIf="currentTab.value === Service"
                                text="Services manage"
+                               (onChangeService)="onChangeService($event)"
                                (onClick)="showPopupManageServices()">
                     </dx-button>
                 </div>
@@ -254,6 +255,22 @@
                     <app-services [services]="book.services">
                     </app-services>
                 </ng-container>
+
+
+                <div class="">
+                    <div class="dx-field">
+                        <div class="dx-field-label">Payment rooms</div>
+                        <div class="dx-field-value">
+                            {{paymentRooms}}
+                        </div>
+                    </div>
+                    <div class="dx-field">
+                        <div class="dx-field-label">Payment services</div>
+                        <div class="dx-field-value">
+                            {{paymentServices}}
+                        </div>
+                    </div>
+                </div>
 
                 <ng-template #popupFooter>
                     <div class="d-flex justify-content-between">

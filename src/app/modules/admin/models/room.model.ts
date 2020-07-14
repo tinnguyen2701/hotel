@@ -13,6 +13,7 @@ export interface RoomModel {
     bookCode: string;
     // only UI
     isUpdated: boolean;
+    amount: number;
 }
 
 export class CustomerModel {

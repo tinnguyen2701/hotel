@@ -41,10 +41,10 @@ export function randomRooms(count: number, floor: number): RoomModel[] {
                 prepay: 0,
                 note: faker.lorem.sentence(),
                 peopleNumber: 0,
-                customerInfomation: null,
                 bookCode: '123',
                 isUpdated: false,
-                isDeleted: false
+                isDeleted: false,
+                amount: 0
             };
         });
 }
@@ -66,7 +66,8 @@ export function randomRoom(roomId: number, type: number): RoomModel {
             note: faker.lorem.sentence(),
             peopleNumber: 0,
             bookCode: null,
-            isUpdated: false
+            isUpdated: false,
+            amount: 0
         };
     }
     const statusRoom = random(2, 4);
@@ -92,7 +93,8 @@ export function randomRoom(roomId: number, type: number): RoomModel {
         note: faker.lorem.sentence(),
         peopleNumber: 0,
         bookCode: '123',
-        isUpdated: false
+        isUpdated: false,
+        amount: 0
     };
 }
 

@@ -38,6 +38,8 @@ export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
     selectedRoomId: number = null;
     roomStatusTypes = ROOM_STATUS_TYPE;
     isShowBookCodeField: boolean = false;
+    paymentServices: number = 0;
+    paymentRooms: number = 0;
 
     isShowManageServices: boolean = false;
     services: ServiceModel[] = [];
@@ -176,6 +178,7 @@ export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
 
     onRowRoomUpdated(e) {
         e.data.isUpdated = true;
+        this.changeRooms();
     }
 
     onRevertDxGridRow = (e) => {
@@ -305,6 +308,18 @@ export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
             this.refreshServices();
         }, err => {
             AppNotify.error('Delete error');
+        });
+    }
+
+    onChangeService(e: any) {
+        this.book.services.map(_ => {
+            this.paymentServices += _.amount;
+        });
+    }
+
+    changeRooms() {
+        this.book.rooms.map(_ => {
+            this.paymentRooms += _.amount;
         });
     }
 

@@ -1,10 +1,11 @@
-import {Component, OnInit, ViewChild, OnDestroy, Input} from '@angular/core';
+import {Component, OnInit, ViewChild, OnDestroy, Input, Output, EventEmitter} from '@angular/core';
 import {DxDataGridComponent} from 'devextreme-angular';
 import {Subscription} from 'rxjs';
 //
 import {PopoverConfirmBoxComponent} from '..';
 import {AppLookupService} from '@app/modules/admin/services';
 import {BaseService, ServiceModel} from '@app/modules/admin/models';
+import {SearchFormDataModel} from '@app/modules/admin/models/search.model';
 
 @Component({
     selector: 'app-services',
@@ -16,6 +17,8 @@ export class ServicesComponent implements OnInit, OnDestroy {
     @ViewChild('deleteGridRowConfirmPopover', {static: false}) confirmPopover: PopoverConfirmBoxComponent;
 
     @Input() services: ServiceModel[] = [];
+
+    @Output() onChangeService: EventEmitter<any> = new EventEmitter();
 
     selectedServiceId: number;
     subscription: Subscription = new Subscription();
@@ -51,14 +54,17 @@ export class ServicesComponent implements OnInit, OnDestroy {
 
     onRowUpdated(e: any) {
         e.data.isUpdated = true;
+        this.onChangeService.emit();
     }
 
     onRowInserted(e: any) {
         e.data.isInserted = true;
+        this.onChangeService.emit();
     }
 
     onRowRemoving(e: any) {
         e.data.isDeleted = true;
+        this.onChangeService.emit();
     }
 
     onServiceChanged(cell: any, e: any) {
