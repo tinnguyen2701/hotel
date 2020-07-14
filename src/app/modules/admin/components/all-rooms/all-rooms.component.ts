@@ -6,7 +6,15 @@ import {RoomService} from '../../services';
 import {BookedModel, FloorModel, RoomModel, TransferRoom} from '../../models/room.model';
 import {RoomStatus, ActionType, ActionNavigationType} from '../../shared/enums';
 import {ROOM_STATUS_TYPE, TRANSFER_ROOM_TYPE} from '../../shared/constant';
-import {AppState, SetActionType, SetBookAvailable, SetBookCheckin, SetBookCheckout, SetEditBooking, SetFloor} from '../../store';
+import {
+    AppState,
+    SetActionType,
+    SetBookAvailable,
+    SetBookCheckin,
+    SetBookCheckout,
+    SetEditBooking,
+    SetFloor
+} from '../../store';
 import {AppNotify} from '@app/utilities';
 import {BaseLookup} from '@app/modules/admin/models';
 
@@ -67,6 +75,11 @@ export class AllRoomsComponent implements OnInit {
             name: 'Transfer room',
             icon: 'far fa-paper-plane',
         },
+        {
+            value: ActionNavigationType.RemoveCheckin,
+            name: 'Remove checkin',
+            icon: 'far fa-trash-alt',
+        },
     ];
 
     constructor(private roomService: RoomService, private store: Store) {
@@ -93,6 +106,7 @@ export class AllRoomsComponent implements OnInit {
                     this.totalMenus[5],
                     this.totalMenus[4],
                     this.totalMenus[6],
+                    this.totalMenus[7]
                 ];
                 break;
             case RoomStatus.Checkin:
@@ -100,7 +114,7 @@ export class AllRoomsComponent implements OnInit {
                     this.totalMenus[2],
                     this.totalMenus[3],
                     this.totalMenus[4],
-                    this.totalMenus[6]
+                    this.totalMenus[6],
                 ];
                 break;
             default:
@@ -139,6 +153,9 @@ export class AllRoomsComponent implements OnInit {
                         this.isShowPopupTransferRoom = true;
                         this.transferRoom.fromRoomId = this.selectedBooked.rooms[0].id;
                         break;
+                    case ActionNavigationType.RemoveCheckin:
+                        this.onHandleRemoveCheckin(this.selectedBooked);
+                        break;
                     default:
                         break;
                 }
@@ -148,6 +165,16 @@ export class AllRoomsComponent implements OnInit {
                 AppNotify.error('Get book went wrong!');
             }
         );
+    }
+
+    onHandleRemoveCheckin(book: BookedModel) {
+        this.roomService.removeCheckinBook(book).subscribe(() => {
+            AppNotify.success('Removed checkin book');
+            this.store.dispatch(new SetActionType(ActionType.None));
+            this.refresh();
+        }, err => {
+            AppNotify.error('Removed checkin book error');
+        });
     }
 
     showTransferRoomPopup() {

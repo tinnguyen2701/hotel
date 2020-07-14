@@ -1,32 +1,15 @@
-import {
-    Component,
-    OnInit,
-    Input,
-    ViewChild,
-    ChangeDetectorRef,
-    DoCheck,
-    OnDestroy,
-} from '@angular/core';
+import {ChangeDetectorRef, Component, DoCheck, Input, OnDestroy, OnInit, ViewChild,} from '@angular/core';
 import {cloneDeep, isEqual} from 'lodash';
 import {Store} from '@ngxs/store';
 import {DxDataGridComponent} from 'devextreme-angular';
 import {Subscription} from 'rxjs';
 import {SelectSnapshot} from '@ngxs-labs/select-snapshot';
 //
-import {
-    AppState,
-    SetFloor,
-    SetActionType, SetEmptyEditBooking, SetEmptyBooking
-} from '@app/modules/admin/store';
-import {
-    RoomModel, BookedModel, ServiceModel
-} from '@app/modules/admin/models';
+import {AppState, SetActionType, SetEmptyBooking, SetEmptyEditBooking, SetFloor} from '@app/modules/admin/store';
+import {BookedModel, RoomModel, ServiceModel} from '@app/modules/admin/models';
 import {PopoverConfirmBoxComponent} from '..';
-import {
-    ROOM_TYPE,
-    ROOM_STATUS_TYPE,
-} from '@app/modules/admin/shared/constant';
-import {RoomStatus, ActionType} from '@app/modules/admin/shared/enums';
+import {ROOM_STATUS_TYPE, ROOM_TYPE,} from '@app/modules/admin/shared/constant';
+import {ActionType, RoomStatus} from '@app/modules/admin/shared/enums';
 import {AppNotify} from '@app/utilities';
 import {RoomService} from '@app/modules/admin/services';
 
@@ -40,6 +23,7 @@ export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
 
     @ViewChild('dxDataGridRoom', {static: false}) dxDataGridRoom: DxDataGridComponent;
     @ViewChild('deleteDetailConfirmPopover', {static: true}) confirmDeleteDetailPopover: PopoverConfirmBoxComponent;
+    @ViewChild('removeCheckinDetailConfirmPopover', {static: true}) removeCheckinDetailConfirmPopover: PopoverConfirmBoxComponent;
     @ViewChild('dxDataGridManageServices', {static: false}) dxDataGridManageServices: DxDataGridComponent;
     @ViewChild('confirmDeleteServiceDetailPopover', {static: false}) confirmDeleteServiceDetailPopover: PopoverConfirmBoxComponent;
 
@@ -316,7 +300,7 @@ export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
             return false;
         }
         this.roomService.deleteService(this.selectedService.id).subscribe(() => {
-            AppNotify.success('Deleted success message');
+            AppNotify.success('Deleted success');
             this.selectedService = null;
             this.refreshServices();
         }, err => {
@@ -341,6 +325,26 @@ export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
         this.store.dispatch(new SetEmptyEditBooking());
     }
 
+    onConfirmRemoveCheckinList = (e) => {
+        if (this.removeCheckinDetailConfirmPopover) {
+            this.removeCheckinDetailConfirmPopover.show(e.event.currentTarget);
+        }
+    };
+
+    onHandleRemoveCheckin() {
+        this.roomService.removeCheckinBook(this.book).subscribe(() => {
+            if (this.isShowBookCheckin()) {
+                this.store.dispatch(new SetEmptyBooking());
+            }
+            AppNotify.success('Removed checkin book');
+
+            this.store.dispatch(new SetActionType(ActionType.None));
+            this.refresh();
+        }, err => {
+            AppNotify.error('Removed checkin book error');
+        });
+    }
+
     onHandleSaving(saveAction: number) {
         this.book.bookType = saveAction;
         if (this.isEmptyInformation()) {
@@ -352,7 +356,11 @@ export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
             .subscribe(
                 (account) => {
                     AppNotify.success('Updated success');
-                    this.store.dispatch(new SetEmptyBooking());
+                    if (this.actionType !== ActionType.Edit
+                        && this.actionType !== ActionType.None
+                        && this.book.rooms && this.book.rooms.length > 1) {
+                        this.store.dispatch(new SetEmptyBooking());
+                    }
                     this.store.dispatch(new SetEmptyEditBooking());
                     this.store.dispatch(new SetActionType(ActionType.None));
                     this.refresh();
@@ -371,7 +379,11 @@ export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
         this.roomService.checkoutBook(this.book)
             .subscribe(() => {
                     AppNotify.success('Checkout success');
-                    this.store.dispatch(new SetEmptyBooking());
+                    if (this.actionType !== ActionType.Edit
+                        && this.actionType !== ActionType.None
+                        && this.book.rooms && this.book.rooms.length > 1) {
+                        this.store.dispatch(new SetEmptyBooking());
+                    }
                     this.store.dispatch(new SetEmptyEditBooking());
                     this.store.dispatch(new SetActionType(ActionType.None));
                     this.refresh();
@@ -401,6 +413,10 @@ export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
 
     isShowBookAvailable() {
         return this.actionType === ActionType.Available;
+    }
+
+    isShowBookCheckin() {
+        return this.actionType === ActionType.Checkin;
     }
 
     isShowBookEdit() {

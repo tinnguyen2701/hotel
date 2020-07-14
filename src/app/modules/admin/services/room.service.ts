@@ -96,4 +96,13 @@ export class RoomService {
 
         return of(randomServices(3));
     }
+
+    removeCheckinBook(book: BookedModel): Observable<boolean> {
+        if (environment.debug) {
+            console.log('API: removeCheckinBook');
+        }
+
+        return of(true);
+    }
+
 }

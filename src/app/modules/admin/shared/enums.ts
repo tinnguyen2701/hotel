@@ -24,7 +24,7 @@ export enum AppLookupDataType {
 
 export enum TransferOption {
     SeparateAndMerge = 1,
-    CaculatedFromBegining= 2
+    CaculatedFromBeginning= 2
 }
 
 export enum ActionNavigationType {
@@ -34,5 +34,6 @@ export enum ActionNavigationType {
     BookingNow,
     CheckoutNow,
     TransferRoom,
-    AddToCheckinList
+    AddToCheckinList,
+    RemoveCheckin
 }

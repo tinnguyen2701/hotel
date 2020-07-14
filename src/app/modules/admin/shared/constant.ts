@@ -27,5 +27,5 @@ export const ROOM_TYPE: { value: RoomType, name: string }[] = [
 
 export const TRANSFER_ROOM_TYPE: { value: number, name: string }[] = [
     {value: TransferOption.SeparateAndMerge, name: 're-calculate from the beginning according to the room transfer price'},
-    {value: TransferOption.CaculatedFromBegining, name: 'Separate the old room bill and merge it into the room that will move in'}
+    {value: TransferOption.CaculatedFromBeginning, name: 'Separate the old room bill and merge it into the room that will move in'}
 ];

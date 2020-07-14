@@ -251,18 +251,26 @@
                 </ng-container>
 
                 <ng-container *ngIf="currentTab.value === Service">
-                    <app-services [services]="book.services"></app-services>
+                    <app-services [services]="book.services">
+                    </app-services>
                 </ng-container>
 
-
                 <ng-template #popupFooter>
-                    <div class="d-flex">
-                        <dx-button
-                            type="normal"
-                            class="mr-auto"
-                            [text]="'Cancel'"
-                            (onClick)="onHandleCancel()">
-                        </dx-button>
+                    <div class="d-flex justify-content-between">
+                        <div class="d-flex">
+                            <dx-button
+                                type="normal"
+                                class="mr-auto"
+                                [text]="'Cancel'"
+                                (onClick)="onHandleCancel()">
+                            </dx-button>
+                            <dx-button *ngIf="isShowBookCheckin()"
+                                       type="danger"
+                                       class="ml-3 mr-auto"
+                                       [text]="'Remove'"
+                                       (onClick)="onConfirmRemoveCheckinList($event)">
+                            </dx-button>
+                        </div>
 
                         <dx-button
                             *ngIf="isShowBookEdit()"
@@ -311,6 +319,12 @@
     (onConfirm)="deleteRoom()">
 </app-popover-confirm-box>
 
+
+<app-popover-confirm-box
+    #removeCheckinDetailConfirmPopover
+    [message]="'Are you want to remove list room checkin'"
+    (onConfirm)="onHandleRemoveCheckin()">
+</app-popover-confirm-box>
 
 <ng-container *ngIf="isShowManageServices">
     <app-popup-container title="Services Manage"
