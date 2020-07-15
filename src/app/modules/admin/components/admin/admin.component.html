@@ -3,20 +3,29 @@
 </app-layout-default>
 
 <app-popup-list-rooms *ngIf='isShowListRoomAvailable()'
-                      [book]="editBooking && editBooking.rooms.length === 1 ? editBooking : bookAvailable"
+                      [book]="bookAvailable"
                       [isShowListRoom]="true">
 </app-popup-list-rooms>
 
 <app-popup-list-rooms *ngIf='isShowListRoomCheckin()'
-                      [book]="editBooking && editBooking.rooms.length === 1 ? editBooking : bookCheckin"
+                      [book]="bookCheckin"
                       [isShowListRoom]="true">
 </app-popup-list-rooms>
 
 <app-popup-list-rooms *ngIf='isShowListRoomCheckout()'
-                      [book]="editBooking && editBooking.rooms.length === 1 ? editBooking : bookCheckout"
+                      [book]="bookCheckout"
                       [isShowListRoom]="true">
 </app-popup-list-rooms>
 
 <app-popup-list-rooms *ngIf='isEditRoom()' [book]="editBooking"
                       [isShowListRoom]="true">
 </app-popup-list-rooms>
+
+<app-popup-list-rooms *ngIf='isBookingNow()' [book]="editBooking"
+                      [isShowListRoom]="true">
+</app-popup-list-rooms>
+
+<app-popup-list-rooms *ngIf='isCheckoutNow()' [book]="editBooking"
+                      [isShowListRoom]="true">
+</app-popup-list-rooms>
+

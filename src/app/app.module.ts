@@ -15,7 +15,7 @@ import {NgxsModule} from '@ngxs/store';
 import {NgxsSelectSnapshotModule} from '@ngxs-labs/select-snapshot';
 import {NgxsReduxDevtoolsPluginModule} from '@ngxs/devtools-plugin';
 import {environment} from '@environment';
-import { RoomService } from './modules/admin/services';
+import {BookingService} from './modules/admin/services';
 
 export function initializeApp(injector: Injector) {
     return (): Promise<any> => {
@@ -71,7 +71,7 @@ export const STATES = [
             deps: [Injector],
             multi: true
         },
-        RoomService
+        BookingService
     ],
     bootstrap: [AppComponent]
 })

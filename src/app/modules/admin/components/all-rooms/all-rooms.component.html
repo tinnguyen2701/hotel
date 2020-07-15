@@ -1,8 +1,8 @@
 <div class="wrapper p-10">
     <div class="row d-flex align-items-center">
-        <div class="col-md-8 d-flex align-items-center p-0">
+        <div class="col-md-9 d-flex align-items-center p-0">
             <div class="field col-md-3 p-0">
-                <div class="field-lable">Tìm kiếm theo trạng thái</div>
+                <div class="field-lable">Status</div>
                 <div class="field-value">
                     <dx-select-box
                         [dataSource]="roomStatusType"
@@ -13,7 +13,7 @@
                 </div>
             </div>
             <div class="field col-md-3">
-                <div class="field-lable">Tìm kiếm theo ngày checkin</div>
+                <div class="field-lable">From date checkin</div>
                 <div class="field-value">
                     <dx-date-box
                         [(value)]="checkinDate"
@@ -26,7 +26,7 @@
                 </div>
             </div>
             <div class="field col-md-3">
-                <div class="field-lable">Ngày checkout</div>
+                <div class="field-lable">To date</div>
                 <div class="field-value">
                     <dx-date-box
                         [(value)]="checkoutDate"
@@ -39,7 +39,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-4 text-right">
+        <div class="col-md-3 text-right">
             <dx-button
                 type="default"
                 icon="far fa-paper-plane"
@@ -72,7 +72,11 @@
                             : false
                 }"
                 (onClick)="onClickRoom(room)"
-                [text]="room.name">
+                [text]="room.name"
+                [template]="'buttonTemplate'">
+                <div *dxTemplate="let buttonData of 'buttonTemplate'">
+                    {{buttonData.text}} ({{isRoomSingle(room) ? "S" : "D"}})
+                </div>
             </dx-button>
         </div>
     </div>

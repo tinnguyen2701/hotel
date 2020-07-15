@@ -321,7 +321,7 @@
                             (onClick)="onHandleSaveBookEditing()">
                         </dx-button>
 
-                        <div class="action-group" *ngIf="isShowBookAvailable()">
+                        <div class="action-group" *ngIf="isShowBookAvailable() || isShowBookingNow()">
                             <dx-drop-down-button
                                 [splitButton]="true"
                                 [useSelectMode]="false"
@@ -339,7 +339,7 @@
                         </div>
 
                         <dx-button
-                            *ngIf="isShowBookCheckout()"
+                            *ngIf="isShowBookCheckout() || isShowCheckoutNow()"
                             class="ml-auto"
                             type="default"
                             [disabled]="!isFormDirty"

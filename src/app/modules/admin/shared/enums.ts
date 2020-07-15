@@ -11,11 +11,13 @@ export enum RoomType {
 }
 
 export enum ActionType {
-    None = 0,
-    Available = 1,
-    Checkin = 2,
-    Checkout = 3,
-    Edit = 4,
+    None ,
+    Available ,
+    Checkin ,
+    Checkout ,
+    Edit,
+    BookingNow,
+    CheckoutNow
 }
 
 export enum AppLookupDataType {

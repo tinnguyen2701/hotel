@@ -1,9 +1,10 @@
 import {Component, OnInit} from '@angular/core';
-import {RoomModel, AppLookupModel, BookedModel} from '../../models';
-import {AppState, SetBookAvailableAndCheckinAndCheckout, SetFloor} from '../../store';
 import {SelectSnapshot} from '@ngxs-labs/select-snapshot';
-import {RoomService, AppLookupService} from '../../services';
 import {Store} from '@ngxs/store';
+//
+import {AppLookupModel, BookedModel} from '../../models';
+import {AppState, SetBookAvailableAndCheckinAndCheckout, SetFloor} from '../../store';
+import {AppLookupService, BookingService} from '../../services';
 import {ActionType} from '../../shared/enums';
 
 @Component({
@@ -20,7 +21,7 @@ export class AdminComponent implements OnInit {
     @SelectSnapshot(AppState.editBooking) editBooking: BookedModel;
 
     constructor(
-        private roomService: RoomService,
+        private bookingService: BookingService,
         private store: Store,
         private appLookupService: AppLookupService
     ) {
@@ -38,7 +39,7 @@ export class AdminComponent implements OnInit {
     }
 
     loadFloor() {
-        this.roomService.getFloors().subscribe(
+        this.bookingService.getFloors().subscribe(
             (result) => {
                 this.store.dispatch(new SetFloor(result));
             },
@@ -61,5 +62,13 @@ export class AdminComponent implements OnInit {
 
     isEditRoom() {
         return this.actionType === ActionType.Edit;
+    }
+
+    isBookingNow() {
+        return this.actionType === ActionType.BookingNow;
+    }
+
+    isCheckoutNow() {
+        return this.actionType === ActionType.CheckoutNow;
     }
 }

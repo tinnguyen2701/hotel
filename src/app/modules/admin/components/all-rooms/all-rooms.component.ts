@@ -2,9 +2,9 @@ import {Component, OnInit} from '@angular/core';
 import {SelectSnapshot} from '@ngxs-labs/select-snapshot';
 import {Store} from '@ngxs/store';
 //
-import {RoomService} from '../../services';
+import {BookingService} from '../../services';
 import {BookedModel, FloorModel, RoomModel, TransferRoom} from '../../models/room.model';
-import {RoomStatus, ActionType, ActionNavigationType} from '../../shared/enums';
+import {RoomStatus, ActionType, ActionNavigationType, RoomType} from '../../shared/enums';
 import {ROOM_STATUS_TYPE, TRANSFER_ROOM_TYPE} from '../../shared/constant';
 import {
     AppState,
@@ -82,7 +82,7 @@ export class AllRoomsComponent implements OnInit {
         },
     ];
 
-    constructor(private roomService: RoomService, private store: Store) {
+    constructor(private bookingService: BookingService, private store: Store) {
     }
 
     ngOnInit() {
@@ -123,16 +123,17 @@ export class AllRoomsComponent implements OnInit {
     }
 
     onClickItem(item) {
-        this.roomService.getBookRoom(this.selectedRoom.id, item.value).subscribe(
+        this.bookingService.getBookRoom(this.selectedRoom.id, item.value).subscribe(
             (booked) => {
                 this.selectedBooked = booked;
 
                 switch (item.value) {
                     case ActionNavigationType.AddToBookingList:
+                        this.store.dispatch(new SetActionType(ActionType.Available));
                         this.store.dispatch(new SetBookAvailable(this.selectedBooked));
                         break;
                     case ActionNavigationType.BookingNow:
-                        this.store.dispatch(new SetActionType(ActionType.Available));
+                        this.store.dispatch(new SetActionType(ActionType.BookingNow));
                         this.store.dispatch(new SetEditBooking(this.selectedBooked));
                         break;
                     case ActionNavigationType.Edit:
@@ -143,10 +144,11 @@ export class AllRoomsComponent implements OnInit {
                         this.store.dispatch(new SetBookCheckout(this.selectedBooked));
                         break;
                     case ActionNavigationType.CheckoutNow:
-                        this.store.dispatch(new SetActionType(ActionType.Checkout));
+                        this.store.dispatch(new SetActionType(ActionType.CheckoutNow));
                         this.store.dispatch(new SetEditBooking(this.selectedBooked));
                         break;
                     case ActionNavigationType.AddToCheckinList:
+                        this.store.dispatch(new SetActionType(ActionType.Checkout));
                         this.store.dispatch(new SetBookCheckin(this.selectedBooked));
                         break;
                     case ActionNavigationType.TransferRoom:
@@ -168,7 +170,7 @@ export class AllRoomsComponent implements OnInit {
     }
 
     onHandleRemoveCheckin(book: BookedModel) {
-        this.roomService.removeCheckinBook(book).subscribe(() => {
+        this.bookingService.removeCheckinBook(book).subscribe(() => {
             AppNotify.success('Removed checkin book');
             this.store.dispatch(new SetActionType(ActionType.None));
             this.refresh();
@@ -187,7 +189,7 @@ export class AllRoomsComponent implements OnInit {
             return;
         }
 
-        this.roomService.transferRoom(this.transferRoom).subscribe(rs => {
+        this.bookingService.transferRoom(this.transferRoom).subscribe(rs => {
             this.isShowPopupTransferRoom = false;
             AppNotify.success('Transfer room success message');
             this.refresh();
@@ -205,7 +207,7 @@ export class AllRoomsComponent implements OnInit {
     }
 
     loadFloors() {
-        this.roomService.getFloors().subscribe(
+        this.bookingService.getFloors().subscribe(
             (result) => {
                 console.log(result);
                 this.store.dispatch(new SetFloor(result));
@@ -214,5 +216,9 @@ export class AllRoomsComponent implements OnInit {
                 AppNotify.error(err);
             }
         );
+    }
+
+    isRoomSingle(room) {
+        return room.type === RoomType.Single;
     }
 }

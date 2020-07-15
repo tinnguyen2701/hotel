@@ -11,7 +11,7 @@ import {PopoverConfirmBoxComponent} from '..';
 import {ROOM_STATUS_TYPE, ROOM_TYPE,} from '@app/modules/admin/shared/constant';
 import {ActionType, RoomStatus} from '@app/modules/admin/shared/enums';
 import {AppNotify} from '@app/utilities';
-import {RoomService} from '@app/modules/admin/services';
+import {BookingService} from '@app/modules/admin/services';
 
 @Component({
     selector: 'app-popup-list-rooms',
@@ -73,7 +73,7 @@ export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
     };
 
     constructor(
-        private roomService: RoomService,
+        private bookingService: BookingService,
         private store: Store,
         private changeDetectorRef: ChangeDetectorRef,
     ) {
@@ -267,7 +267,7 @@ export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
 
     saveService() {
         let message = '';
-        this.roomService.saveService(this.selectedService).subscribe(() => {
+        this.bookingService.saveService(this.selectedService).subscribe(() => {
             if (this.selectedService.id) {
                 message = 'Updated success';
             } else {
@@ -283,7 +283,7 @@ export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
 
     getServices() {
         this.isLoading = true;
-        this.roomService.getServices().subscribe((rs) => {
+        this.bookingService.getServices().subscribe((rs) => {
             this.services = rs;
             this.isLoading = false;
         }, err => {
@@ -302,7 +302,7 @@ export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
         if (!this.selectedService.id) {
             return false;
         }
-        this.roomService.deleteService(this.selectedService.id).subscribe(() => {
+        this.bookingService.deleteService(this.selectedService.id).subscribe(() => {
             AppNotify.success('Deleted success');
             this.selectedService = null;
             this.refreshServices();
@@ -371,7 +371,7 @@ export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
     };
 
     onHandleRemoveCheckin() {
-        this.roomService.removeCheckinBook(this.book).subscribe(() => {
+        this.bookingService.removeCheckinBook(this.book).subscribe(() => {
             if (this.isShowBookCheckin()) {
                 this.store.dispatch(new SetEmptyBooking());
             }
@@ -390,17 +390,16 @@ export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
             return;
         }
 
-        this.roomService
+        this.bookingService
             .updateBook(this.book)
             .subscribe(
                 (account) => {
                     AppNotify.success('Updated success');
-                    if (this.actionType !== ActionType.Edit
-                        && this.actionType !== ActionType.None
-                        && this.book.rooms && this.book.rooms.length > 1) {
+                    if (this.isShowBookingNow()) {
+                        this.store.dispatch(new SetEmptyEditBooking());
+                    } else {
                         this.store.dispatch(new SetEmptyBooking());
                     }
-                    this.store.dispatch(new SetEmptyEditBooking());
                     this.store.dispatch(new SetActionType(ActionType.None));
                     this.refresh();
                 },
@@ -415,15 +414,14 @@ export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
             return;
         }
 
-        this.roomService.checkoutBook(this.book)
+        this.bookingService.checkoutBook(this.book)
             .subscribe(() => {
                     AppNotify.success('Checkout success');
-                    if (this.actionType !== ActionType.Edit
-                        && this.actionType !== ActionType.None
-                        && this.book.rooms && this.book.rooms.length > 1) {
+                    if (this.isShowCheckoutNow()) {
+                        this.store.dispatch(new SetEmptyEditBooking());
+                    } else {
                         this.store.dispatch(new SetEmptyBooking());
                     }
-                    this.store.dispatch(new SetEmptyEditBooking());
                     this.store.dispatch(new SetActionType(ActionType.None));
                     this.refresh();
                 }, (error) => {
@@ -438,7 +436,7 @@ export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
             return;
         }
 
-        this.roomService.saveBookEditing(this.book)
+        this.bookingService.saveBookEditing(this.book)
             .subscribe(() => {
                     AppNotify.success('Update success');
                     this.store.dispatch(new SetEmptyEditBooking());
@@ -466,6 +464,14 @@ export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
         return this.actionType === ActionType.Checkout;
     }
 
+    isShowBookingNow() {
+        return this.actionType === ActionType.BookingNow;
+    }
+
+    isShowCheckoutNow() {
+        return this.actionType === ActionType.CheckoutNow;
+    }
+
     refresh() {
         setTimeout(() => {
             this.loadFloor();
@@ -473,7 +479,7 @@ export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
     }
 
     loadFloor() {
-        this.roomService.getFloors().subscribe(
+        this.bookingService.getFloors().subscribe(
             (result) => {
                 this.store.dispatch(new SetFloor(result));
             },
@@ -484,7 +490,11 @@ export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
 
 
     isEmptyInformation() {
-
+        if (!this.book.rooms || this.book.rooms.length === 0
+            || !this.book.customers || this.book.customers.length === 0) {
+            AppNotify.error('The information is required');
+            return true;
+        }
         return false;
     }
 
@@ -494,5 +504,9 @@ export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
 
     ngOnDestroy() {
         this.subscription.unsubscribe();
+    }
+
+    onRowPrepared(e: any) {
+        debugger;
     }
 }

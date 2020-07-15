@@ -11,7 +11,7 @@ import {
     SetBookAvailable, SetBookAvailableAndCheckinAndCheckout, SetBookCheckin
 } from '../actions/app.action';
 import {ActionType} from '../../shared/enums';
-import {RoomService} from '../../services';
+import {BookingService} from '../../services';
 import {AppNotify} from '@app/utilities';
 
 export interface AppStateModel {
@@ -39,7 +39,7 @@ const appStateDefaults: AppStateModel = {
 
 @Injectable()
 export class AppState {
-    constructor(private roomService: RoomService) {
+    constructor(private bookService: BookingService) {
     }
 
     @Selector()
@@ -85,7 +85,7 @@ export class AppState {
         const rooms: RoomModel[] = sc.getState().bookAvailable.rooms;
 
         if (rooms.findIndex(_ => _.id === action.payload.rooms[0].id) === -1) {
-            this.roomService.addBook(action.payload, ActionType.Available).subscribe(booked => {
+            this.bookService.addBook(action.payload, ActionType.Available).subscribe(booked => {
                 sc.setState({
                     ...sc.getState(),
                     bookAvailable: {
@@ -106,7 +106,7 @@ export class AppState {
         const rooms: RoomModel[] = sc.getState().bookCheckin.rooms;
 
         if (rooms.findIndex(_ => _.id === action.payload.rooms[0].id) === -1) {
-            this.roomService.addBook(action.payload, ActionType.Checkin).subscribe(booked => {
+            this.bookService.addBook(action.payload, ActionType.Checkin).subscribe(booked => {
                 sc.setState({
                     ...sc.getState(),
                     bookCheckin: {
@@ -127,7 +127,7 @@ export class AppState {
         const rooms: RoomModel[] = sc.getState().bookCheckout.rooms;
 
         if (rooms.findIndex(_ => _.id === action.payload.rooms[0].id) === -1) {
-            this.roomService.addBook(action.payload, ActionType.Checkout).subscribe(booked => {
+            this.bookService.addBook(action.payload, ActionType.Checkout).subscribe(booked => {
                 sc.setState({
                     ...sc.getState(),
                     bookCheckout: {
@@ -154,7 +154,7 @@ export class AppState {
     @Action(SetEmptyBooking)
     SetEmptyBooking(sc: StateContext<AppStateModel>) {
         if (sc.getState().actionType === ActionType.Available) {
-            this.roomService.addBook(new BookedModel(), ActionType.Available).subscribe((rooms) => {
+            this.bookService.addBook(new BookedModel(), ActionType.Available).subscribe((rooms) => {
                 sc.setState({
                     ...sc.getState(),
                     bookAvailable: new BookedModel()
@@ -163,7 +163,7 @@ export class AppState {
                 AppNotify.error('Set empty book available error');
             });
         } else if (sc.getState().actionType === ActionType.Checkin) {
-            this.roomService.addBook(new BookedModel(), ActionType.Checkin).subscribe((rooms) => {
+            this.bookService.addBook(new BookedModel(), ActionType.Checkin).subscribe((rooms) => {
                 sc.setState({
                     ...sc.getState(),
                     bookCheckin: new BookedModel()
@@ -172,7 +172,7 @@ export class AppState {
                 AppNotify.error('Set empty book checkin error');
             });
         } else if (sc.getState().actionType === ActionType.Checkout) {
-            this.roomService.addBook(new BookedModel(), ActionType.Checkout).subscribe((rooms) => {
+            this.bookService.addBook(new BookedModel(), ActionType.Checkout).subscribe((rooms) => {
                 sc.setState({
                     ...sc.getState(),
                     bookCheckout: new BookedModel()
@@ -201,7 +201,7 @@ export class AppState {
 
     @Action(SetBookAvailableAndCheckinAndCheckout)
     SetBookAvailableAndCheckinAndCheckout(sc: StateContext<AppStateModel>) {
-        this.roomService.getBookCheckinAndCheckout().subscribe((result) => {
+        this.bookService.getBookCheckinAndCheckout().subscribe((result) => {
             sc.setState({
                 ...sc.getState(),
                 bookAvailable: result.bookAvailable,
