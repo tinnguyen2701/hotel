@@ -311,15 +311,39 @@ export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
         });
     }
 
+
+    onChangeValuePrice = (newData: RoomModel, value: number, currentRowData) => {
+        newData.price = value;
+        newData.amount = value - currentRowData.prepay - currentRowData.deduct;
+    };
+
+    onChangeValueDeduct = (newData: RoomModel, value: number, currentRowData) => {
+        newData.deduct = value;
+        newData.amount = currentRowData.price - currentRowData.prepay - value;
+    };
+
+    onChangeValuePrepay = (newData: RoomModel, value: number, currentRowData) => {
+        newData.prepay = value;
+        newData.amount = currentRowData.price - value - currentRowData.deduct;
+    };
+
+    customizeTotalValue(e) {
+        return (e.value).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') + ' VND';
+    }
+
     onChangeService(e: any) {
-        this.book.services.map(_ => {
-            this.paymentServices += _.amount;
+        setTimeout(() => {
+            this.book.services.map(_ => {
+                this.paymentServices += _.amount;
+            });
         });
     }
 
     changeRooms() {
-        this.book.rooms.map(_ => {
-            this.paymentRooms += _.amount;
+        setTimeout(() => {
+            this.book.rooms.map(_ => {
+                this.paymentRooms += _.amount;
+            });
         });
     }
 
@@ -460,6 +484,7 @@ export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
 
 
     isEmptyInformation() {
+
         return false;
     }
 

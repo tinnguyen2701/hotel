@@ -152,6 +152,7 @@
                                     [minWidth]="130"
                                     alignment="right"
                                     dataType="number"
+                                    [setCellValue]="onChangeValuePrice"
                                     caption="Price">
                             <dxi-validation-rule
                                 type="required"
@@ -164,8 +165,9 @@
                                     alignment="right"
                                     dataType="number"
                                     format="#0,###"
-                                    [editorOptions]="{format: '#0,###'}"
-                                    caption="Deduct">
+                                    caption="Deduct"
+                                    [setCellValue]="onChangeValueDeduct"
+                                    [editorOptions]="{format: '#0,###'}">
                             <dxi-validation-rule
                                 type="required"
                                 [message]="'This field is required'">
@@ -178,7 +180,8 @@
                                     [minWidth]="130"
                                     alignment="right"
                                     dataType="number"
-                                    caption="Prepay">
+                                    caption="Prepay"
+                                    [setCellValue]="onChangeValuePrepay">
                             <dxi-validation-rule
                                 type="required"
                                 [message]="'This field is required'">
@@ -199,6 +202,19 @@
                         <dxi-column dataField="note"
                                     caption="Note"
                                     [width]="200">
+                        </dxi-column>
+
+                        <dxi-column dataField="amount"
+                                    format="#0,###"
+                                    [editorOptions]="{format: '#0,###'}"
+                                    [minWidth]="130"
+                                    alignment="right"
+                                    dataType="number"
+                                    caption="Amount">
+                            <dxi-validation-rule
+                                type="required"
+                                [message]="'This field is required'">
+                            </dxi-validation-rule>
                         </dxi-column>
 
                         <dxi-column caption="Action"
@@ -229,6 +245,16 @@
                                         [onClick]="onDeleteRoom">
                             </dxi-button>
                         </dxi-column>
+
+                        <dxo-summary>
+                            <dxi-total-item column="note"
+                                            [displayFormat]="'Total payment rooms'">
+                            </dxi-total-item>
+                            <dxi-total-item column="amount"
+                                            [customizeText]="customizeTotalValue"
+                                            summaryType="sum">
+                            </dxi-total-item>
+                        </dxo-summary>
                     </dx-data-grid>
                 </ng-container>
 
@@ -242,7 +268,6 @@
                     </app-tab>
                     <dx-button *ngIf="currentTab.value === Service"
                                text="Services manage"
-                               (onChangeService)="onChangeService($event)"
                                (onClick)="showPopupManageServices()">
                     </dx-button>
                 </div>
@@ -252,23 +277,21 @@
                 </ng-container>
 
                 <ng-container *ngIf="currentTab.value === Service">
-                    <app-services [services]="book.services">
+                    <app-services [services]="book.services"
+                                  (onChangeService)="onChangeService($event)">
                     </app-services>
                 </ng-container>
 
 
-                <div class="">
-                    <div class="dx-field">
-                        <div class="dx-field-label">Payment rooms</div>
-                        <div class="dx-field-value">
-                            {{paymentRooms}}
-                        </div>
+                <div class="row mt-2" *ngIf="!isShowBookEdit()">
+                    <div class="font-weight-bold col-md-4">
+                        Payment rooms: {{paymentRooms | CurrencyDisplay}}
                     </div>
-                    <div class="dx-field">
-                        <div class="dx-field-label">Payment services</div>
-                        <div class="dx-field-value">
-                            {{paymentServices}}
-                        </div>
+                    <div class="font-weight-bold col-md-4">
+                        Payment services: {{paymentServices | CurrencyDisplay}}
+                    </div>
+                    <div class="font-weight-bold text-danger col-md-4">
+                        Total payment:  {{paymentRooms + paymentServices | CurrencyDisplay}}
                     </div>
                 </div>
 

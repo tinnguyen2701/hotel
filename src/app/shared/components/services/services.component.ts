@@ -97,6 +97,10 @@ export class ServicesComponent implements OnInit, OnDestroy {
         }
     }
 
+    customizeTotalValue(e) {
+        return (e.value).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') + ' VND';
+    }
+
     ngOnDestroy() {
         this.subscription.unsubscribe();
     }
