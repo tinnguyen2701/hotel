@@ -273,17 +273,17 @@
                 </div>
 
                 <ng-container *ngIf="currentTab.value === Customer">
-                    <app-customers [customers]="book.customers"></app-customers>
+                    <app-customers [(customers)]="book.customers"></app-customers>
                 </ng-container>
 
                 <ng-container *ngIf="currentTab.value === Service">
                     <app-services [services]="book.services"
-                                  (onChangeService)="onChangeService($event)">
+                                  (onChangeService)="onChangeService()">
                     </app-services>
                 </ng-container>
 
 
-                <div class="row mt-2" *ngIf="!isShowBookEdit()">
+                <div class="row mt-3" *ngIf="!isShowBookEdit()">
                     <div class="font-weight-bold col-md-4">
                         Payment rooms: {{paymentRooms | CurrencyDisplay}}
                     </div>
@@ -294,6 +294,46 @@
                         Total payment:  {{paymentRooms + paymentServices | CurrencyDisplay}}
                     </div>
                 </div>
+
+                <ng-container *ngIf="isShowBookCheckout() || isShowCheckoutNow()">
+                    <div class="dx-field w-50 mt-2">
+                        <div class="dx-field-label font-weight-bold">Payment method</div>
+                        <div class="dx-field-value">
+                            <dx-radio-group [dataSource]="paymentMethods"
+                                            [(value)]="book.paymentMethod"
+                                            valueExpr="value"
+                                            displayExpr="name"
+                                            layout="horizontal">
+                            </dx-radio-group>
+                        </div>
+                    </div>
+                    <div class="field mt-2">
+                        <div class="field-label align-self-start">
+                            Note
+                        </div>
+                        <div class="field-value">
+                            <dx-text-area
+                                [(value)]="book.note"
+                                height="70">
+                            </dx-text-area>
+                        </div>
+                    </div>
+                    <div class="row my-2">
+                        <div class="col-md-3">
+                            <dx-check-box [(value)]="isSelectedDeposit"></dx-check-box> Select room to deposit
+                        </div>
+                        <div class="col-md-3">
+                            <dx-select-box [dataSource]="roomCheckinSource"
+                                           valueExpr="id"
+                                           displayExpr="name"
+                                           placeholder="Room.."
+                                           [(value)]="book.depositRoom"
+                                           [disabled]="!isSelectedDeposit">
+                            </dx-select-box>
+                        </div>
+                    </div>
+                </ng-container>
+
 
                 <ng-template #popupFooter>
                     <div class="d-flex justify-content-between">

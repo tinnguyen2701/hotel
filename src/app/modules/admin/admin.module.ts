@@ -11,6 +11,7 @@ import { SearchFormComponent } from '@app/modules/admin/components/shared/search
 import { AllRoomsComponent } from './components/all-rooms/all-rooms.component';
 import { BookedClientsComponent } from './components/booked/booked.component';
 import { AppState } from './store';
+import { RevenueComponent } from './components/revenue/revenue.component';
 
 const PROVIDERS = [
     BookingService,
@@ -42,6 +43,10 @@ export const STATES = [
                         path: 'booked',
                         component: BookedClientsComponent
                     },
+                    {
+                        path: 'revenue',
+                        component: RevenueComponent
+                    }
                 ]
             }
         ]),
@@ -51,7 +56,8 @@ export const STATES = [
         AdminComponent,
         UsersComponent,
         BookedClientsComponent,
-        SearchFormComponent
+        SearchFormComponent,
+        RevenueComponent
     ],
     providers: [
         ...PROVIDERS

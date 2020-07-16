@@ -1,8 +1,8 @@
 <dx-data-grid
-    #dxDataGridCustomer
+    #dxDataGrid
     class="w-100 mt-3 grid-customer"
     height="200"
-    [(dataSource)]="customers"
+    [(dataSource)]="editingCustomers"
     [showRowLines]="true"
     [showBorders]="true"
     [showColumnLines]="true"
@@ -11,8 +11,7 @@
     [allowColumnResizing]="true"
     [allowColumnReordering]="false"
     (onRowInserted)="onRowInserted($event)"
-    (onRowUpdated)="onRowUpdated($event)"
-    (onRowRemoved)="onRowRemoving($event)">
+    (onRowUpdated)="onRowUpdated($event)">
     <dxo-editing mode="row" [allowUpdating]="true" [allowDeleting]="true">
         <dxo-texts [confirmDeleteMessage]="null"></dxo-texts>
     </dxo-editing>
@@ -36,7 +35,7 @@
                 class="btn-add-row-circle border-0 p-0"
                 [stylingMode]="'outlined'"
                 [hint]="'Add'"
-                (onClick)="dxDataGridCustomer.instance.addRow()">
+                (onClick)="dxDataGrid.instance.addRow()">
             </dx-button>
         </div>
         <div *dxTemplate="let cell of 'indexCellTemplate'">
@@ -138,7 +137,8 @@
         <dxi-button name="save"
                     icon="save"
                     [text]="''"
-                    [hint]="'Save'">
+                    [hint]="'Save'"
+                    [onClick]="onSaveDxGridRow">
         </dxi-button>
         <dxi-button name="cancel"
                     icon="revert"
@@ -149,18 +149,19 @@
         <dxi-button name="edit"
                     icon="fas fa-pencil-alt edit-icon"
                     [text]="''"
-                    [hint]="'Edit'">
+                    [hint]="'Edit'"
+                    [onClick]="onUpdateDxGridRow">
         </dxi-button>
         <dxi-button name="delete"
                     [cssClass]="'far fa-trash-alt delete-icon'"
                     [hint]="'Delete'"
                     [text]="''"
-                    [onClick]="onDeleteCustomer">
+                    [onClick]="onDeleteDxGridRow">
         </dxi-button>
     </dxi-column>
 </dx-data-grid>
 
-<app-popover-confirm-box #deleteDetailConfirmPopover
+<app-popover-confirm-box #confirmPopover
                          [message]="'Are you want to remove it out of list'"
                          (onConfirm)="deleteCustomer()">
 </app-popover-confirm-box>

@@ -83,8 +83,9 @@ export class BookedModel {
     rooms: RoomModel[] = [];
     customers: CustomerModel[] = [];
     services: ServiceModel[] = [];
-    paymentType: number;
+    paymentMethod: number;
     note: string;
+    depositRoom: number;
 
     public constructor(init?: Partial<BookedModel>) {
         Object.assign(this, init);
@@ -98,6 +99,15 @@ export class TransferRoom {
 
 
     public constructor(init?: Partial<TransferRoom>) {
+        Object.assign(this, init);
+    }
+}
+
+export class RevenueModel {
+    month: string;
+    amount: number;
+
+    public constructor(init?: Partial<RevenueModel>) {
         Object.assign(this, init);
     }
 }

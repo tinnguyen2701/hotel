@@ -28,7 +28,7 @@ export class ServicesComponent implements OnInit, OnDestroy {
     }
 
     @Output() servicesChange = new EventEmitter<ServiceModel[]>();
-    @Output() onChangeService: EventEmitter<any> = new EventEmitter();
+    @Output() onChangeService: EventEmitter<void> = new EventEmitter();
 
     subscription: Subscription = new Subscription();
     serviceSource: BaseService[] = [];
@@ -68,6 +68,13 @@ export class ServicesComponent implements OnInit, OnDestroy {
         rowData.amount = rowData.quantity * rowData.price;
     }
 
+    onRowInserted(e: any) {
+        const data: ServiceModel = e.data;
+        data.isInserted = true;
+        this.services.push(data);
+        this.onChangeService.emit();
+    }
+
     onRowUpdated(e: any) {
         if (e.data.id) {
             e.data.isUpdated = true;
@@ -79,14 +86,9 @@ export class ServicesComponent implements OnInit, OnDestroy {
             }
             return _;
         });
-
+        this.onChangeService.emit();
     }
 
-    onRowInserted(e: any) {
-        const data: ServiceModel = e.data;
-        data.isInserted = true;
-        this.services.push(data);
-    }
 
     onServiceChanged(cell: any, e: any) {
         if (e && e.value) {
@@ -112,7 +114,7 @@ export class ServicesComponent implements OnInit, OnDestroy {
         this.dxDataGrid.instance.saveEditData();
     };
 
-    updateLookupData = (e) => {
+    onUpdateDxGridRow = (e) => {
         this.dxDataGrid.instance.editRow(e.row.dataIndex);
         this.dxDataGrid.instance.repaint();
     };
@@ -137,6 +139,7 @@ export class ServicesComponent implements OnInit, OnDestroy {
                 this.confirmPopover.show(e.event.currentTarget);
             }
         }
+        this.onChangeService.emit();
     };
 
     removedServiceWithoutId() {

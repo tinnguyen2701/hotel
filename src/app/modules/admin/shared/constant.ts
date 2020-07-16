@@ -4,12 +4,17 @@ export const ADMIN_MENU = [
     {
         text: 'Rooms',
         link: '/admin/all',
-        icon: 'fas fa-address-book'
+        icon: 'fa fa-university'
     },
     {
         text: 'Booked',
         link: '/admin/booked',
         icon: 'fas fa-address-book'
+    },
+    {
+        text: 'Revenue',
+        link: '/admin/revenue',
+        icon: 'fa fa-university'
     }
 ];
 

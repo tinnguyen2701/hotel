@@ -1,7 +1,15 @@
 import * as faker from 'faker';
 import {random} from 'lodash';
 //
-import {BaseService, BookedModel, CustomerModel, FloorModel, RoomModel, ServiceModel} from '@app/modules/admin/models/room.model';
+import {
+    BaseService,
+    BookedModel,
+    CustomerModel,
+    FloorModel,
+    RevenueModel,
+    RoomModel,
+    ServiceModel
+} from '@app/modules/admin/models/room.model';
 import {ActionNavigationType, RoomStatus} from '@app/modules/admin/shared/enums';
 
 export function randomFloors(count: number): FloorModel[] {
@@ -67,7 +75,7 @@ export function randomRoom(roomId: number, type: number): RoomModel {
             peopleNumber: 0,
             bookCode: null,
             isUpdated: false,
-            amount: 0
+            amount: 10000
         };
     }
     const statusRoom = random(2, 4);
@@ -94,7 +102,7 @@ export function randomRoom(roomId: number, type: number): RoomModel {
         peopleNumber: 0,
         bookCode: '123',
         isUpdated: false,
-        amount: 0
+        amount: 10000
     };
 }
 
@@ -135,7 +143,6 @@ export function randomServices(count: number): ServiceModel[] {
             });
         });
 }
-
 export function randomCustomers(count: number): CustomerModel[] {
     return Array(count)
         .fill({})
@@ -201,3 +208,44 @@ export function randomBooked(roomId: number, status: ActionNavigationType): Book
     }
 }
 
+
+
+export function getRevenueModel(): RevenueModel[] {
+    return [{
+        month: 'Jan',
+        amount: 3
+    }, {
+        month: 'Feb',
+        amount: 2
+    }, {
+        month: 'Mar',
+        amount: 3
+    }, {
+        month: 'Apr',
+        amount: 4
+    }, {
+        month: 'May',
+        amount: 6
+    }, {
+        month: 'Jun',
+        amount: 11
+    }, {
+        month: 'Jul',
+        amount: 4
+    }, {
+        month: 'Aug',
+        amount: 6
+    }, {
+        month: 'Sep',
+        amount: 11
+    }, {
+        month: 'Oct',
+        amount: 4
+    }, {
+        month: 'Nov',
+        amount: 4
+    }, {
+        month: 'Dec',
+        amount: 4
+    }];
+}

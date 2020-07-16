@@ -1,9 +1,9 @@
 import {Observable, of} from 'rxjs';
 import {random} from 'lodash';
 //
-import {randomBooked, randomBookings, randomRoom, randomServices} from '@app/data/admin';
+import {getRevenueModel, randomBooked, randomBookings, randomRoom, randomServices} from '@app/data/admin';
 import {environment} from '@environment';
-import {RoomModel, FloorModel, BookedModel, TransferRoom, ServiceModel} from '../models/room.model';
+import {RoomModel, FloorModel, BookedModel, TransferRoom, ServiceModel, RevenueModel} from '../models/room.model';
 import { randomRooms, randomFloors } from '@app/data/admin/room.mock';
 import { BookModel } from '../models';
 import { LoadParamModel, LoadResultModel } from '@app/modules/core/models';
@@ -118,7 +118,6 @@ export class BookingService {
 
         return of(randomServices(3));
     }
-
     removeCheckinBook(book: BookedModel): Observable<boolean> {
         if (environment.debug) {
             console.log('API: removeCheckinBook');
@@ -126,4 +125,13 @@ export class BookingService {
 
         return of(true);
     }
+
+    getRevenueByMonth(): Observable<RevenueModel[]> {
+        if (environment.debug) {
+            console.log('API: getRevenueByMonth');
+        }
+
+        return of(getRevenueModel());
+    }
+
 }

@@ -1,5 +1,6 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {DxDataGridComponent} from 'devextreme-angular';
+import {cloneDeep} from 'lodash';
 //
 import {PopoverConfirmBoxComponent} from '..';
 import {CustomerModel} from '@app/modules/admin/models';
@@ -10,31 +11,66 @@ import {CustomerModel} from '@app/modules/admin/models';
     styleUrls: ['./customers.component.scss']
 })
 export class CustomersComponent implements OnInit {
-    @ViewChild('dxDataGridCustomer', {static: true}) dxDataGridCustomer: DxDataGridComponent;
-    @ViewChild('deleteDetailConfirmPopover', {static: true}) confirmDeleteDetailPopover: PopoverConfirmBoxComponent;
+    private _customers: CustomerModel[];
+    @ViewChild('dxDataGrid', {static: true}) dxDataGrid: DxDataGridComponent;
+    @ViewChild('confirmPopover', {static: true}) confirmPopover: PopoverConfirmBoxComponent;
 
-    @Input() customers: CustomerModel[] = [];
+    @Input()
+    get customers(): CustomerModel[] {
+        return this._customers;
+    }
 
-    selectedCustomerId: number = null;
+    set customers(value: CustomerModel[]) {
+        this._customers = value;
+        this.customersChange.emit(value);
+    }
+
+    @Output() customersChange = new EventEmitter<CustomerModel[]>();
+
+    editingCustomers: CustomerModel[] = [];
+    selectedRowIndex: number;
+    selectedRowData: CustomerModel = new CustomerModel();
 
     constructor() {
     }
 
     ngOnInit() {
+        this.cloneSource();
     }
 
-    // customer action
-    onRowUpdated(e: any) {
-        e.data.isUpdated = true;
+    cloneSource() {
+        this.editingCustomers = cloneDeep(this.customers);
     }
+
 
     onRowInserted(e: any) {
-        e.data.isInserted = true;
+        const data: CustomerModel = e.data;
+        data.isInserted = true;
+        this.customers.push(data);
     }
 
-    onRowRemoving(e: any) {
-        e.data.isDeleted = true;
+    onRowUpdated(e: any) {
+        if (e.data.id) {
+            e.data.isUpdated = true;
+        }
+
+        this.customers = this.customers.map((_: any) => {
+            if (_.__KEY__ && _.__KEY__ === e.data.__KEY__ || _.id && _.id === e.data.id) {
+                _ = e.data;
+            }
+            return _;
+        });
+
     }
+
+    onSaveDxGridRow = () => {
+        this.dxDataGrid.instance.saveEditData();
+    };
+
+    onUpdateDxGridRow = (e) => {
+        this.dxDataGrid.instance.editRow(e.row.dataIndex);
+        this.dxDataGrid.instance.repaint();
+    };
 
     onRevertDxGridRow = (e) => {
         e.event.preventDefault();
@@ -42,27 +78,35 @@ export class CustomersComponent implements OnInit {
         e.component.refresh();
     };
 
-    onDeleteCustomer = (e) => {
+    onDeleteDxGridRow = (e) => {
         e.event.preventDefault();
         const data = e.row.data;
-        if (!Boolean(data.id)) {
-            this.dxDataGridCustomer.instance.deleteRow(
-                this.dxDataGridCustomer.instance.getRowIndexByKey(data)
-            );
+        this.selectedRowIndex = this.editingCustomers.findIndex(detail => detail.id === data.id);
+
+        if (!data.id) {
+            this.selectedRowData = data;
+            this.removedServiceWithoutId();
         } else {
-            this.selectedCustomerId = this.customers.findIndex((detail) => detail.id === data.id
-            );
-            if (this.confirmDeleteDetailPopover) {
-                this.confirmDeleteDetailPopover.show(e.event.currentTarget);
+            this.selectedRowData = this.editingCustomers.find(detail => detail.id === data.id);
+            if (this.confirmPopover) {
+                this.confirmPopover.show(e.event.currentTarget);
             }
         }
     };
 
+    removedServiceWithoutId() {
+        const index = this.customers.findIndex(_ => _.id === this.editingCustomers[this.selectedRowIndex].id);
+        this.dxDataGrid.instance.deleteRow(this.selectedRowIndex);
+        this.customers.splice(index, 1);
+    }
+
     deleteCustomer() {
-        if (this.selectedCustomerId !== null) {
-            this.customers.splice(this.selectedCustomerId, 1);
-            this.dxDataGridCustomer.instance.refresh(true);
-            this.selectedCustomerId = null;
-        }
+        this.customers = this.customers.map(_ => {
+            if (_.id === this.selectedRowData.id) {
+                _.isDeleted = true;
+            }
+            return _;
+        });
+        this.editingCustomers.splice(this.selectedRowIndex, 1);
     }
 }
