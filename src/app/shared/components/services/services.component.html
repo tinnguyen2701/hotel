@@ -1,13 +1,12 @@
 <dx-data-grid #dxDataGrid
               class="w-100 mt-3 grid-service"
               [height]="200"
-              [dataSource]="services"
+              [dataSource]="editingServices"
               [showBorders]="true"
               [showRowLines]="true"
               [columnAutoWidth]="true"
               (onRowInserted)="onRowInserted($event)"
-              (onRowUpdated)="onRowUpdated($event)"
-              (onRowRemoved)="onRowRemoving($event)">
+              (onRowUpdated)="onRowUpdated($event)">
     <dxo-editing mode="row"
                  [allowUpdating]="true"
                  [allowDeleting]="true"
@@ -98,11 +97,20 @@
     </dxi-column>
 
     <dxi-column type="buttons" alignment="center" [width]="100">
-        <dxi-button name="save" [text]="''" icon="save"></dxi-button>
-        <dxi-button name="cancel" [text]="''" icon="revert"></dxi-button>
+        <dxi-button name="save"
+                    [text]="''"
+                    icon="save"
+                    [onClick]="onSaveDxGridRow">
+        </dxi-button>
+        <dxi-button name="cancel"
+                    [text]="''"
+                    icon="revert"
+                    [onClick]="onRevertDxGridRow">
+        </dxi-button>
         <dxi-button name="edit"
                     [text]="''"
-                    icon="fas fa-pencil-alt edit-icon">
+                    icon="fas fa-pencil-alt edit-icon"
+                    [onClick]="updateLookupData">
         </dxi-button>
         <dxi-button name="delete" [cssClass]="'far fa-trash-alt delete-icon'"
                     [text]="''"

@@ -389,6 +389,7 @@ export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
         if (this.isEmptyInformation()) {
             return;
         }
+        debugger;
 
         this.bookingService
             .updateBook(this.book)
