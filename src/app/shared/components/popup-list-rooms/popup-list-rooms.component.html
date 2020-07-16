@@ -1,12 +1,10 @@
-<dx-load-panel
-    *ngIf="isLoading"
+<dx-load-panel *ngIf="isLoading"
     [visible]="true"
-    [showPane]="false"
-></dx-load-panel>
+    [showPane]="false">
+</dx-load-panel>
 
 <ng-container *ngIf="!isLoading">
-    <app-popup-container
-        [width]="1000"
+    <app-popup-container [width]="1000"
         [height]="650"
         [(visible)]="isShowListRoom"
         (onHiding)="onHiding()"
@@ -14,8 +12,7 @@
         [footerTemplate]="popupFooter">
         <dx-validation-group>
             <div class="form-wrapper">
-                <dx-load-panel
-                    *ngIf="isProcessing"
+                <dx-load-panel *ngIf="isProcessing"
                     [visible]="true"
                     [showPane]="false"
                     [message]="'Load'">
@@ -29,8 +26,7 @@
                             <dx-switch class="ml-2" [(value)]="isShowBookCodeField"></dx-switch>
                         </div>
                     </div>
-                    <dx-data-grid
-                        #dxDataGridRoom
+                    <dx-data-grid #dxDataGridRoom
                         height="200"
                         [dataSource]="book.rooms"
                         [showRowLines]="true"
@@ -42,8 +38,7 @@
                         [allowColumnReordering]="false"
                         (onRowValidating)="onListRoomValidation($event)"
                         (onRowUpdated)="onRowRoomUpdated($event)">
-                        <dxo-editing
-                            mode="row"
+                        <dxo-editing mode="row"
                             [allowUpdating]="true"
                             [allowDeleting]="true">
                             <dxo-texts [confirmDeleteMessage]="null">
@@ -97,12 +92,10 @@
                                 {{cell.value | DateTimeDisplay}}
                             </div>
                             <div *dxTemplate="let cell of 'editCheckinTemplate'">
-                                <dx-date-box
-                                    [(value)]="cell.value"
+                                <dx-date-box [(value)]="cell.value"
                                     (onValueChanged)="setValueCheckin(cell, $event)"
                                     type="datetime">
-                                    <dxi-validation-rule
-                                        type="required"
+                                    <dxi-validation-rule type="required"
                                         [message]="'This field is required'">
                                     </dxi-validation-rule>
                                 </dx-date-box>
@@ -120,12 +113,10 @@
                                 {{cell.value | DateTimeDisplay}}
                             </div>
                             <div *dxTemplate="let cell of 'editCheckoutTemplate'">
-                                <dx-date-box
-                                    [(value)]="cell.value"
+                                <dx-date-box [(value)]="cell.value"
                                     (onValueChanged)="setValueCheckout(cell, $event)"
                                     type="datetime">
-                                    <dxi-validation-rule
-                                        type="required"
+                                    <dxi-validation-rule type="required"
                                         [message]="'This field is required'">
                                     </dxi-validation-rule>
                                 </dx-date-box>
@@ -154,8 +145,7 @@
                                     dataType="number"
                                     [setCellValue]="onChangeValuePrice"
                                     caption="Price">
-                            <dxi-validation-rule
-                                type="required"
+                            <dxi-validation-rule type="required"
                                 [message]="'This field is required'">
                             </dxi-validation-rule>
                         </dxi-column>
@@ -312,8 +302,7 @@
                             Note
                         </div>
                         <div class="field-value">
-                            <dx-text-area
-                                [(value)]="book.note"
+                            <dx-text-area [(value)]="book.note"
                                 height="70">
                             </dx-text-area>
                         </div>
@@ -352,8 +341,7 @@
                             </dx-button>
                         </div>
 
-                        <dx-button
-                            *ngIf="isShowBookEdit()"
+                        <dx-button *ngIf="isShowBookEdit()"
                             class="ml-auto"
                             type="default"
                             [disabled]="!isFormDirty"
@@ -378,8 +366,7 @@
                             </dx-drop-down-button>
                         </div>
 
-                        <dx-button
-                            *ngIf="isShowBookCheckout() || isShowCheckoutNow()"
+                        <dx-button *ngIf="isShowBookCheckout() || isShowCheckoutNow()"
                             class="ml-auto"
                             type="default"
                             [disabled]="!isFormDirty"
@@ -393,15 +380,13 @@
     </app-popup-container>
 </ng-container>
 
-<app-popover-confirm-box
-    #deleteDetailConfirmPopover
+<app-popover-confirm-box #deleteDetailConfirmPopover
     [message]="'Are you want to remove it out of list'"
     (onConfirm)="deleteRoom()">
 </app-popover-confirm-box>
 
 
-<app-popover-confirm-box
-    #removeCheckinDetailConfirmPopover
+<app-popover-confirm-box #removeCheckinDetailConfirmPopover
     [message]="'Are you want to remove list room checkin'"
     (onConfirm)="onHandleRemoveCheckin()">
 </app-popover-confirm-box>

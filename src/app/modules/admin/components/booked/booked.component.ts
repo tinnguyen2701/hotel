@@ -6,6 +6,7 @@ import { FilterBookModel, BookModel } from '../../models';
 import { LoadParamModel } from '@app/modules/core/models';
 import { BookingService } from '../../services';
 import { ROOM_TYPE } from '../../shared/constant';
+import {DxDataGridComponent} from 'devextreme-angular';
 
 @Component({
   selector: 'app-admin-booked',
@@ -14,22 +15,22 @@ import { ROOM_TYPE } from '../../shared/constant';
 })
 export class BookedClientsComponent implements OnInit {
     @ViewChild('deleteDetailConfirmPopover') deleteDetailConfirmPopover: PopoverConfirmBoxComponent;
+    @ViewChild('dxDataGrid') dxDataGrid: DxDataGridComponent;
     //
     dataSource: DataSource;
     filterBooking: FilterBookModel = new FilterBookModel();
     dataBooking: BookModel = new BookModel();
     roomType = ROOM_TYPE;
     selectedId: number;
-    isOpenBookingDetailPopup: boolean = false;
     isProcessing: boolean = false;
     codeBook: string;
     nameRoom: string;
 
     constructor(private bookingsService: BookingService) {
+        this.loadBookings();
     }
 
     ngOnInit() {
-        this.loadBookings();
     }
 
     loadBookings() {
@@ -44,7 +45,7 @@ export class BookedClientsComponent implements OnInit {
     onSearchBooking() {
         this.filterBooking.codeBook = this.codeBook;
         this.filterBooking.nameRoom = this.nameRoom;
-        this.loadBookings();
+        this.dxDataGrid.instance.refresh();
     }
 
     onBookingDetail(param: BookModel) {
@@ -62,7 +63,7 @@ export class BookedClientsComponent implements OnInit {
         this.isProcessing = true;
         this.bookingsService.deleteBooking(this.selectedId).subscribe(() => {
             AppNotify.success('Deleted success');
-            this.loadBookings();
+            this.dxDataGrid.instance.refresh();
             this.isProcessing = false;
         }, (error) => {
             AppNotify.error();
