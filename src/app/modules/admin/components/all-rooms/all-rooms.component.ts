@@ -129,7 +129,6 @@ export class AllRoomsComponent implements OnInit {
 
                 switch (item.value) {
                     case ActionNavigationType.AddToBookingList:
-                        // this.store.dispatch(new SetActionType(ActionType.Available));
                         this.store.dispatch(new SetBookAvailable(this.selectedBooked));
                         break;
                     case ActionNavigationType.BookingNow:
@@ -148,7 +147,6 @@ export class AllRoomsComponent implements OnInit {
                         this.store.dispatch(new SetEditBooking(this.selectedBooked));
                         break;
                     case ActionNavigationType.AddToCheckinList:
-                        this.store.dispatch(new SetActionType(ActionType.Checkout));
                         this.store.dispatch(new SetBookCheckin(this.selectedBooked));
                         break;
                     case ActionNavigationType.TransferRoom:

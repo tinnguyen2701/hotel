@@ -17,7 +17,8 @@ export enum ActionType {
     Checkout ,
     Edit,
     BookingNow,
-    CheckoutNow
+    CheckoutNow,
+    CheckinNow
 }
 
 export enum AppLookupDataType {

@@ -477,6 +477,10 @@ export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
         return this.actionType === ActionType.Checkin;
     }
 
+    isShowBookCheckinNow() {
+        return this.actionType === ActionType.CheckinNow;
+    }
+
     isShowBookEdit() {
         return this.actionType === ActionType.Edit;
     }
