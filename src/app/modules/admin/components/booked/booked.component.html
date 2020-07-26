@@ -46,6 +46,12 @@
             </dxo-remote-operations>
 
             <dxi-column [minWidth]="100"
+                        [caption]="'code'"
+                        alignment="center"
+                        dataField="code">
+            </dxi-column>
+
+            <dxi-column [minWidth]="100"
                         [caption]="'Room name'"
                         [allowFiltering]="true"
                         alignment="center"
@@ -109,12 +115,6 @@
                         [caption]="'Author'"
                         alignment="center"
                         dataField="author">
-            </dxi-column>
-
-            <dxi-column [minWidth]="100"
-                        [caption]="'code'"
-                        alignment="center"
-                        dataField="code">
             </dxi-column>
 
             <dxi-column [minWidth]="100"

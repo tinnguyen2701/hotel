@@ -366,10 +366,16 @@
                             </dx-drop-down-button>
                         </div>
 
+                        <dx-button *ngIf="isShowBookCheckinNow() || isShowBookCheckin()"
+                                   class="ml-auto"
+                                   type="default"
+                                   [text]="'Checkin'"
+                                   (onClick)="onHandleSaving(saveAction.Checkin)">
+                        </dx-button>
+
                         <dx-button *ngIf="isShowBookCheckout() || isShowCheckoutNow()"
                             class="ml-auto"
                             type="default"
-                            [disabled]="!isFormDirty"
                             [text]="'Checkout'"
                             (onClick)="onHandleCheckout()">
                         </dx-button>
