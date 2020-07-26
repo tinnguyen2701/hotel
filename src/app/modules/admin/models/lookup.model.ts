@@ -1,4 +1,4 @@
-import {BaseService} from './room.model';
+import {BaseService} from './roomModel';
 
 export class AppLookupModel {
     services: BaseService[] = [];

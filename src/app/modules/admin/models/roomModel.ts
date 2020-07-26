@@ -1,4 +1,16 @@
-export interface RoomModel {
+import { ISearchDataInterface } from './search.model';
+
+export class FloorModel {
+    id: number;
+    name: string;
+    rooms: RoomModel[];
+
+    public constructor(init?: Partial<FloorModel>) {
+        Object.assign(this, init);
+    }
+}
+
+export class RoomModel {
     id: number;
     status: number;
     name: string;
@@ -11,9 +23,10 @@ export interface RoomModel {
     note: string;
     peopleNumber: number;
     bookCode: string;
+    amount: number;
+
     // only UI
     isUpdated: boolean;
-    amount: number;
 }
 
 export class CustomerModel {
@@ -57,15 +70,6 @@ export class ServiceModel {
     }
 }
 
-export class FloorModel {
-    id: number;
-    name: string;
-    rooms: RoomModel[];
-
-    public constructor(init?: Partial<FloorModel>) {
-        Object.assign(this, init);
-    }
-}
 
 export class BaseService {
     id: number;
@@ -79,10 +83,14 @@ export class BaseService {
 
 export class BookedModel {
     id: number;
+    name: string;
+    checkinDate: Date;
+    checkoutDate: Date;
     bookType: number; // just need booking and checkin
     rooms: RoomModel[] = [];
     customers: CustomerModel[] = [];
     services: ServiceModel[] = [];
+    prepay: number;
     paymentMethod: number;
     note: string;
     depositRoom: number;
@@ -108,6 +116,16 @@ export class RevenueModel {
     amount: number;
 
     public constructor(init?: Partial<RevenueModel>) {
+        Object.assign(this, init);
+    }
+}
+
+export class FilterBookModel implements ISearchDataInterface {
+    codeBook: string;
+    nameRoom: string;
+    keyword: string;
+
+    public constructor(init?: Partial<FilterBookModel>) {
         Object.assign(this, init);
     }
 }

@@ -201,15 +201,15 @@ export class AppState {
 
     @Action(SetBookAvailableAndCheckinAndCheckout)
     SetBookAvailableAndCheckinAndCheckout(sc: StateContext<AppStateModel>) {
-        this.bookService.getBookCheckinAndCheckout().subscribe((result) => {
-            sc.setState({
-                ...sc.getState(),
-                bookAvailable: result.bookAvailable,
-                bookCheckin: result.bookCheckin,
-                bookCheckout: result.bookCheckout
-            });
-        }, (error) => {
-            AppNotify.error('Get book available and checkin and checkout error');
-        });
+        // this.bookService.getBookCheckinAndCheckout().subscribe((result) => {
+        //     sc.setState({
+        //         ...sc.getState(),
+        //         bookAvailable: result.bookAvailable,
+        //         bookCheckin: result.bookCheckin,
+        //         bookCheckout: result.bookCheckout
+        //     });
+        // }, (error) => {
+        //     AppNotify.error('Get book available and checkin and checkout error');
+        // });
     }
 }

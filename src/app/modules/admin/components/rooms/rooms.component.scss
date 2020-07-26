@@ -3,7 +3,9 @@
     padding: 20px;
 
     .list-room {
-        padding-top: 20px;
+        .selected {
+            opacity: 0.5;
+        }
     }
 
     .row {
@@ -15,10 +17,6 @@
 
         .floor {
             background: #3cc;
-        }
-
-        .hidden, .hiddenViaDate {
-            visibility: hidden;
         }
     }
 }

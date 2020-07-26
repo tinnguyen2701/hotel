@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { AppNotify } from '@app/utilities';
 import { PopoverConfirmBoxComponent } from '@app/shared/components';
 import DataSource from 'devextreme/data/data_source';
-import { FilterBookModel, BookModel } from '../../models';
+import { FilterBookModel, RoomModel } from '../../models';
 import { LoadParamModel } from '@app/modules/core/models';
 import { BookingService } from '../../services';
 import { ROOM_TYPE } from '../../shared/constant';
@@ -19,7 +19,7 @@ export class BookedClientsComponent implements OnInit {
     //
     dataSource: DataSource;
     filterBooking: FilterBookModel = new FilterBookModel();
-    dataBooking: BookModel = new BookModel();
+    dataBooking: RoomModel = new RoomModel();
     roomType = ROOM_TYPE;
     selectedId: number;
     isProcessing: boolean = false;
@@ -34,12 +34,12 @@ export class BookedClientsComponent implements OnInit {
     }
 
     loadBookings() {
-        this.dataSource = new DataSource({
-            load: (loadOptions) => {
-                const loadParams = new LoadParamModel(loadOptions, this.filterBooking);
-                return this.bookingsService.getBookings(loadParams).toPromise();
-            }
-        });
+        // this.dataSource = new DataSource({
+        //     load: (loadOptions) => {
+        //         const loadParams = new LoadParamModel(loadOptions, this.filterBooking);
+        //         return this.bookingsService.getBookings(loadParams).toPromise();
+        //     }
+        // });
     }
 
     onSearchBooking() {
@@ -48,7 +48,7 @@ export class BookedClientsComponent implements OnInit {
         this.dxDataGrid.instance.refresh();
     }
 
-    onBookingDetail(param: BookModel) {
+    onBookingDetail(param: RoomModel) {
         this.dataBooking = param;
     }
 

@@ -2,101 +2,88 @@
     <div class="row d-flex align-items-center">
         <div class="col-md-9 d-flex align-items-center p-0">
             <div class="field col-md-3 p-0">
-                <div class="field-lable">Status</div>
+                <div class="field-label">Type rooms</div>
                 <div class="field-value">
                     <dx-select-box
-                        [dataSource]="roomStatusType"
+                        [dataSource]="roomType"
+                        [(value)]="selectedTypeRoom"
                         displayExpr="name"
-                        valueExpr="value"
-                        [(value)]="selectedStatus">
+                        valueExpr="value">
                     </dx-select-box>
                 </div>
             </div>
             <div class="field col-md-3">
-                <div class="field-lable">From date checkin</div>
+                <div class="field-label">From date</div>
                 <div class="field-value">
                     <dx-date-box
-                        [(value)]="checkinDate"
-                        [max]="checkoutDate"
+                        [(value)]="fromDate"
+                        [max]="toDate"
                         [useMaskBehavior]="true"
                         displayFormat="dd/MM/yyyy"
-                        [showClearButton]="true"
+                        showClearButton="true"
                         type="date">
                     </dx-date-box>
                 </div>
             </div>
             <div class="field col-md-3">
-                <div class="field-lable">To date</div>
+                <div class="field-label">To date</div>
                 <div class="field-value">
                     <dx-date-box
-                        [(value)]="checkoutDate"
-                        [min]="checkinDate"
+                        [(value)]="toDate"
+                        [min]="fromDate"
                         [useMaskBehavior]="true"
                         displayFormat="dd/MM/yyyy"
-                        [showClearButton]="true"
+                        showClearButton="true"
                         type="date">
                     </dx-date-box>
                 </div>
             </div>
-        </div>
-        <div class="col-md-3 text-right">
-            <dx-button
-                type="default"
-                icon="far fa-paper-plane"
-                text="transfer room"
-                (onClick)="showTransferRoomPopup()">
-            </dx-button>
+            <div class="field col-md-3 p-0" *ngIf="listRoomsSelected.length">
+                <div class="field-label">Selected rooms</div>
+                <div class="field-value">
+                    {{listRoomsSelected.length}}
+                </div>
+            </div>
         </div>
     </div>
 
-    <div class="list-room">
-        <div class="row" *ngFor="let item of floors">
-            <div class="floor d-flex justify-content-center align-items-center">{{ item.name }}</div>
-            <dx-button
-                [id]="'room-' + room.name"
-                class="room"
-                *ngFor="let room of item.rooms"
-                [ngClass]="{
-                    hidden:
-                        selectedStatus !== roomStatus.All &&
-                        room.status !== selectedStatus,
+    <div class="row pt-5">
+        <div class="list-room col-md-10">
+            <div class="row" *ngFor="let item of floors">
+                <div class="floor d-flex justify-content-center align-items-center">{{ item.name }}</div>
+                <dx-button
+                    class="room"
+                    *ngFor="let room of item.rooms"
+                    [text]="room.name"
+                    [ngClass]="{
                     'bg-warning': room.status === roomStatus.Booking,
                     'bg-success': room.status === roomStatus.Available,
-                    'bg-danger': room.status === roomStatus.Checkin,
-                    hiddenViaDate:
-                        checkinDate !== null && checkoutDate !== null
-                            ? room.status === roomStatus.Available ||
-                              room.status === roomStatus.All ||
-                              checkinDate > room.checkoutDate ||
-                              room.checkinDate > checkoutDate
-                            : false
+                    'bg-danger': room.status === roomStatus.Checkin
                 }"
-                (onClick)="onClickRoom(room)"
-                [text]="room.name"
-                [template]="'buttonTemplate'">
-                <div *dxTemplate="let buttonData of 'buttonTemplate'">
-                    {{buttonData.text}} ({{isRoomSingle(room) ? "S" : "D"}})
-                </div>
+                    (onClick)="onClickedRoom(room, $event)">
+                </dx-button>
+            </div>
+        </div>
+        <div class="action-booking col-md-2 d-flex flex-column">
+            <dx-button type="normal"
+                       text="Booking">
+            </dx-button>
+            <dx-button type="normal"
+                       class="mt-3"
+                       text="Checkin">
+            </dx-button>
+            <dx-button type="normal"
+                       class="mt-3"
+                       text="Checkout">
+            </dx-button>
+            <dx-button type="normal"
+                       class="mt-3"
+                       text="Transfer">
             </dx-button>
         </div>
     </div>
-</div>
 
-<dx-popover
-    [target]="'#room-' + selectedRoom.name"
-    position="right"
-    [width]="300"
-    [(visible)]="visible">
-    <dx-list [dataSource]="menus" itemTemplate="itemTemplate">
-        <div *dxTemplate="let item of 'itemTemplate'" (click)="onClickItem(item)"
-             class="d-flex align-items-center">
-            <div class="icon-style">
-                <i *ngIf="!!item.icon" class="{{item.icon}}"></i>
-            </div>
-            <div class="ml-2"> {{item.name}}</div>
-        </div>
-    </dx-list>
-</dx-popover>
+</div>
 
 <ng-container *ngIf="isShowPopupTransferRoom">
     <app-popup-container title="Transfer room"
@@ -156,8 +143,7 @@
                 type="default"
                 [text]="'Save'"
                 [disabled]="!transferRoom.fromRoomId || !transferRoom.toRoomId || !transferRoom.option"
-                [useSubmitBehavior]="false"
-                (onClick)="onHandleTransfer()">
+                [useSubmitBehavior]="false">
             </dx-button>
         </div>
     </app-popup-container>

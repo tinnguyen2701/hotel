@@ -1,3 +1,2 @@
-export * from './room.model';
-export * from './book.model';
+export * from './roomModel';
 export * from './lookup.model';

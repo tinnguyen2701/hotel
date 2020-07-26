@@ -8,7 +8,7 @@ import { BookingService, AppLookupService } from '@app/modules/admin/services';
 import { AdminComponent } from './components/admin/admin.component';
 import { UsersComponent } from './components/users/users.component';
 import { SearchFormComponent } from '@app/modules/admin/components/shared/search-form/search-form.component';
-import { AllRoomsComponent } from './components/all-rooms/all-rooms.component';
+import { RoomsComponent } from './components/rooms/rooms.component';
 import { BookedClientsComponent } from './components/booked/booked.component';
 import { AppState } from './store';
 import { RevenueComponent } from './components/revenue/revenue.component';
@@ -37,7 +37,7 @@ export const STATES = [
                     { path: '', redirectTo: 'all', pathMatch: 'full' },
                     {
                         path: 'all',
-                        component: AllRoomsComponent
+                        component: RoomsComponent
                     },
                     {
                         path: 'booked',
@@ -52,7 +52,7 @@ export const STATES = [
         ]),
     ],
     declarations: [
-        AllRoomsComponent,
+        RoomsComponent,
         AdminComponent,
         UsersComponent,
         BookedClientsComponent,

@@ -3,22 +3,32 @@ import {random} from 'lodash';
 //
 import {getRevenueModel, randomBooked, randomBookings, randomRoom, randomServices} from '@app/data/admin';
 import {environment} from '@environment';
-import {RoomModel, FloorModel, BookedModel, TransferRoom, ServiceModel, RevenueModel} from '../models/room.model';
+import {RoomModel, FloorModel, BookedModel, TransferRoom, ServiceModel, RevenueModel} from '../models/roomModel';
 import { randomRooms, randomFloors } from '@app/data/admin/room.mock';
-import { BookModel } from '../models';
 import { LoadParamModel, LoadResultModel } from '@app/modules/core/models';
 import {ActionNavigationType, ActionType} from '@app/modules/admin/shared/enums';
 
 export class BookingService {
-    getBookings(param: LoadParamModel): Observable<LoadResultModel<BookModel[]>> {
-        if (environment.production) {
-            console.log('API: getBookings');
+    /**
+     * all rooms
+     */
+    getFloors(): Observable<FloorModel[]> {
+        if (environment.debug) {
+            console.log('API: getFloors');
         }
-        return of({
-            data: randomBookings(30),
-            totalCount: random(50, 100)
-        });
+
+        return of(randomFloors(7));
     }
+
+    // getBookings(param: LoadParamModel): Observable<LoadResultModel<RoomModel[]>> {
+    //     if (environment.production) {
+    //         console.log('API: getBookings');
+    //     }
+    //     return of({
+    //         data: randomBookings(30),
+    //         totalCount: random(50, 100)
+    //     });
+    // }
 
     deleteBooking(param: number): Observable<boolean> {
         if (environment.production) {
@@ -27,13 +37,7 @@ export class BookingService {
         return of(true);
     }
 
-    getFloors(): Observable<FloorModel[]> {
-        if (environment.debug) {
-            console.log('API: getRooms');
-        }
 
-        return of(randomFloors(7));
-    }
 
     getBookRoom(roomId: number, status: ActionNavigationType): Observable<BookedModel> {
         if (environment.debug) {
@@ -67,17 +71,17 @@ export class BookingService {
         return of(true);
     }
 
-    getBookCheckinAndCheckout(): Observable<{ bookAvailable: BookedModel, bookCheckin: BookedModel, bookCheckout: BookedModel }> {
-        if (environment.debug) {
-            console.log('API: getBookCheckinAndCheckout');
-        }
-
-        return of({
-            bookAvailable: new BookedModel({rooms: [randomRoom(102, 1)]})
-            , bookCheckin: new BookedModel()
-            , bookCheckout: new BookedModel()
-        });
-    }
+    // getBookCheckinAndCheckout(): Observable<{ bookAvailable: BookedModel, bookCheckin: BookedModel, bookCheckout: BookedModel }> {
+    //     if (environment.debug) {
+    //         console.log('API: getBookCheckinAndCheckout');
+    //     }
+    //
+    //     return of({
+    //         bookAvailable: new BookedModel({rooms: [randomRoom(102, 1)]})
+    //         , bookCheckin: new BookedModel()
+    //         , bookCheckout: new BookedModel()
+    //     });
+    // }
 
     checkoutBook(booked: BookedModel): Observable<boolean> {
         if (environment.debug) {

@@ -9,7 +9,7 @@ import {
     RevenueModel,
     RoomModel,
     ServiceModel
-} from '@app/modules/admin/models/room.model';
+} from '@app/modules/admin/models/roomModel';
 import {ActionNavigationType, RoomStatus} from '@app/modules/admin/shared/enums';
 
 export function randomFloors(count: number): FloorModel[] {
@@ -28,28 +28,20 @@ export function randomRooms(count: number, floor: number): RoomModel[] {
     return Array(count)
         .fill({})
         .map((item: RoomModel, index) => {
-            const statusRoom = random(2, 4);
+            const statusRoom = random(1, 3);
             return {
-                id: index + 1,
+                id: parseInt(floor.toString() + '0' + (index + 1).toString(), 10),
                 status: statusRoom,
                 name: floor.toString() + '0' + (index + 1).toString(),
-                checkinDate:
-                    statusRoom === RoomStatus.Booking ||
-                    statusRoom === RoomStatus.Checkin
-                        ? faker.date.past()
-                        : null,
-                checkoutDate:
-                    statusRoom === RoomStatus.Booking ||
-                    statusRoom === RoomStatus.Checkin
-                        ? faker.date.future()
-                        : null,
-                type: random(1, 2),
+                checkinDate: statusRoom !== RoomStatus.Available ? faker.date.past() : null,
+                checkoutDate: statusRoom !== RoomStatus.Available ? faker.date.future() : null,
+                type: random(2, 3),
                 price: 100000,
                 deduct: 0,
                 prepay: 0,
                 note: faker.lorem.sentence(),
                 peopleNumber: 0,
-                bookCode: '123',
+                bookCode: statusRoom !== RoomStatus.Available ? random('A', 'B', 'C') + random(10, 100) : null,
                 isUpdated: false,
                 isDeleted: false,
                 amount: 0
@@ -57,6 +49,7 @@ export function randomRooms(count: number, floor: number): RoomModel[] {
         });
 }
 
+/////////////////////// here today
 // TODO remove type
 export function randomRoom(roomId: number, type: number): RoomModel {
     if (type === 1) {
@@ -143,6 +136,7 @@ export function randomServices(count: number): ServiceModel[] {
             });
         });
 }
+
 export function randomCustomers(count: number): CustomerModel[] {
     return Array(count)
         .fill({})
@@ -209,7 +203,6 @@ export function randomBooked(roomId: number, status: ActionNavigationType): Book
 }
 
 
-
 export function getRevenueModel(): RevenueModel[] {
     return [{
         month: 'Jan',
@@ -248,4 +241,17 @@ export function getRevenueModel(): RevenueModel[] {
         month: 'Dec',
         amount: 4
     }];
+}
+
+export function randomBookings(count: number): BookedModel[] {
+    return Array(count).fill({}).map((item: RoomModel, index) => {
+        return new BookedModel({
+            id: index + 1,
+            name: random(1, 5) + '0' + random(1, 5),
+            checkinDate: faker.date.past(),
+            checkoutDate: faker.date.future(),
+            prepay: random(0, 100) * 1000,
+            note: faker.name.findName(),
+        });
+    });
 }

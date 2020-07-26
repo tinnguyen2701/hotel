@@ -1,24 +1,8 @@
 import * as faker from 'faker';
 import {random} from 'lodash';
-import {BookModel} from '@app/modules/admin/models';
+import {RoomModel} from '@app/modules/admin/models';
 
-export function randomBookings(count: number): BookModel[] {
-    return Array(count).fill({}).map((item: BookModel, index) => {
-        return new BookModel({
-            id: index + 1,
-            roomName: random(1, 5) + '0' + random(1, 5),
-            contactName: faker.name.findName(),
-            checkinDate: faker.date.past(),
-            checkoutDate: faker.date.future(),
-            roomType: random(1, 2),
-            prepay: random(0, 100) * 1000,
-            note: faker.name.findName(),
-            createdDate: faker.date.past(),
-            author: faker.name.findName(),
-            code: faker.name.findName(),
-        });
-    });
-}
+
 
 // export function randomBookingById(param: number): BookModel {
 //     const arrActivities = [BookingActivity.Transportation, BookingActivity.ScubaDiving, BookingActivity.Overnight];
