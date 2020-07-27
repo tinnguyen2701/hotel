@@ -3,7 +3,7 @@ import {SelectSnapshot} from '@ngxs-labs/select-snapshot';
 import {Store} from '@ngxs/store';
 //
 import {BookingService} from '../../services';
-import {BookedModel, FloorModel, RoomModel, TransferRoom} from '../../models/roomModel';
+import {BookedModel, FloorModel, QuerySearchingModel, RoomModel, TransferRoom} from '../../models/roomModel';
 import {RoomStatus, ActionType, ActionNavigationType, RoomType} from '../../shared/enums';
 import {ROOM_STATUS_TYPE, ROOM_TYPE, TRANSFER_ROOM_TYPE} from '../../shared/constant';
 import {
@@ -31,6 +31,7 @@ export class RoomsComponent implements OnInit {
     toDate: Date = null;
     roomStatus = RoomStatus;
     listRoomsSelected: RoomModel[] = [];
+    querySearching: QuerySearchingModel = new QuerySearchingModel();
 
     // selectedRoom: BookModel = {} as BookModel;
     // selectedBooked: BookedModel = new BookedModel();
@@ -42,12 +43,16 @@ export class RoomsComponent implements OnInit {
     transferRoomType = TRANSFER_ROOM_TYPE;
 
     constructor(private bookingService: BookingService, private store: Store) {
-        this.bookingService.getFloors().subscribe((floors) => {
-            this.floors = floors;
-        });
     }
 
     ngOnInit() {
+        this.loadFloor();
+    }
+
+    loadFloor() {
+        this.bookingService.getFloors(this.querySearching).subscribe((floors) => {
+            this.floors = floors;
+        });
     }
 
     onClickedRoom(room: RoomModel, e: any) {
@@ -63,6 +68,10 @@ export class RoomsComponent implements OnInit {
                 e.element.classList.remove('selected');
             }
         }
+    }
+
+    onChangedQuerySearching() {
+        this.loadFloor();
     }
 
     // onClickItem(item) {

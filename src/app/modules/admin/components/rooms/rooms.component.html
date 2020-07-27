@@ -1,44 +1,47 @@
-<div class="wrapper p-10">
-    <div class="row d-flex align-items-center">
-        <div class="col-md-9 d-flex align-items-center p-0">
-            <div class="field col-md-3 p-0">
+<div class="wrapper">
+    <div class="d-flex align-items-center">
+        <div class="d-flex align-items-center p-0">
+            <div class="field p-0">
                 <div class="field-label">Type rooms</div>
                 <div class="field-value">
                     <dx-select-box
                         [dataSource]="roomType"
-                        [(value)]="selectedTypeRoom"
+                        [(value)]="querySearching.roomType"
+                        (onValueChanged)="onChangedQuerySearching()"
                         displayExpr="name"
                         valueExpr="value">
                     </dx-select-box>
                 </div>
             </div>
-            <div class="field col-md-3">
+            <div class="field ml-3">
                 <div class="field-label">From date</div>
                 <div class="field-value">
                     <dx-date-box
-                        [(value)]="fromDate"
-                        [max]="toDate"
+                        [(value)]="querySearching.fromDate"
+                        [max]="querySearching.toDate"
                         [useMaskBehavior]="true"
                         displayFormat="dd/MM/yyyy"
                         showClearButton="true"
-                        type="date">
+                        type="date"
+                        (onValueChanged)="onChangedQuerySearching()">
                     </dx-date-box>
                 </div>
             </div>
-            <div class="field col-md-3">
+            <div class="field ml-3">
                 <div class="field-label">To date</div>
                 <div class="field-value">
                     <dx-date-box
-                        [(value)]="toDate"
-                        [min]="fromDate"
+                        [(value)]="querySearching.toDate"
+                        [min]="querySearching.fromDate"
                         [useMaskBehavior]="true"
                         displayFormat="dd/MM/yyyy"
                         showClearButton="true"
-                        type="date">
+                        type="date"
+                        (onValueChanged)="onChangedQuerySearching()">
                     </dx-date-box>
                 </div>
             </div>
-            <div class="field col-md-3 p-0" *ngIf="listRoomsSelected.length">
+            <div class="field ml-3 p-0" *ngIf="listRoomsSelected.length">
                 <div class="field-label">Selected rooms</div>
                 <div class="field-value">
                     {{listRoomsSelected.length}}
@@ -47,8 +50,8 @@
         </div>
     </div>
 
-    <div class="row pt-5">
-        <div class="list-room col-md-10">
+    <div class="d-flex mt-3 ml-3">
+        <div class="list-room">
             <div class="row" *ngFor="let item of floors">
                 <div class="floor d-flex justify-content-center align-items-center">{{ item.name }}</div>
                 <dx-button
@@ -64,7 +67,7 @@
                 </dx-button>
             </div>
         </div>
-        <div class="action-booking col-md-2 d-flex flex-column">
+        <div class="action-booking d-flex flex-column ml-5">
             <dx-button type="normal"
                        text="Booking">
             </dx-button>

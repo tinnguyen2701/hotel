@@ -10,7 +10,7 @@ import {
     RoomModel,
     ServiceModel
 } from '@app/modules/admin/models/roomModel';
-import {ActionNavigationType, RoomStatus} from '@app/modules/admin/shared/enums';
+import {ActionNavigationType, BookType, RoomStatus} from '@app/modules/admin/shared/enums';
 
 export function randomFloors(count: number): FloorModel[] {
     return Array(count)
@@ -46,6 +46,20 @@ export function randomRooms(count: number, floor: number): RoomModel[] {
                 isDeleted: false,
                 amount: 0
             };
+        });
+}
+
+export function randomRoomsBooked(count: number): RoomModel[] {
+    return Array(count)
+        .fill({})
+        .map((item: RoomModel, index) => {
+            const floor = random(1, 7).toString();
+
+            return new RoomModel({
+                id: parseInt(floor + '0' + (index + 1).toString(), 10),
+                name: floor + '0' + (index + 1).toString(),
+                type: random(1, 2),
+            });
         });
 }
 
@@ -245,13 +259,32 @@ export function getRevenueModel(): RevenueModel[] {
 
 export function randomBookings(count: number): BookedModel[] {
     return Array(count).fill({}).map((item: RoomModel, index) => {
-        return new BookedModel({
-            id: index + 1,
-            name: random(1, 5) + '0' + random(1, 5),
-            checkinDate: faker.date.past(),
-            checkoutDate: faker.date.future(),
-            prepay: random(0, 100) * 1000,
-            note: faker.name.findName(),
-        });
+        const bookType = random(1, 2);
+        if (bookType === BookType.Personal) {
+            return new BookedModel({
+                id: index + 1,
+                code: ['A', 'B', 'C', 'D'][random(0, 3)] + random(1, 99),
+                bookType,
+                status: random(1, 3),
+                name: ['mr A', 'mr B', 'mr C', 'mr D', 'mr E'][random(0, 4)],
+                checkinDate: faker.date.past(),
+                checkoutDate: faker.date.future(),
+                prepay: random(0, 100) * 1000,
+                note: faker.lorem.sentence(),
+            });
+        } else {
+            return new BookedModel({
+                id: index + 1,
+                code: ['A', 'B', 'C', 'D'][random(0, 3)] + random(1, 99),
+                bookType,
+                status: random(1, 3),
+                name: ['Cty A', 'Cty B', 'Cty C', 'Cty D', 'Cty E'][random(0, 4)],
+                checkinDate: faker.date.past(),
+                checkoutDate: faker.date.future(),
+                prepay: random(0, 100) * 1000,
+                note: faker.lorem.sentence(),
+                rooms: randomRoomsBooked(random(2, 5))
+            });
+        }
     });
 }

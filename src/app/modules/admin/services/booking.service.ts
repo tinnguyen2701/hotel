@@ -3,7 +3,16 @@ import {random} from 'lodash';
 //
 import {getRevenueModel, randomBooked, randomBookings, randomRoom, randomServices} from '@app/data/admin';
 import {environment} from '@environment';
-import {RoomModel, FloorModel, BookedModel, TransferRoom, ServiceModel, RevenueModel} from '../models/roomModel';
+import {
+    RoomModel,
+    FloorModel,
+    BookedModel,
+    TransferRoom,
+    ServiceModel,
+    RevenueModel,
+    QuerySearchingModel,
+    FilterBookModel
+} from '../models/roomModel';
 import { randomRooms, randomFloors } from '@app/data/admin/room.mock';
 import { LoadParamModel, LoadResultModel } from '@app/modules/core/models';
 import {ActionNavigationType, ActionType} from '@app/modules/admin/shared/enums';
@@ -12,7 +21,7 @@ export class BookingService {
     /**
      * all rooms
      */
-    getFloors(): Observable<FloorModel[]> {
+    getFloors(querySearching: QuerySearchingModel): Observable<FloorModel[]> {
         if (environment.debug) {
             console.log('API: getFloors');
         }
@@ -20,15 +29,15 @@ export class BookingService {
         return of(randomFloors(7));
     }
 
-    // getBookings(param: LoadParamModel): Observable<LoadResultModel<RoomModel[]>> {
-    //     if (environment.production) {
-    //         console.log('API: getBookings');
-    //     }
-    //     return of({
-    //         data: randomBookings(30),
-    //         totalCount: random(50, 100)
-    //     });
-    // }
+    getBookings(param: LoadParamModel): Observable<LoadResultModel<BookedModel[]>> {
+        if (environment.production) {
+            console.log('API: getBookings');
+        }
+        return of({
+            data: randomBookings(30),
+            totalCount: random(50, 100)
+        });
+    }
 
     deleteBooking(param: number): Observable<boolean> {
         if (environment.production) {

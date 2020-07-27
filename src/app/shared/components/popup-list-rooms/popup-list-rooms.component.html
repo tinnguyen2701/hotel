@@ -1,493 +1,493 @@
-<dx-load-panel *ngIf="isLoading"
-    [visible]="true"
-    [showPane]="false">
-</dx-load-panel>
+<!--<dx-load-panel *ngIf="isLoading"-->
+<!--    [visible]="true"-->
+<!--    [showPane]="false">-->
+<!--</dx-load-panel>-->
 
-<ng-container *ngIf="!isLoading">
-    <app-popup-container [width]="1000"
-        [height]="650"
-        [(visible)]="isShowListRoom"
-        (onHiding)="onHiding()"
-        [title]="handleTitlePopup()"
-        [footerTemplate]="popupFooter">
-        <dx-validation-group>
-            <div class="form-wrapper">
-                <dx-load-panel *ngIf="isProcessing"
-                    [visible]="true"
-                    [showPane]="false"
-                    [message]="'Load'">
-                </dx-load-panel>
+<!--<ng-container *ngIf="!isLoading">-->
+<!--    <app-popup-container [width]="1000"-->
+<!--        [height]="650"-->
+<!--        [(visible)]="isShowListRoom"-->
+<!--        (onHiding)="onHiding()"-->
+<!--        [title]="handleTitlePopup()"-->
+<!--        [footerTemplate]="popupFooter">-->
+<!--        <dx-validation-group>-->
+<!--            <div class="form-wrapper">-->
+<!--                <dx-load-panel *ngIf="isProcessing"-->
+<!--                    [visible]="true"-->
+<!--                    [showPane]="false"-->
+<!--                    [message]="'Load'">-->
+<!--                </dx-load-panel>-->
 
-                <ng-container>
-                    <div class="row d-flex align-items-center justify-content-between px-3 pb-2">
-                        <span>List rooms</span>
-                        <div class="d-flex align-items-center">
-                            <span>Show book code</span>
-                            <dx-switch class="ml-2" [(value)]="isShowBookCodeField"></dx-switch>
-                        </div>
-                    </div>
-                    <dx-data-grid #dxDataGridRoom
-                        height="200"
-                        [dataSource]="book.rooms"
-                        [showRowLines]="true"
-                        [showBorders]="true"
-                        [showColumnLines]="true"
-                        [hoverStateEnabled]="true"
-                        [columnAutoWidth]="false"
-                        [allowColumnResizing]="true"
-                        [allowColumnReordering]="false"
-                        (onRowValidating)="onListRoomValidation($event)"
-                        (onRowUpdated)="onRowRoomUpdated($event)">
-                        <dxo-editing mode="row"
-                            [allowUpdating]="true"
-                            [allowDeleting]="true">
-                            <dxo-texts [confirmDeleteMessage]="null">
-                            </dxo-texts>
-                        </dxo-editing>
+<!--                <ng-container>-->
+<!--                    <div class="row d-flex align-items-center justify-content-between px-3 pb-2">-->
+<!--                        <span>List rooms</span>-->
+<!--                        <div class="d-flex align-items-center">-->
+<!--                            <span>Show book code</span>-->
+<!--                            <dx-switch class="ml-2" [(value)]="isShowBookCodeField"></dx-switch>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <dx-data-grid #dxDataGridRoom-->
+<!--                        height="200"-->
+<!--                        [dataSource]="book.rooms"-->
+<!--                        [showRowLines]="true"-->
+<!--                        [showBorders]="true"-->
+<!--                        [showColumnLines]="true"-->
+<!--                        [hoverStateEnabled]="true"-->
+<!--                        [columnAutoWidth]="false"-->
+<!--                        [allowColumnResizing]="true"-->
+<!--                        [allowColumnReordering]="false"-->
+<!--                        (onRowValidating)="onListRoomValidation($event)"-->
+<!--                        (onRowUpdated)="onRowRoomUpdated($event)">-->
+<!--                        <dxo-editing mode="row"-->
+<!--                            [allowUpdating]="true"-->
+<!--                            [allowDeleting]="true">-->
+<!--                            <dxo-texts [confirmDeleteMessage]="null">-->
+<!--                            </dxo-texts>-->
+<!--                        </dxo-editing>-->
 
-                        <dxo-paging [enabled]="false"></dxo-paging>
+<!--                        <dxo-paging [enabled]="false"></dxo-paging>-->
 
-                        <dxi-column caption="#"
-                                    alignment="center"
-                                    [allowEditing]="false"
-                                    [allowSorting]="false"
-                                    [width]="60"
-                                    [fixed]="true"
-                                    fixedPosition="left"
-                                    headerCellTemplate="indexHeaderCellTemplate"
-                                    cellTemplate="indexCellTemplate">
-                            <div *dxTemplate="let row of 'indexHeaderCellTemplate'">
-                                <span>#</span>
-                            </div>
-                            <div *dxTemplate="let cell of 'indexCellTemplate'">
-                                <ng-container>
-                                    {{ cell.rowIndex + 1 }}
-                                </ng-container>
-                            </div>
-                        </dxi-column>
+<!--                        <dxi-column caption="#"-->
+<!--                                    alignment="center"-->
+<!--                                    [allowEditing]="false"-->
+<!--                                    [allowSorting]="false"-->
+<!--                                    [width]="60"-->
+<!--                                    [fixed]="true"-->
+<!--                                    fixedPosition="left"-->
+<!--                                    headerCellTemplate="indexHeaderCellTemplate"-->
+<!--                                    cellTemplate="indexCellTemplate">-->
+<!--                            <div *dxTemplate="let row of 'indexHeaderCellTemplate'">-->
+<!--                                <span>#</span>-->
+<!--                            </div>-->
+<!--                            <div *dxTemplate="let cell of 'indexCellTemplate'">-->
+<!--                                <ng-container>-->
+<!--                                    {{ cell.rowIndex + 1 }}-->
+<!--                                </ng-container>-->
+<!--                            </div>-->
+<!--                        </dxi-column>-->
 
-                        <dxi-column *ngIf="isShowBookCodeField"
-                                    dataField="bookCode"
-                                    caption="Cook code"
-                                    [allowEditing]="false"
-                                    [width]="100"
-                                    alignment="right">
-                        </dxi-column>
+<!--                        <dxi-column *ngIf="isShowBookCodeField"-->
+<!--                                    dataField="bookCode"-->
+<!--                                    caption="Cook code"-->
+<!--                                    [allowEditing]="false"-->
+<!--                                    [width]="100"-->
+<!--                                    alignment="right">-->
+<!--                        </dxi-column>-->
 
-                        <dxi-column dataField="name"
-                                    caption="Name"
-                                    [allowEditing]="false"
-                                    [width]="100"
-                                    alignment="right">
-                        </dxi-column>
+<!--                        <dxi-column dataField="name"-->
+<!--                                    caption="Name"-->
+<!--                                    [allowEditing]="false"-->
+<!--                                    [width]="100"-->
+<!--                                    alignment="right">-->
+<!--                        </dxi-column>-->
 
-                        <dxi-column dataField="checkinDate"
-                                    [width]="160"
-                                    alignment="center"
-                                    caption="Checkin date"
-                                    cellTemplate="checkinTemplate"
-                                    format="dd/MM/yyyy hh:mm a"
-                                    editCellTemplate="editCheckinTemplate">
-                            <div *dxTemplate="let cell of 'checkinTemplate'">
-                                {{cell.value | DateTimeDisplay}}
-                            </div>
-                            <div *dxTemplate="let cell of 'editCheckinTemplate'">
-                                <dx-date-box [(value)]="cell.value"
-                                    (onValueChanged)="setValueCheckin(cell, $event)"
-                                    type="datetime">
-                                    <dxi-validation-rule type="required"
-                                        [message]="'This field is required'">
-                                    </dxi-validation-rule>
-                                </dx-date-box>
-                            </div>
-                        </dxi-column>
+<!--                        <dxi-column dataField="checkinDate"-->
+<!--                                    [width]="160"-->
+<!--                                    alignment="center"-->
+<!--                                    caption="Checkin date"-->
+<!--                                    cellTemplate="checkinTemplate"-->
+<!--                                    format="dd/MM/yyyy hh:mm a"-->
+<!--                                    editCellTemplate="editCheckinTemplate">-->
+<!--                            <div *dxTemplate="let cell of 'checkinTemplate'">-->
+<!--                                {{cell.value | DateTimeDisplay}}-->
+<!--                            </div>-->
+<!--                            <div *dxTemplate="let cell of 'editCheckinTemplate'">-->
+<!--                                <dx-date-box [(value)]="cell.value"-->
+<!--                                    (onValueChanged)="setValueCheckin(cell, $event)"-->
+<!--                                    type="datetime">-->
+<!--                                    <dxi-validation-rule type="required"-->
+<!--                                        [message]="'This field is required'">-->
+<!--                                    </dxi-validation-rule>-->
+<!--                                </dx-date-box>-->
+<!--                            </div>-->
+<!--                        </dxi-column>-->
 
-                        <dxi-column dataField="checkoutDate"
-                                    [width]="160"
-                                    alignment="center"
-                                    caption="Checkout date"
-                                    format="dd/MM/yyyy hh:mm a"
-                                    cellTemplate="checkoutTemplate"
-                                    editCellTemplate="editCheckoutTemplate">
-                            <div *dxTemplate="let cell of 'checkoutTemplate'">
-                                {{cell.value | DateTimeDisplay}}
-                            </div>
-                            <div *dxTemplate="let cell of 'editCheckoutTemplate'">
-                                <dx-date-box [(value)]="cell.value"
-                                    (onValueChanged)="setValueCheckout(cell, $event)"
-                                    type="datetime">
-                                    <dxi-validation-rule type="required"
-                                        [message]="'This field is required'">
-                                    </dxi-validation-rule>
-                                </dx-date-box>
-                            </div>
-                        </dxi-column>
+<!--                        <dxi-column dataField="checkoutDate"-->
+<!--                                    [width]="160"-->
+<!--                                    alignment="center"-->
+<!--                                    caption="Checkout date"-->
+<!--                                    format="dd/MM/yyyy hh:mm a"-->
+<!--                                    cellTemplate="checkoutTemplate"-->
+<!--                                    editCellTemplate="editCheckoutTemplate">-->
+<!--                            <div *dxTemplate="let cell of 'checkoutTemplate'">-->
+<!--                                {{cell.value | DateTimeDisplay}}-->
+<!--                            </div>-->
+<!--                            <div *dxTemplate="let cell of 'editCheckoutTemplate'">-->
+<!--                                <dx-date-box [(value)]="cell.value"-->
+<!--                                    (onValueChanged)="setValueCheckout(cell, $event)"-->
+<!--                                    type="datetime">-->
+<!--                                    <dxi-validation-rule type="required"-->
+<!--                                        [message]="'This field is required'">-->
+<!--                                    </dxi-validation-rule>-->
+<!--                                </dx-date-box>-->
+<!--                            </div>-->
+<!--                        </dxi-column>-->
 
-                        <dxi-column dataField="type"
-                                    caption="Type room"
-                                    [width]="120">
-                            <dxo-lookup
-                                [dataSource]="roomTypes"
-                                valueExpr="value"
-                                displayExpr="name">
-                            </dxo-lookup>
-                            <dxi-validation-rule
-                                type="required"
-                                [message]="'This field is required'">
-                            </dxi-validation-rule>
-                        </dxi-column>
+<!--                        <dxi-column dataField="type"-->
+<!--                                    caption="Type room"-->
+<!--                                    [width]="120">-->
+<!--                            <dxo-lookup-->
+<!--                                [dataSource]="roomTypes"-->
+<!--                                valueExpr="value"-->
+<!--                                displayExpr="name">-->
+<!--                            </dxo-lookup>-->
+<!--                            <dxi-validation-rule-->
+<!--                                type="required"-->
+<!--                                [message]="'This field is required'">-->
+<!--                            </dxi-validation-rule>-->
+<!--                        </dxi-column>-->
 
-                        <dxi-column dataField="price"
-                                    format="#0,###"
-                                    [editorOptions]="{format: '#0,###'}"
-                                    [minWidth]="130"
-                                    alignment="right"
-                                    dataType="number"
-                                    [setCellValue]="onChangeValuePrice"
-                                    caption="Price">
-                            <dxi-validation-rule type="required"
-                                [message]="'This field is required'">
-                            </dxi-validation-rule>
-                        </dxi-column>
+<!--                        <dxi-column dataField="price"-->
+<!--                                    format="#0,###"-->
+<!--                                    [editorOptions]="{format: '#0,###'}"-->
+<!--                                    [minWidth]="130"-->
+<!--                                    alignment="right"-->
+<!--                                    dataType="number"-->
+<!--                                    [setCellValue]="onChangeValuePrice"-->
+<!--                                    caption="Price">-->
+<!--                            <dxi-validation-rule type="required"-->
+<!--                                [message]="'This field is required'">-->
+<!--                            </dxi-validation-rule>-->
+<!--                        </dxi-column>-->
 
-                        <dxi-column dataField="deduct"
-                                    [minWidth]="130"
-                                    alignment="right"
-                                    dataType="number"
-                                    format="#0,###"
-                                    caption="Deduct"
-                                    [setCellValue]="onChangeValueDeduct"
-                                    [editorOptions]="{format: '#0,###'}">
-                            <dxi-validation-rule
-                                type="required"
-                                [message]="'This field is required'">
-                            </dxi-validation-rule>
-                        </dxi-column>
+<!--                        <dxi-column dataField="deduct"-->
+<!--                                    [minWidth]="130"-->
+<!--                                    alignment="right"-->
+<!--                                    dataType="number"-->
+<!--                                    format="#0,###"-->
+<!--                                    caption="Deduct"-->
+<!--                                    [setCellValue]="onChangeValueDeduct"-->
+<!--                                    [editorOptions]="{format: '#0,###'}">-->
+<!--                            <dxi-validation-rule-->
+<!--                                type="required"-->
+<!--                                [message]="'This field is required'">-->
+<!--                            </dxi-validation-rule>-->
+<!--                        </dxi-column>-->
 
-                        <dxi-column dataField="prepay"
-                                    format="#0,###"
-                                    [editorOptions]="{format: '#0,###'}"
-                                    [minWidth]="130"
-                                    alignment="right"
-                                    dataType="number"
-                                    caption="Prepay"
-                                    [setCellValue]="onChangeValuePrepay">
-                            <dxi-validation-rule
-                                type="required"
-                                [message]="'This field is required'">
-                            </dxi-validation-rule>
-                        </dxi-column>
+<!--                        <dxi-column dataField="prepay"-->
+<!--                                    format="#0,###"-->
+<!--                                    [editorOptions]="{format: '#0,###'}"-->
+<!--                                    [minWidth]="130"-->
+<!--                                    alignment="right"-->
+<!--                                    dataType="number"-->
+<!--                                    caption="Prepay"-->
+<!--                                    [setCellValue]="onChangeValuePrepay">-->
+<!--                            <dxi-validation-rule-->
+<!--                                type="required"-->
+<!--                                [message]="'This field is required'">-->
+<!--                            </dxi-validation-rule>-->
+<!--                        </dxi-column>-->
 
-                        <dxi-column dataField="peopleNumber"
-                                    [minWidth]="130"
-                                    alignment="right"
-                                    dataType="number"
-                                    caption="Total peoples">
-                            <dxi-validation-rule
-                                type="required"
-                                [message]="'This field is required'">
-                            </dxi-validation-rule>
-                        </dxi-column>
+<!--                        <dxi-column dataField="peopleNumber"-->
+<!--                                    [minWidth]="130"-->
+<!--                                    alignment="right"-->
+<!--                                    dataType="number"-->
+<!--                                    caption="Total peoples">-->
+<!--                            <dxi-validation-rule-->
+<!--                                type="required"-->
+<!--                                [message]="'This field is required'">-->
+<!--                            </dxi-validation-rule>-->
+<!--                        </dxi-column>-->
 
-                        <dxi-column dataField="note"
-                                    caption="Note"
-                                    [width]="200">
-                        </dxi-column>
+<!--                        <dxi-column dataField="note"-->
+<!--                                    caption="Note"-->
+<!--                                    [width]="200">-->
+<!--                        </dxi-column>-->
 
-                        <dxi-column dataField="amount"
-                                    format="#0,###"
-                                    [editorOptions]="{format: '#0,###'}"
-                                    [minWidth]="130"
-                                    alignment="right"
-                                    dataType="number"
-                                    caption="Amount">
-                            <dxi-validation-rule
-                                type="required"
-                                [message]="'This field is required'">
-                            </dxi-validation-rule>
-                        </dxi-column>
+<!--                        <dxi-column dataField="amount"-->
+<!--                                    format="#0,###"-->
+<!--                                    [editorOptions]="{format: '#0,###'}"-->
+<!--                                    [minWidth]="130"-->
+<!--                                    alignment="right"-->
+<!--                                    dataType="number"-->
+<!--                                    caption="Amount">-->
+<!--                            <dxi-validation-rule-->
+<!--                                type="required"-->
+<!--                                [message]="'This field is required'">-->
+<!--                            </dxi-validation-rule>-->
+<!--                        </dxi-column>-->
 
-                        <dxi-column caption="Action"
-                                    type="buttons"
-                                    alignment="center"
-                                    [width]="80">
-                            <dxi-button name="save"
-                                        icon="save"
-                                        [text]="''"
-                                        [hint]="'Save'">
-                            </dxi-button>
-                            <dxi-button name="cancel"
-                                        icon="revert"
-                                        [text]="''"
-                                        [hint]="'Cancel'"
-                                        [onClick]="onRevertDxGridRow">
-                            </dxi-button>
-                            <dxi-button name="edit"
-                                        icon="fas fa-pencil-alt edit-icon"
-                                        [text]="''"
-                                        [hint]="'Edit'"
-                                        [onClick]="onUpdateRoom">
-                            </dxi-button>
-                            <dxi-button name="delete"
-                                        [cssClass]="'far fa-trash-alt delete-icon'"
-                                        [hint]="'Delete'"
-                                        [text]="''"
-                                        [onClick]="onDeleteRoom">
-                            </dxi-button>
-                        </dxi-column>
+<!--                        <dxi-column caption="Action"-->
+<!--                                    type="buttons"-->
+<!--                                    alignment="center"-->
+<!--                                    [width]="80">-->
+<!--                            <dxi-button name="save"-->
+<!--                                        icon="save"-->
+<!--                                        [text]="''"-->
+<!--                                        [hint]="'Save'">-->
+<!--                            </dxi-button>-->
+<!--                            <dxi-button name="cancel"-->
+<!--                                        icon="revert"-->
+<!--                                        [text]="''"-->
+<!--                                        [hint]="'Cancel'"-->
+<!--                                        [onClick]="onRevertDxGridRow">-->
+<!--                            </dxi-button>-->
+<!--                            <dxi-button name="edit"-->
+<!--                                        icon="fas fa-pencil-alt edit-icon"-->
+<!--                                        [text]="''"-->
+<!--                                        [hint]="'Edit'"-->
+<!--                                        [onClick]="onUpdateRoom">-->
+<!--                            </dxi-button>-->
+<!--                            <dxi-button name="delete"-->
+<!--                                        [cssClass]="'far fa-trash-alt delete-icon'"-->
+<!--                                        [hint]="'Delete'"-->
+<!--                                        [text]="''"-->
+<!--                                        [onClick]="onDeleteRoom">-->
+<!--                            </dxi-button>-->
+<!--                        </dxi-column>-->
 
-                        <dxo-summary>
-                            <dxi-total-item column="note"
-                                            [displayFormat]="'Total payment rooms'">
-                            </dxi-total-item>
-                            <dxi-total-item column="amount"
-                                            [customizeText]="customizeTotalValue"
-                                            summaryType="sum">
-                            </dxi-total-item>
-                        </dxo-summary>
-                    </dx-data-grid>
-                </ng-container>
+<!--                        <dxo-summary>-->
+<!--                            <dxi-total-item column="note"-->
+<!--                                            [displayFormat]="'Total payment rooms'">-->
+<!--                            </dxi-total-item>-->
+<!--                            <dxi-total-item column="amount"-->
+<!--                                            [customizeText]="customizeTotalValue"-->
+<!--                                            summaryType="sum">-->
+<!--                            </dxi-total-item>-->
+<!--                        </dxo-summary>-->
+<!--                    </dx-data-grid>-->
+<!--                </ng-container>-->
 
-                <div class="row mt-3 mx-2 d-flex align-items-center justify-content-between">
-                    <app-tab [tabs]="menuTabs"
-                             [displayExpr]="'text'"
-                             [valueExpr]="'value'"
-                             [selectedTab]="currentTab"
-                             [showCloseIcon]="false"
-                             (onSelectionChanged)="changeTab($event)">
-                    </app-tab>
-                    <dx-button *ngIf="currentTab.value === Service"
-                               text="Services manage"
-                               (onClick)="showPopupManageServices()">
-                    </dx-button>
-                </div>
+<!--                <div class="row mt-3 mx-2 d-flex align-items-center justify-content-between">-->
+<!--                    <app-tab [tabs]="menuTabs"-->
+<!--                             [displayExpr]="'text'"-->
+<!--                             [valueExpr]="'value'"-->
+<!--                             [selectedTab]="currentTab"-->
+<!--                             [showCloseIcon]="false"-->
+<!--                             (onSelectionChanged)="changeTab($event)">-->
+<!--                    </app-tab>-->
+<!--                    <dx-button *ngIf="currentTab.value === Service"-->
+<!--                               text="Services manage"-->
+<!--                               (onClick)="showPopupManageServices()">-->
+<!--                    </dx-button>-->
+<!--                </div>-->
 
-                <ng-container *ngIf="currentTab.value === Customer">
-                    <app-customers [(customers)]="book.customers"></app-customers>
-                </ng-container>
+<!--                <ng-container *ngIf="currentTab.value === Customer">-->
+<!--                    <app-customers [(customers)]="book.customers"></app-customers>-->
+<!--                </ng-container>-->
 
-                <ng-container *ngIf="currentTab.value === Service">
-                    <app-services [services]="book.services"
-                                  (onChangeService)="onChangeService()">
-                    </app-services>
-                </ng-container>
-
-
-                <div class="row mt-3" *ngIf="!isShowBookEdit()">
-                    <div class="font-weight-bold col-md-4">
-                        Payment rooms: {{paymentRooms | CurrencyDisplay}}
-                    </div>
-                    <div class="font-weight-bold col-md-4">
-                        Payment services: {{paymentServices | CurrencyDisplay}}
-                    </div>
-                    <div class="font-weight-bold text-danger col-md-4">
-                        Total payment:  {{paymentRooms + paymentServices | CurrencyDisplay}}
-                    </div>
-                </div>
-
-                <ng-container *ngIf="isShowBookCheckout() || isShowCheckoutNow()">
-                    <div class="dx-field w-50 mt-2">
-                        <div class="dx-field-label font-weight-bold">Payment method</div>
-                        <div class="dx-field-value">
-                            <dx-radio-group [dataSource]="paymentMethods"
-                                            [(value)]="book.paymentMethod"
-                                            valueExpr="value"
-                                            displayExpr="name"
-                                            layout="horizontal">
-                            </dx-radio-group>
-                        </div>
-                    </div>
-                    <div class="field mt-2">
-                        <div class="field-label align-self-start">
-                            Note
-                        </div>
-                        <div class="field-value">
-                            <dx-text-area [(value)]="book.note"
-                                height="70">
-                            </dx-text-area>
-                        </div>
-                    </div>
-                    <div class="row my-2">
-                        <div class="col-md-3">
-                            <dx-check-box [(value)]="isSelectedDeposit"></dx-check-box> Select room to deposit
-                        </div>
-                        <div class="col-md-3">
-                            <dx-select-box [dataSource]="roomCheckinSource"
-                                           valueExpr="id"
-                                           displayExpr="name"
-                                           placeholder="Room.."
-                                           [(value)]="book.depositRoom"
-                                           [disabled]="!isSelectedDeposit">
-                            </dx-select-box>
-                        </div>
-                    </div>
-                </ng-container>
+<!--                <ng-container *ngIf="currentTab.value === Service">-->
+<!--                    <app-services [services]="book.services"-->
+<!--                                  (onChangeService)="onChangeService()">-->
+<!--                    </app-services>-->
+<!--                </ng-container>-->
 
 
-                <ng-template #popupFooter>
-                    <div class="d-flex justify-content-between">
-                        <div class="d-flex">
-                            <dx-button
-                                type="normal"
-                                class="mr-auto"
-                                [text]="'Cancel'"
-                                (onClick)="onHandleCancel()">
-                            </dx-button>
-                            <dx-button *ngIf="isShowBookCheckin()"
-                                       type="danger"
-                                       class="ml-3 mr-auto"
-                                       [text]="'Remove'"
-                                       (onClick)="onConfirmRemoveCheckinList($event)">
-                            </dx-button>
-                        </div>
+<!--                <div class="row mt-3" *ngIf="!isShowBookEdit()">-->
+<!--                    <div class="font-weight-bold col-md-4">-->
+<!--                        Payment rooms: {{paymentRooms | CurrencyDisplay}}-->
+<!--                    </div>-->
+<!--                    <div class="font-weight-bold col-md-4">-->
+<!--                        Payment services: {{paymentServices | CurrencyDisplay}}-->
+<!--                    </div>-->
+<!--                    <div class="font-weight-bold text-danger col-md-4">-->
+<!--                        Total payment:  {{paymentRooms + paymentServices | CurrencyDisplay}}-->
+<!--                    </div>-->
+<!--                </div>-->
 
-                        <dx-button *ngIf="isShowBookEdit()"
-                            class="ml-auto"
-                            type="default"
-                            [disabled]="!isFormDirty"
-                            [text]="'Save'"
-                            (onClick)="onHandleSaveBookEditing()">
-                        </dx-button>
-
-                        <div class="action-group" *ngIf="isShowBookAvailable() || isShowBookingNow()">
-                            <dx-drop-down-button
-                                [splitButton]="true"
-                                [useSelectMode]="false"
-                                [disabled]="!isFormDirty"
-                                stylingMode="outlined"
-                                text="Booking"
-                                [items]="[
-									{text: 'Checking', value: saveAction.Checkin}
-								]"
-                                displayExpr="text"
-                                keyExpr="value"
-                                (onButtonClick)="onHandleSaving(saveAction.Booking)"
-                                (onItemClick)="onHandleSaving(saveAction.Checkin)">
-                            </dx-drop-down-button>
-                        </div>
-
-                        <dx-button *ngIf="isShowBookCheckinNow() || isShowBookCheckin()"
-                                   class="ml-auto"
-                                   type="default"
-                                   [text]="'Checkin'"
-                                   (onClick)="onHandleSaving(saveAction.Checkin)">
-                        </dx-button>
-
-                        <dx-button *ngIf="isShowBookCheckout() || isShowCheckoutNow()"
-                            class="ml-auto"
-                            type="default"
-                            [text]="'Checkout'"
-                            (onClick)="onHandleCheckout()">
-                        </dx-button>
-                    </div>
-                </ng-template>
-            </div>
-        </dx-validation-group>
-    </app-popup-container>
-</ng-container>
-
-<app-popover-confirm-box #deleteDetailConfirmPopover
-    [message]="'Are you want to remove it out of list'"
-    (onConfirm)="deleteRoom()">
-</app-popover-confirm-box>
+<!--                <ng-container *ngIf="isShowBookCheckout() || isShowCheckoutNow()">-->
+<!--                    <div class="dx-field w-50 mt-2">-->
+<!--                        <div class="dx-field-label font-weight-bold">Payment method</div>-->
+<!--                        <div class="dx-field-value">-->
+<!--                            <dx-radio-group [dataSource]="paymentMethods"-->
+<!--                                            [(value)]="book.paymentMethod"-->
+<!--                                            valueExpr="value"-->
+<!--                                            displayExpr="name"-->
+<!--                                            layout="horizontal">-->
+<!--                            </dx-radio-group>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="field mt-2">-->
+<!--                        <div class="field-label align-self-start">-->
+<!--                            Note-->
+<!--                        </div>-->
+<!--                        <div class="field-value">-->
+<!--                            <dx-text-area [(value)]="book.note"-->
+<!--                                height="70">-->
+<!--                            </dx-text-area>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="row my-2">-->
+<!--                        <div class="col-md-3">-->
+<!--                            <dx-check-box [(value)]="isSelectedDeposit"></dx-check-box> Select room to deposit-->
+<!--                        </div>-->
+<!--                        <div class="col-md-3">-->
+<!--                            <dx-select-box [dataSource]="roomCheckinSource"-->
+<!--                                           valueExpr="id"-->
+<!--                                           displayExpr="name"-->
+<!--                                           placeholder="Room.."-->
+<!--                                           [(value)]="book.depositRoom"-->
+<!--                                           [disabled]="!isSelectedDeposit">-->
+<!--                            </dx-select-box>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </ng-container>-->
 
 
-<app-popover-confirm-box #removeCheckinDetailConfirmPopover
-    [message]="'Are you want to remove list room checkin'"
-    (onConfirm)="onHandleRemoveCheckin()">
-</app-popover-confirm-box>
+<!--                <ng-template #popupFooter>-->
+<!--                    <div class="d-flex justify-content-between">-->
+<!--                        <div class="d-flex">-->
+<!--                            <dx-button-->
+<!--                                type="normal"-->
+<!--                                class="mr-auto"-->
+<!--                                [text]="'Cancel'"-->
+<!--                                (onClick)="onHandleCancel()">-->
+<!--                            </dx-button>-->
+<!--                            <dx-button *ngIf="isShowBookCheckin()"-->
+<!--                                       type="danger"-->
+<!--                                       class="ml-3 mr-auto"-->
+<!--                                       [text]="'Remove'"-->
+<!--                                       (onClick)="onConfirmRemoveCheckinList($event)">-->
+<!--                            </dx-button>-->
+<!--                        </div>-->
 
-<ng-container *ngIf="isShowManageServices">
-    <app-popup-container title="Services Manage"
-                         [width]="500"
-                         [(visible)]="isShowManageServices"
-                         [height]="'auto'">
-        <div class="d-flex flex-row-reverse mb-2">
-            <dx-button type="default" icon="plus" class="btn-add-row"
-                       [stylingMode]="'outlined'"
-                       [text]="'Add Row'"
-                       (onClick)="onNewRow()">
-            </dx-button>
-        </div>
-        <dx-data-grid #dxDataGridManageServices
-                      [dataSource]="services"
-                      [height]="300"
-                      [showColumnLines]="true"
-                      [showRowLines]="true"
-                      [hoverStateEnabled]="true"
-                      [columnAutoWidth]="true"
-                      [showBorders]="true"
-                      (onRowInserting)="onDxGridRowInserting($event)"
-                      (onRowUpdating)="onDxGridRowUpdating($event)">
-            <dxo-editing mode="row"
-                         [allowUpdating]="true"
-                         [allowDeleting]="true">
-                <dxo-texts [confirmDeleteMessage]="null"></dxo-texts>
-            </dxo-editing>
+<!--                        <dx-button *ngIf="isShowBookEdit()"-->
+<!--                            class="ml-auto"-->
+<!--                            type="default"-->
+<!--                            [disabled]="!isFormDirty"-->
+<!--                            [text]="'Save'"-->
+<!--                            (onClick)="onHandleSaveBookEditing()">-->
+<!--                        </dx-button>-->
 
-            <dxi-column caption="#" alignment="center"
-                        [formItem]="{visible: false}"
-                        [width]="40"
-                        [fixed]="true"
-                        cellTemplate="indexCellTemplate">
-                <div *dxTemplate="let cell of 'indexCellTemplate'">
-                    <ng-container>
-                        {{cell.rowIndex + 1}}
-                    </ng-container>
-                </div>
-            </dxi-column>
-            <dxi-column dataField="name"
-                        caption="Name"
-                        [minWidth]="200">
-                <dxi-validation-rule type="required"
-                                     message="This field is required">
-                </dxi-validation-rule>
-                <dxi-validation-rule type="custom" [validationCallback]="duplicationName"
-                                     message="Name must be different">
-                </dxi-validation-rule>
-            </dxi-column>
+<!--                        <div class="action-group" *ngIf="isShowBookAvailable() || isShowBookingNow()">-->
+<!--                            <dx-drop-down-button-->
+<!--                                [splitButton]="true"-->
+<!--                                [useSelectMode]="false"-->
+<!--                                [disabled]="!isFormDirty"-->
+<!--                                stylingMode="outlined"-->
+<!--                                text="Booking"-->
+<!--                                [items]="[-->
+<!--									{text: 'Checking', value: saveAction.Checkin}-->
+<!--								]"-->
+<!--                                displayExpr="text"-->
+<!--                                keyExpr="value"-->
+<!--                                (onButtonClick)="onHandleSaving(saveAction.Booking)"-->
+<!--                                (onItemClick)="onHandleSaving(saveAction.Checkin)">-->
+<!--                            </dx-drop-down-button>-->
+<!--                        </div>-->
 
-            <dxi-column dataField="price"
-                        caption="Price"
-                        [minWidth]="110">
-                <dxi-validation-rule type="required"
-                                     message="This field is required">
-                </dxi-validation-rule>
-            </dxi-column>
+<!--                        <dx-button *ngIf="isShowBookCheckinNow() || isShowBookCheckin()"-->
+<!--                                   class="ml-auto"-->
+<!--                                   type="default"-->
+<!--                                   [text]="'Checkin'"-->
+<!--                                   (onClick)="onHandleSaving(saveAction.Checkin)">-->
+<!--                        </dx-button>-->
 
-            <dxi-column type="buttons" alignment="center">
-                <dxi-button name="save"
-                            [text]="''"
-                            hint="Save"
-                            [onClick]="onUpdateServiceRow"
-                            icon="save">
-                </dxi-button>
-                <dxi-button name="cancel"
-                            [text]="''"
-                            hint="Cancel"
-                            [visible]="isRevertButtonVisible"
-                            icon="revert"
-                            [onClick]="onRevertDxGridRow">
-                </dxi-button>
-                <dxi-button name="edit"
-                            icon="fas fa-pencil-alt edit-icon"
-                            [onClick]="onEditServiceRow"
-                            [text]="''"
-                            hint="Edit">
-                </dxi-button>
-                <dxi-button name="delete"
-                            [cssClass]="'far fa-trash-alt delete-icon'"
-                            [text]="''"
-                            [onClick]="onDelete"
-                            hint="Delete">
-                </dxi-button>
-            </dxi-column>
+<!--                        <dx-button *ngIf="isShowBookCheckout() || isShowCheckoutNow()"-->
+<!--                            class="ml-auto"-->
+<!--                            type="default"-->
+<!--                            [text]="'Checkout'"-->
+<!--                            (onClick)="onHandleCheckout()">-->
+<!--                        </dx-button>-->
+<!--                    </div>-->
+<!--                </ng-template>-->
+<!--            </div>-->
+<!--        </dx-validation-group>-->
+<!--    </app-popup-container>-->
+<!--</ng-container>-->
 
-        </dx-data-grid>
+<!--<app-popover-confirm-box #deleteDetailConfirmPopover-->
+<!--    [message]="'Are you want to remove it out of list'"-->
+<!--    (onConfirm)="deleteRoom()">-->
+<!--</app-popover-confirm-box>-->
 
-        <app-popover-confirm-box #confirmDeleteServiceDetailPopover
-                                 [message]="'Are you sure delete this service'"
-                                 (onConfirm)="onConfirmDeleteService()">
-        </app-popover-confirm-box>
-    </app-popup-container>
-</ng-container>
+
+<!--<app-popover-confirm-box #removeCheckinDetailConfirmPopover-->
+<!--    [message]="'Are you want to remove list room checkin'"-->
+<!--    (onConfirm)="onHandleRemoveCheckin()">-->
+<!--</app-popover-confirm-box>-->
+
+<!--<ng-container *ngIf="isShowManageServices">-->
+<!--    <app-popup-container title="Services Manage"-->
+<!--                         [width]="500"-->
+<!--                         [(visible)]="isShowManageServices"-->
+<!--                         [height]="'auto'">-->
+<!--        <div class="d-flex flex-row-reverse mb-2">-->
+<!--            <dx-button type="default" icon="plus" class="btn-add-row"-->
+<!--                       [stylingMode]="'outlined'"-->
+<!--                       [text]="'Add Row'"-->
+<!--                       (onClick)="onNewRow()">-->
+<!--            </dx-button>-->
+<!--        </div>-->
+<!--        <dx-data-grid #dxDataGridManageServices-->
+<!--                      [dataSource]="services"-->
+<!--                      [height]="300"-->
+<!--                      [showColumnLines]="true"-->
+<!--                      [showRowLines]="true"-->
+<!--                      [hoverStateEnabled]="true"-->
+<!--                      [columnAutoWidth]="true"-->
+<!--                      [showBorders]="true"-->
+<!--                      (onRowInserting)="onDxGridRowInserting($event)"-->
+<!--                      (onRowUpdating)="onDxGridRowUpdating($event)">-->
+<!--            <dxo-editing mode="row"-->
+<!--                         [allowUpdating]="true"-->
+<!--                         [allowDeleting]="true">-->
+<!--                <dxo-texts [confirmDeleteMessage]="null"></dxo-texts>-->
+<!--            </dxo-editing>-->
+
+<!--            <dxi-column caption="#" alignment="center"-->
+<!--                        [formItem]="{visible: false}"-->
+<!--                        [width]="40"-->
+<!--                        [fixed]="true"-->
+<!--                        cellTemplate="indexCellTemplate">-->
+<!--                <div *dxTemplate="let cell of 'indexCellTemplate'">-->
+<!--                    <ng-container>-->
+<!--                        {{cell.rowIndex + 1}}-->
+<!--                    </ng-container>-->
+<!--                </div>-->
+<!--            </dxi-column>-->
+<!--            <dxi-column dataField="name"-->
+<!--                        caption="Name"-->
+<!--                        [minWidth]="200">-->
+<!--                <dxi-validation-rule type="required"-->
+<!--                                     message="This field is required">-->
+<!--                </dxi-validation-rule>-->
+<!--                <dxi-validation-rule type="custom" [validationCallback]="duplicationName"-->
+<!--                                     message="Name must be different">-->
+<!--                </dxi-validation-rule>-->
+<!--            </dxi-column>-->
+
+<!--            <dxi-column dataField="price"-->
+<!--                        caption="Price"-->
+<!--                        [minWidth]="110">-->
+<!--                <dxi-validation-rule type="required"-->
+<!--                                     message="This field is required">-->
+<!--                </dxi-validation-rule>-->
+<!--            </dxi-column>-->
+
+<!--            <dxi-column type="buttons" alignment="center">-->
+<!--                <dxi-button name="save"-->
+<!--                            [text]="''"-->
+<!--                            hint="Save"-->
+<!--                            [onClick]="onUpdateServiceRow"-->
+<!--                            icon="save">-->
+<!--                </dxi-button>-->
+<!--                <dxi-button name="cancel"-->
+<!--                            [text]="''"-->
+<!--                            hint="Cancel"-->
+<!--                            [visible]="isRevertButtonVisible"-->
+<!--                            icon="revert"-->
+<!--                            [onClick]="onRevertDxGridRow">-->
+<!--                </dxi-button>-->
+<!--                <dxi-button name="edit"-->
+<!--                            icon="fas fa-pencil-alt edit-icon"-->
+<!--                            [onClick]="onEditServiceRow"-->
+<!--                            [text]="''"-->
+<!--                            hint="Edit">-->
+<!--                </dxi-button>-->
+<!--                <dxi-button name="delete"-->
+<!--                            [cssClass]="'far fa-trash-alt delete-icon'"-->
+<!--                            [text]="''"-->
+<!--                            [onClick]="onDelete"-->
+<!--                            hint="Delete">-->
+<!--                </dxi-button>-->
+<!--            </dxi-column>-->
+
+<!--        </dx-data-grid>-->
+
+<!--        <app-popover-confirm-box #confirmDeleteServiceDetailPopover-->
+<!--                                 [message]="'Are you sure delete this service'"-->
+<!--                                 (onConfirm)="onConfirmDeleteService()">-->
+<!--        </app-popover-confirm-box>-->
+<!--    </app-popup-container>-->
+<!--</ng-container>-->

@@ -29,7 +29,7 @@ import {
 import {AutoFocusInputDirective} from './directives';
 import { AppState } from '@app/modules/admin/store';
 import { NgxsModule } from '@ngxs/store';
-import {DateTimeDisplay, CurrencyDisplay} from './pipes';
+import {DateTimeDisplay, CurrencyDisplay, LookupDisplay} from './pipes';
 
 //
 const DEVEXTREME_MODULES = [
@@ -74,7 +74,8 @@ const DIRECTIVES = [
 //
 const PIPES = [
     DateTimeDisplay,
-    CurrencyDisplay
+    CurrencyDisplay,
+    LookupDisplay
 ];
 
 

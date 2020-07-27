@@ -27,7 +27,23 @@ export class RoomModel {
 
     // only UI
     isUpdated: boolean;
+
+    public constructor(init?: Partial<RoomModel>) {
+        Object.assign(this, init);
+    }
 }
+
+export class QuerySearchingModel {
+    roomType: number;
+    fromDate: Date;
+    toDate: Date;
+
+    public constructor(init?: Partial<QuerySearchingModel>) {
+        Object.assign(this, init);
+    }
+}
+
+
 
 export class CustomerModel {
     id: number;
@@ -83,10 +99,12 @@ export class BaseService {
 
 export class BookedModel {
     id: number;
+    code: string;
+    bookType: number; // just need booking and checkin
+    status: number;
     name: string;
     checkinDate: Date;
     checkoutDate: Date;
-    bookType: number; // just need booking and checkin
     rooms: RoomModel[] = [];
     customers: CustomerModel[] = [];
     services: ServiceModel[] = [];
@@ -121,9 +139,9 @@ export class RevenueModel {
 }
 
 export class FilterBookModel implements ISearchDataInterface {
-    codeBook: string;
-    nameRoom: string;
     keyword: string;
+    fromDate: Date;
+    toDate: Date;
 
     public constructor(init?: Partial<FilterBookModel>) {
         Object.assign(this, init);

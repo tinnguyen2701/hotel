@@ -1,146 +1,276 @@
-<div class="full-container-wrapper">
-    <div class="d-flex justify-content-between align-items-center mb-3 mt-3">
-        <div class="row">
-            <div class="field col-md-6">
-                <div class="field-label">
-                    Booked
-                </div>
-                <div class="field-value">
-                    <dx-text-box [(value)]="codeBook"
-                                 (onValueChanged)="onSearchBooking()"
-                                 [showClearButton]="true">
-                    </dx-text-box>
-                </div>
+<!--<div class="full-container-wrapper">-->
+<!--    <div class="d-flex justify-content-between align-items-center mb-3 mt-3">-->
+<!--        <div class="row">-->
+<!--            <div class="field col-md-6">-->
+<!--                <div class="field-label">-->
+<!--                    Booked-->
+<!--                </div>-->
+<!--                <div class="field-value">-->
+<!--                    <dx-text-box [(value)]="codeBook"-->
+<!--                                 (onValueChanged)="onSearchBooking()"-->
+<!--                                 [showClearButton]="true">-->
+<!--                    </dx-text-box>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="field col-md-6">-->
+<!--                <div class="field-label">-->
+<!--                    Room name-->
+<!--                </div>-->
+<!--                <div class="field-value">-->
+<!--                    <dx-text-box [(value)]="nameRoom"-->
+<!--                                 (onValueChanged)="onSearchBooking()"-->
+<!--                                 [showClearButton]="true">-->
+<!--                    </dx-text-box>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+
+<!--    <div class="grid-wrapper auto-fill-content">-->
+<!--        <dx-data-grid #dxDataGrid class="h-100"-->
+<!--                      [dataSource]="dataSource"-->
+<!--                      [columnHidingEnabled]="false"-->
+<!--                      [showBorders]="true"-->
+<!--                      [showRowLines]="true"-->
+<!--                      [hoverStateEnabled]="true">-->
+<!--            <dxo-paging [pageSize]="20"></dxo-paging>-->
+<!--            <dxo-pager [showInfo]="true"-->
+<!--                       [showPageSizeSelector]="false"-->
+<!--                       [allowedPageSizes]="[20, 50, 100]"-->
+<!--                       [showNavigationButtons]="true">-->
+<!--            </dxo-pager>-->
+
+<!--            <dxo-remote-operations [filtering]="true"-->
+<!--                                   [sorting]="true"-->
+<!--                                   [paging]="true">-->
+<!--            </dxo-remote-operations>-->
+
+<!--            <dxi-column [minWidth]="100"-->
+<!--                        [caption]="'code'"-->
+<!--                        alignment="center"-->
+<!--                        dataField="code">-->
+<!--            </dxi-column>-->
+
+<!--            <dxi-column [minWidth]="100"-->
+<!--                        [caption]="'Room name'"-->
+<!--                        [allowFiltering]="true"-->
+<!--                        alignment="center"-->
+<!--                        dataField="roomName">-->
+<!--            </dxi-column>-->
+
+<!--            <dxi-column [minWidth]="100"-->
+<!--                        [caption]="'Contact name'"-->
+<!--                        alignment="center"-->
+<!--                        dataField="contactName">-->
+<!--            </dxi-column>-->
+
+<!--            <dxi-column [minWidth]="170"-->
+<!--                        [caption]="'Checkin date'"-->
+<!--                        alignment="center"-->
+<!--                        dataField="checkinDate"-->
+<!--                        dataType="date"-->
+<!--                        format="dd/MM/yyyy">-->
+<!--            </dxi-column>-->
+
+<!--            <dxi-column [minWidth]="170"-->
+<!--                        [caption]="'Checkout date'"-->
+<!--                        alignment="center"-->
+<!--                        dataField="checkoutDate"-->
+<!--                        dataType="date"-->
+<!--                        format="dd/MM/yyyy">-->
+<!--            </dxi-column>-->
+
+<!--            <dxi-column [minWidth]="150"-->
+<!--                        [caption]="'Room type'"-->
+<!--                        alignment="center"-->
+<!--                        dataField="roomType"-->
+<!--                        [filterOperations]="['=']">-->
+<!--                <dxo-lookup [dataSource]="roomType"-->
+<!--                            displayExpr="name"-->
+<!--                            valueExpr="value">-->
+<!--                </dxo-lookup>-->
+<!--            </dxi-column>-->
+
+<!--            <dxi-column [minWidth]="120"-->
+<!--                        [caption]="'Prepay'"-->
+<!--                        alignment="center"-->
+<!--                        dataField="prepay">-->
+<!--            </dxi-column>-->
+
+<!--            <dxi-column [minWidth]="150"-->
+<!--                        [caption]="'Note'"-->
+<!--                        alignment="center"-->
+<!--                        dataField="note">-->
+<!--            </dxi-column>-->
+
+<!--            <dxi-column [minWidth]="170"-->
+<!--                        [caption]="'Created date'"-->
+<!--                        alignment="center"-->
+<!--                        dataField="createdDate"-->
+<!--                        dataType="date"-->
+<!--                        format="dd/MM/yyyy">-->
+<!--            </dxi-column>-->
+
+<!--            <dxi-column [minWidth]="120"-->
+<!--                        [caption]="'Author'"-->
+<!--                        alignment="center"-->
+<!--                        dataField="author">-->
+<!--            </dxi-column>-->
+
+<!--            <dxi-column [minWidth]="100"-->
+<!--                        [fixed]="true"-->
+<!--                        alignment="center"-->
+<!--                        cellTemplate="actionsCellTemplate"-->
+<!--                        fixedPosition="right"-->
+<!--                        [caption]="'Action'">-->
+<!--                <div *dxTemplate="let cell of 'actionsCellTemplate'">-->
+<!--                    <div class="action-inline">-->
+<!--                        <i class="fas fa-pencil-alt edit-icon pointer"-->
+<!--                           title="'Edit'"-->
+<!--                           (click)="onBookingDetail(cell.data)">-->
+<!--                        </i>-->
+<!--                        <i class="far fa-trash-alt delete-icon ml-2 pointer"-->
+<!--                           title="'Delete'"-->
+<!--                           (click)="onDeleteBooking(cell.data.id, $event)">-->
+<!--                        </i>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </dxi-column>-->
+<!--        </dx-data-grid>-->
+<!--    </div>-->
+<!--</div>-->
+
+<!--<app-popover-confirm-box #deleteDetailConfirmPopover-->
+<!--                         [message]="'Are you sure to delete?'"-->
+<!--                         (onConfirm)="deleteBooking()">-->
+<!--</app-popover-confirm-box>-->
+<div class="wrapper">
+    <div class="d-flex align-items-center pt-2 pb-3">
+        <div class="field pl-0">
+            <div class="field-label">Searching</div>
+            <div class="field-value">
+                <dx-text-box [(value)]="filterBooking.keyword"
+                             [width]="200"
+                             (onValueChanged)="onChangedKeySearch()"
+                             displayExpr="name"
+                             valueExpr="value">
+                </dx-text-box>
             </div>
-            <div class="field col-md-6">
-                <div class="field-label">
-                    Room name
-                </div>
-                <div class="field-value">
-                    <dx-text-box [(value)]="nameRoom"
-                                 (onValueChanged)="onSearchBooking()"
-                                 [showClearButton]="true">
-                    </dx-text-box>
-                </div>
+        </div>
+        <div class="field ml-3">
+            <div class="field-label">From date</div>
+            <div class="field-value">
+                <dx-date-box [(value)]="filterBooking.fromDate"
+                             [max]="filterBooking.toDate"
+                             [useMaskBehavior]="true"
+                             [width]="200"
+                             displayFormat="dd/MM/yyyy"
+                             showClearButton="true"
+                             type="date"
+                             (onValueChanged)="onChangedKeySearch()">
+                </dx-date-box>
+            </div>
+        </div>
+        <div class="field ml-3">
+            <div class="field-label">To date</div>
+            <div class="field-value">
+                <dx-date-box [(value)]="filterBooking.toDate"
+                             [min]="filterBooking.fromDate"
+                             [width]="200"
+                             [useMaskBehavior]="true"
+                             displayFormat="dd/MM/yyyy"
+                             showClearButton="true"
+                             type="date"
+                             (onValueChanged)="onChangedKeySearch()">
+                </dx-date-box>
             </div>
         </div>
     </div>
+    <dx-data-grid #paymentGrid
+                  [dataSource]="bookingSource"
+                  [columnHidingEnabled]="false"
+                  [showRowLines]="true"
+                  [showBorders]="true"
+                  [showColumnLines]="true"
+                  [hoverStateEnabled]="true"
+                  [columnAutoWidth]="true"
+                  [allowColumnResizing]="true"
+                  [allowColumnReordering]="false"
+                  (onCellPrepared)="onGridCellPrepared($event)"
+                  [masterDetail]="{enabled: true , template: 'rooms' }">
+        <dxo-filter-row [visible]="true" [showOperationChooser]="true"></dxo-filter-row>
+        <dxo-load-panel [showPane]="false"></dxo-load-panel>
+        <dxo-remote-operations [paging]="true"></dxo-remote-operations>
+        <dxo-scrolling mode="infinite"></dxo-scrolling>
 
-    <div class="grid-wrapper auto-fill-content">
-        <dx-data-grid #dxDataGrid class="h-100"
-                      [dataSource]="dataSource"
-                      [columnHidingEnabled]="false"
-                      [showBorders]="true"
-                      [showRowLines]="true"
-                      [hoverStateEnabled]="true">
-            <dxo-paging [pageSize]="20"></dxo-paging>
-            <dxo-pager [showInfo]="true"
-                       [showPageSizeSelector]="false"
-                       [allowedPageSizes]="[20, 50, 100]"
-                       [showNavigationButtons]="true">
-            </dxo-pager>
+        <dxi-column caption="Code"
+                    dataField="code"
+                    alignment="left"
+                    [width]="100">
+        </dxi-column>
+        <dxi-column caption="Name"
+                    dataField="name"
+                    alignment="left"
+                    [width]="150">
+        </dxi-column>
+        <dxi-column caption="Checkin Date"
+                    dataField="checkinDate"
+                    dataType="Date"
+                    format="dd/MM/yyyy"
+                    alignment="center"
+                    [width]="200">
+        </dxi-column>
+        <dxi-column caption="Checkout Date"
+                    dataField="checkoutDate"
+                    dataType="Date"
+                    format="dd/MM/yyyy"
+                    alignment="center"
+                    [width]="200">
+        </dxi-column>
+        <dxi-column caption="Prepay"
+                    dataField="prepay"
+                    dataType="number"
+                    alignment="center"
+                    [width]="200">
+        </dxi-column>
+        <dxi-column caption="Note"
+                    dataField="note"
+                    [width]="400"
+                    alignment="center">
+        </dxi-column>
 
-            <dxo-remote-operations [filtering]="true"
-                                   [sorting]="true"
-                                   [paging]="true">
-            </dxo-remote-operations>
-
-            <dxi-column [minWidth]="100"
-                        [caption]="'code'"
-                        alignment="center"
-                        dataField="code">
-            </dxi-column>
-
-            <dxi-column [minWidth]="100"
-                        [caption]="'Room name'"
-                        [allowFiltering]="true"
-                        alignment="center"
-                        dataField="roomName">
-            </dxi-column>
-
-            <dxi-column [minWidth]="100"
-                        [caption]="'Contact name'"
-                        alignment="center"
-                        dataField="contactName">
-            </dxi-column>
-
-            <dxi-column [minWidth]="170"
-                        [caption]="'Checkin date'"
-                        alignment="center"
-                        dataField="checkinDate"
-                        dataType="date"
-                        format="dd/MM/yyyy">
-            </dxi-column>
-
-            <dxi-column [minWidth]="170"
-                        [caption]="'Checkout date'"
-                        alignment="center"
-                        dataField="checkoutDate"
-                        dataType="date"
-                        format="dd/MM/yyyy">
-            </dxi-column>
-
-            <dxi-column [minWidth]="150"
-                        [caption]="'Room type'"
-                        alignment="center"
-                        dataField="roomType"
-                        [filterOperations]="['=']">
-                <dxo-lookup [dataSource]="roomType"
-                            displayExpr="name"
-                            valueExpr="value">
-                </dxo-lookup>
-            </dxi-column>
-
-            <dxi-column [minWidth]="120"
-                        [caption]="'Prepay'"
-                        alignment="center"
-                        dataField="prepay">
-            </dxi-column>
-
-            <dxi-column [minWidth]="150"
-                        [caption]="'Note'"
-                        alignment="center"
-                        dataField="note">
-            </dxi-column>
-
-            <dxi-column [minWidth]="170"
-                        [caption]="'Created date'"
-                        alignment="center"
-                        dataField="createdDate"
-                        dataType="date"
-                        format="dd/MM/yyyy">
-            </dxi-column>
-
-            <dxi-column [minWidth]="120"
-                        [caption]="'Author'"
-                        alignment="center"
-                        dataField="author">
-            </dxi-column>
-
-            <dxi-column [minWidth]="100"
-                        [fixed]="true"
-                        alignment="center"
-                        cellTemplate="actionsCellTemplate"
-                        fixedPosition="right"
-                        [caption]="'Action'">
-                <div *dxTemplate="let cell of 'actionsCellTemplate'">
-                    <div class="action-inline">
-                        <i class="fas fa-pencil-alt edit-icon pointer"
-                           title="'Edit'"
-                           (click)="onBookingDetail(cell.data)">
-                        </i>
-                        <i class="far fa-trash-alt delete-icon ml-2 pointer"
-                           title="'Delete'"
-                           (click)="onDeleteBooking(cell.data.id, $event)">
-                        </i>
-                    </div>
+        <dxi-column alignment="center"
+                    cellTemplate="actionsCellTemplate">
+            <div *dxTemplate="let cell of 'actionsCellTemplate'">
+                <div class="action-inline d-flex justify-content-center">
+                    <ng-container>
+                        <i class="fas fa-eye mr-3" title="View"></i>
+                        <i title="Delete" class="far fa-trash-alt delete-icon mr-3"></i>
+                    </ng-container>
                 </div>
-            </dxi-column>
-        </dx-data-grid>
-    </div>
-</div>
+            </div>
+        </dxi-column>
 
-<app-popover-confirm-box #deleteDetailConfirmPopover
-                         [message]="'Are you sure to delete?'"
-                         (onConfirm)="deleteBooking()">
-</app-popover-confirm-box>
+        <div *dxTemplate="let item of 'rooms'">
+            <dx-data-grid [dataSource]="item.data.rooms"
+                          [showBorders]="true"
+                          [columnAutoWidth]="true"
+                          height="auto">
+                <dxi-column caption="Room No"
+                            dataField="name"
+                            alignment="left"
+                            [width]="100">
+                </dxi-column>
+                <dxi-column caption="Type"
+                            dataField="type"
+                            alignment="center"
+                            cellTemplate="cellTypeRoomTemplate"
+                            [width]="200">
+                    <div *dxTemplate="let cell of 'cellTypeRoomTemplate'">
+                        {{cell.value | LookupDisplay : roomType}}
+                    </div>
+                </dxi-column>
+            </dx-data-grid>
+        </div>
+    </dx-data-grid>
+</div>

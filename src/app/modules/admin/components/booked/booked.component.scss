@@ -1,0 +1,9 @@
+@import "src/styles/scss/variables";
+
+.wrapper {
+    padding: 15px 5px;
+
+    ::ng-deep dx-data-grid {
+        height: calc(100vh - 180px);
+    }
+}

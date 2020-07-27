@@ -39,13 +39,13 @@ export class AdminComponent implements OnInit {
     }
 
     loadFloor() {
-        this.bookingService.getFloors().subscribe(
-            (result) => {
-                this.store.dispatch(new SetFloor(result));
-            },
-            (err) => {
-            }
-        );
+        // this.bookingService.getFloors().subscribe(
+        //     (result) => {
+        //         this.store.dispatch(new SetFloor(result));
+        //     },
+        //     (err) => {
+        //     }
+        // );
     }
 
     isShowListRoomAvailable() {

@@ -4,10 +4,21 @@ export enum RoomStatus {
     Booking = 3,
 }
 
+export enum BookedStatus {
+    Booking = 1,
+    Checkin = 2,
+    Checkout = 3
+}
+
 export enum RoomType {
     All,
     Single,
     Double,
+}
+
+export enum BookType {
+    Personal = 1,
+    Group = 2,
 }
 
 export enum ActionType {
