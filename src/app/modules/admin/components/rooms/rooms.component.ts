@@ -78,6 +78,12 @@ export class RoomsComponent implements OnInit {
         this.isShowBooking = !this.isShowBooking;
     }
 
+    onSaveBooking() {
+        setTimeout(() => {
+            this.loadFloor();
+        }, 200);
+    }
+
     // onClickItem(item) {
     //     this.bookingService.getBookRoom(this.selectedRoom.id, item.value).subscribe(
     //         (booked-list) => {

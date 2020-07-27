@@ -1,7 +1,7 @@
 import {Observable, of} from 'rxjs';
 import {random} from 'lodash';
 //
-import {getRevenueModel, randomBooked, randomBookings, randomRoom, randomServices} from '@app/data/admin';
+import {getRevenueModel, randomBooked, randomBookings, randomRoom, randomRoomsBooked, randomServices} from '@app/data/admin';
 import {environment} from '@environment';
 import {
     RoomModel,
@@ -30,7 +30,7 @@ export class BookingService {
     }
 
     getBookings(param: LoadParamModel): Observable<LoadResultModel<BookedModel[]>> {
-        if (environment.production) {
+        if (environment.debug) {
             console.log('API: getBookings');
         }
         return of({
@@ -40,10 +40,17 @@ export class BookingService {
     }
 
     booking(booked: BookedModel): Observable<string> {
-        if (environment.production) {
-            console.log('API: getBookings');
+        if (environment.debug) {
+            console.log('API: booking');
         }
         return of(['A', 'B', 'C', 'D'][random(0, 3)] + random(10, 99));
+    }
+
+    findListAvailableRooms(numberOfSingleRooms: number, numberOfDoubleRooms: number): Observable<RoomModel[]> {
+        if (environment.debug) {
+            console.log('API: booking');
+        }
+        return of(randomRoomsBooked(numberOfSingleRooms + numberOfDoubleRooms));
     }
 
     // TODO will be remove all code above

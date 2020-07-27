@@ -92,7 +92,8 @@
 <ng-container *ngIf="isShowBooking">
     <app-admin-booking [(visible)]="isShowBooking"
                        [allRoomsAvailable]="allRoomsAvailable"
-                       [listRoomSelected]="listRoomsSelected">
+                       [listRoomSelected]="listRoomsSelected"
+    (onSaveBooking)="onSaveBooking()">
     </app-admin-booking>
 </ng-container>
 

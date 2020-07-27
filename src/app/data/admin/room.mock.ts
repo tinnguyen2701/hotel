@@ -59,6 +59,7 @@ export function randomRoomsBooked(count: number): RoomModel[] {
                 id: parseInt(floor + '0' + (index + 1).toString(), 10),
                 name: floor + '0' + (index + 1).toString(),
                 type: random(1, 2),
+                price: random(100, 1000) * 1000,
             });
         });
 }

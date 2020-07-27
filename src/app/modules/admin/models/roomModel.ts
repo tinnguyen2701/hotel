@@ -114,6 +114,7 @@ export class BookedModel {
     roomId: number;
     roomType: number;
     roomPrice: number;
+    peopleNumber: number;
 
     public constructor(init?: Partial<BookedModel>) {
         Object.assign(this, init);

@@ -1,0 +1,153 @@
+<dx-data-grid #dxDataGridRoom
+              height="200"
+              [dataSource]="rooms"
+              [showRowLines]="true"
+              [showBorders]="true"
+              [showColumnLines]="true"
+              [hoverStateEnabled]="true"
+              [columnAutoWidth]="false"
+              [allowColumnResizing]="true"
+              [allowColumnReordering]="false"
+              (onRowUpdated)="onRowRoomUpdated($event)">
+    <dxo-editing mode="row"
+                 [allowUpdating]="true"
+                 [allowDeleting]="true">
+        <dxo-texts [confirmDeleteMessage]="null">
+        </dxo-texts>
+    </dxo-editing>
+
+    <dxo-paging [enabled]="false"></dxo-paging>
+
+    <dxi-column caption="#" alignment="center"
+                [allowEditing]="false"
+                [allowSorting]="false"
+                [allowResizing]="false"
+                [fixed]="true" fixedPosition="left"
+                headerCellTemplate="indexHeaderCellTemplate"
+                cellTemplate="indexCellTemplate">
+        <div *dxTemplate="let row of 'indexHeaderCellTemplate'">
+            <dx-button type="default"
+                       icon="plus"
+                       class="btn-add-row-circle"
+                       hint="Add Rooms"
+                       [stylingMode]="'outlined'"
+                       (onClick)="onClickedAddAvailableRooms($event)">
+            </dx-button>
+        </div>
+        <div *dxTemplate="let cell of 'indexCellTemplate'">
+            <ng-container>
+				<span *ngIf="!cell.row.isNewRow">
+					{{cell.rowIndex + 1}}
+				</span>
+                <span *ngIf="cell.row.isNewRow"></span>
+            </ng-container>
+        </div>
+    </dxi-column>
+
+    <dxi-column dataField="name"
+                caption="Name"
+                [allowEditing]="false"
+                [width]="100"
+                alignment="right">
+    </dxi-column>
+
+    <dxi-column dataField="type"
+                caption="Type room"
+                [width]="120">
+        <dxo-lookup
+            [dataSource]="roomTypes"
+            valueExpr="value"
+            displayExpr="name">
+        </dxo-lookup>
+        <dxi-validation-rule
+            type="required"
+            [message]="'This field is required'">
+        </dxi-validation-rule>
+    </dxi-column>
+
+    <dxi-column dataField="price"
+                format="#0,###"
+                [editorOptions]="{format: '#0,###'}"
+                [minWidth]="130"
+                alignment="right"
+                dataType="number"
+                caption="Price">
+        <dxi-validation-rule type="required"
+                             [message]="'This field is required'">
+        </dxi-validation-rule>
+    </dxi-column>
+
+    <dxi-column dataField="note"
+                caption="Note"
+                [width]="200">
+    </dxi-column>
+
+    <dxi-column caption="Action"
+                type="buttons"
+                alignment="center"
+                [width]="80">
+        <dxi-button name="save"
+                    icon="save"
+                    [text]="''"
+                    [hint]="'Save'">
+        </dxi-button>
+        <dxi-button name="cancel"
+                    icon="revert"
+                    [text]="''"
+                    [hint]="'Cancel'"
+                    [onClick]="onRevertDxGridRow">
+        </dxi-button>
+        <dxi-button name="edit"
+                    icon="fas fa-pencil-alt edit-icon"
+                    [text]="''"
+                    [hint]="'Edit'"
+                    [onClick]="onUpdateRoom">
+        </dxi-button>
+        <dxi-button name="delete"
+                    [cssClass]="'far fa-trash-alt delete-icon'"
+                    [hint]="'Delete'"
+                    [text]="''"
+                    [onClick]="onDeleteRoom">
+        </dxi-button>
+    </dxi-column>
+</dx-data-grid>
+
+<dx-popover #popoverFindAvailableRooms
+            class="popover-title"
+            [width]="350"
+            [showCloseButton]="true"
+            [shading]="false">
+    <div>
+        <div class="dx-field">
+            <div class="dx-field-label">Single rooms</div>
+            <div class="dx-field-value">
+                <dx-number-box [(value)]="numberOfSingleRooms"
+                               [showClearButton]="true"
+                               min="0">
+                </dx-number-box>
+            </div>
+        </div>
+        <div class="dx-field mt-3">
+            <div class="dx-field-label">Double rooms</div>
+            <div class="dx-field-value">
+                <dx-number-box [(value)]="numberOfDoubleRooms"
+                               [showClearButton]="true"
+                               min="0">
+                </dx-number-box>
+            </div>
+        </div>
+
+        <div class="text-right mt-3">
+            <dx-button text="Find"
+                       type="default"
+                       (onClick)="onFindRooms()">
+            </dx-button>
+        </div>
+    </div>
+</dx-popover>
+
+<app-popover-confirm-box #deleteDetailConfirmPopover
+                         [message]="'Are you want to remove it out of list'"
+                         (onConfirm)="deleteRoom()">
+</app-popover-confirm-box>
+

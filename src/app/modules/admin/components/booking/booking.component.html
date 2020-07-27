@@ -1,18 +1,21 @@
 <app-popup-container title="Booking"
-                     [width]="700"
-                     [height]="500"
+                     [width]="750"
+                     [height]="650"
                      [(visible)]="visible"
                      [footerTemplate]="popupFooter">
 
     <div class="d-flex align-items-center justify-content-end">
         <span>Group booking</span>
-        <dx-switch class="ml-2" [(value)]="isGroupBooking"></dx-switch>
+        <dx-switch class="ml-2"
+                   [(value)]="isGroupBooking"
+                   (onValueChanged)="onSwitchBookingChanged()">
+        </dx-switch>
     </div>
 
-    <ng-container *ngIf="!isGroupBooking">
+    <ng-container>
         <p>Information:</p>
         <div>
-            <div class="row">
+            <div class="row" *ngIf="!isGroupBooking">
                 <div class="field col-md-6">
                     <div class="field-label">Room<span class="text-danger"> *</span></div>
                     <div class="field-value">
@@ -27,10 +30,10 @@
                 </div>
 
                 <div class="field col-md-6" *ngIf="!isGroupBooking">
-                    <div class="field-label">Room type</div>
+                    <div class="field-label">Room Type</div>
                     <div class="field-value">
                         <dx-select-box
-                            [dataSource]="roomType"
+                            [dataSource]="roomTypes"
                             [(value)]="selectedBooking.roomType"
                             displayExpr="name"
                             valueExpr="value"
@@ -40,7 +43,25 @@
                 </div>
             </div>
 
-            <div class="row">
+            <div class="row" *ngIf="isGroupBooking">
+                <div class="field col-md-6">
+                    <div class="field-label">Group Name<span class="text-danger"> *</span></div>
+                    <div class="field-value">
+                        <dx-text-box [(value)]="selectedBooking.companyName">
+                        </dx-text-box>
+                    </div>
+                </div>
+
+                <div class="field col-md-6">
+                    <div class="field-label">People Number</div>
+                    <div class="field-value">
+                        <dx-number-box [(value)]="selectedBooking.peopleNumber">
+                        </dx-number-box>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-2">
                 <div class="field col-md-6">
                     <div class="field-label">Checkin Date<span class="text-danger"> *</span></div>
                     <div class="field-value">
@@ -65,35 +86,69 @@
                 </div>
             </div>
 
-            <div class="row">
+            <div class="row mt-2">
                 <div class="field col-md-3">
                     <div class="field-label">Prepay</div>
                     <div class="field-value">
-                        <dx-number-box [min]="0" [(value)]="selectedBooking.prepay">
+                        <dx-number-box [min]="0"
+                                       [(value)]="selectedBooking.prepay"
+                                       format="#0,###">
                         </dx-number-box>
                     </div>
                 </div>
                 <div class="field col-md-3">
                     <div class="field-label">Deduct</div>
                     <div class="field-value">
-                        <dx-number-box [min]="0" [(value)]="selectedBooking.deduct">
+                        <dx-number-box [min]="0"
+                                       [(value)]="selectedBooking.deduct"
+                                       format="#0,###">
                         </dx-number-box>
                     </div>
                 </div>
                 <div class="field col-md-3">
                     <div class="field-label">Price<span class="text-danger"> *</span></div>
                     <div class="field-value">
-                        <dx-number-box [min]="0" [(value)]="selectedBooking.roomPrice">
+                        <dx-number-box [min]="0"
+                                       [(value)]="selectedBooking.roomPrice"
+                                       format="#0,###">
                         </dx-number-box>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-2">
+                <div class="field col-md-12">
+                    <div class="field-label">Note</div>
+                    <div class="field-value">
+                        <dx-text-area [height]="50" [(value)]="selectedBooking.note">
+                        </dx-text-area>
                     </div>
                 </div>
             </div>
         </div>
     </ng-container>
 
-    <ng-container *ngIf="isGroupBooking">
-        <h1>h1</h1>
+    <app-tab [tabs]="menuTabs"
+             [displayExpr]="'text'"
+             [valueExpr]="'value'"
+             [selectedTab]="currentTab"
+             [showCloseIcon]="false"
+             (onSelectionChanged)="onChangedTab($event)">
+    </app-tab>
+
+    <ng-container *ngIf="currentTab.value === rooms">
+        <app-admin-tab-rooms [(rooms)]="selectedBooking.rooms"></app-admin-tab-rooms>
     </ng-container>
+
+<!--    <ng-container *ngIf="currentTab.value === customers">-->
+<!--        <app-tab-customers [(customers)]="book.customers"></app-tab-customers>-->
+<!--    </ng-container>-->
+
+<!--    <ng-container *ngIf="currentTab.value === services">-->
+<!--        <app-tab-services [services]="book.services"-->
+<!--                      (onChangeService)="onChangeService()">-->
+<!--        </app-tab-services>-->
+<!--    </ng-container>-->
 
     <ng-template #popupFooter>
         <div class="d-flex">

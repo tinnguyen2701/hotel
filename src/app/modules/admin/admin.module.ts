@@ -14,6 +14,9 @@ import { AppState } from './store';
 import { RevenueComponent } from './components/revenue/revenue.component';
 import { BookingComponent } from './components/booking/booking.component';
 import { CheckoutComponent } from './components/checkout/checkout.component';
+import { TabRoomsComponent } from './components/tab-rooms/tab-rooms.component';
+import { TabCustomersComponent } from './components/tab-customers/tab-customers.component';
+import { TabServicesComponent } from './components/tab-services/tab-services.component';
 
 const PROVIDERS = [
     BookingService,
@@ -61,7 +64,10 @@ export const STATES = [
         SearchFormComponent,
         RevenueComponent,
         BookingComponent,
-        CheckoutComponent
+        CheckoutComponent,
+        TabRoomsComponent,
+        TabCustomersComponent,
+        TabServicesComponent
     ],
     providers: [
         ...PROVIDERS

@@ -30,6 +30,7 @@ export class BookingComponent implements OnInit {
 
     //
     @Output() visibleChange = new EventEmitter<boolean>();
+    @Output() onSaveBooking = new EventEmitter<void>();
     //
 
     isGroupBooking: boolean = false;
@@ -37,10 +38,17 @@ export class BookingComponent implements OnInit {
     isShowBookedCodeReceived: boolean = false;
     bookedCodeReceived: string;
 
-    roomType: {value: number, name: string}[] = [
+    roomTypes: {value: number, name: string}[] = [
         {value: RoomType.Single, name: 'Single Room'},
         {value: RoomType.Double, name: 'Double Room'}
     ];
+
+    rooms = 'Rooms';
+    customers = 'Customers';
+    services = 'Services';
+    menuTabs: {value: string, text: string, enableHistory: boolean, visited: boolean}[] = [];
+    currentTab: {value: string, text: string, enableHistory: boolean, visited: boolean};
+
 
     constructor(private bookingsService: BookingService) {
     }
@@ -58,10 +66,87 @@ export class BookingComponent implements OnInit {
                 this.selectedBooking.roomPrice = this.listRoomSelected[0].price;
                 this.selectedBooking.roomType = this.listRoomSelected[0].type;
             }
+            this.menuTabs = [
+                {
+                    value: this.customers,
+                    text: 'Customers',
+                    enableHistory: true,
+                    visited: true,
+                },
+                {
+                    value: this.services,
+                    text: 'Services',
+                    enableHistory: true,
+                    visited: true,
+                },
+            ];
+            this.currentTab = this.menuTabs[0];
         } else {
             // group booking
             this.selectedBooking.rooms = this.listRoomSelected;
+            this.menuTabs = [
+                {
+                    value: this.rooms,
+                    text: 'Rooms',
+                    enableHistory: true,
+                    visited: true,
+                },
+                {
+                    value: this.customers,
+                    text: 'Customers',
+                    enableHistory: true,
+                    visited: true,
+                },
+                {
+                    value: this.services,
+                    text: 'Services',
+                    enableHistory: true,
+                    visited: true,
+                },
+            ];
+            this.currentTab = this.menuTabs[0];
         }
+    }
+
+    onSwitchBookingChanged() {
+        if (this.isGroupBooking) {
+            this.menuTabs = [
+                {
+                    value: this.rooms,
+                    text: 'Rooms',
+                    enableHistory: true,
+                    visited: true,
+                },
+                {
+                    value: this.customers,
+                    text: 'Customers',
+                    enableHistory: true,
+                    visited: true,
+                },
+                {
+                    value: this.services,
+                    text: 'Services',
+                    enableHistory: true,
+                    visited: true,
+                },
+            ];
+        } else {
+            this.menuTabs = [
+                {
+                    value: this.customers,
+                    text: 'Customers',
+                    enableHistory: true,
+                    visited: true,
+                },
+                {
+                    value: this.services,
+                    text: 'Services',
+                    enableHistory: true,
+                    visited: true,
+                },
+            ];
+        }
+        this.currentTab = this.menuTabs[0];
     }
 
     onChangedRoom() {
@@ -71,6 +156,11 @@ export class BookingComponent implements OnInit {
             this.selectedBooking.roomType = selectedRoom.type;
         }
     }
+
+    onChangedTab(tab) {
+        this.currentTab = tab;
+    }
+
 
     onHandleCancel() {
         this.visible = false;
@@ -85,6 +175,7 @@ export class BookingComponent implements OnInit {
                 .subscribe(rs => {
                         this.bookedCodeReceived = rs;
                         this.isShowBookedCodeReceived = true;
+                        this.onSaveBooking.emit();
                     }, (error) => {
                         AppNotify.error('Update error!');
                     }
@@ -94,7 +185,6 @@ export class BookingComponent implements OnInit {
     onReceivedCode() {
         this.isShowBookedCodeReceived = false;
         this.visible = false;
-
     }
 
     private isEmptyInformation() {
