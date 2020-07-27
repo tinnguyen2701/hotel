@@ -8,7 +8,7 @@ export const ADMIN_MENU = [
     },
     {
         text: 'Booked',
-        link: '/admin/booked',
+        link: '/admin/booked-list',
         icon: 'fas fa-address-book'
     },
     {

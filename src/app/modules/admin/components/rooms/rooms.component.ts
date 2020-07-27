@@ -19,20 +19,17 @@ import {AppNotify} from '@app/utilities';
 import {BaseLookup} from '@app/modules/admin/models';
 
 @Component({
-    selector: 'app-admin-all-rooms',
+    selector: 'app-admin-rooms',
     templateUrl: 'rooms.component.html',
     styleUrls: ['./rooms.component.scss'],
 })
 export class RoomsComponent implements OnInit {
     floors: FloorModel[] = [];
     roomType = ROOM_TYPE;
-    selectedTypeRoom = RoomType.All;
-    fromDate: Date = null;
-    toDate: Date = null;
     roomStatus = RoomStatus;
     listRoomsSelected: RoomModel[] = [];
     querySearching: QuerySearchingModel = new QuerySearchingModel();
-
+    isShowBooking: boolean = false;
     // selectedRoom: BookModel = {} as BookModel;
     // selectedBooked: BookedModel = new BookedModel();
     // visible: boolean = false;
@@ -41,6 +38,7 @@ export class RoomsComponent implements OnInit {
     transferRoom = new TransferRoom();
     roomSource: BaseLookup[] = [];
     transferRoomType = TRANSFER_ROOM_TYPE;
+    allRoomsAvailable: RoomModel[] = [];
 
     constructor(private bookingService: BookingService, private store: Store) {
     }
@@ -74,10 +72,16 @@ export class RoomsComponent implements OnInit {
         this.loadFloor();
     }
 
+    onToggleBooking() {
+        const roomArray = this.floors.map(_ => _.rooms);
+        this.allRoomsAvailable = [].concat.apply([], roomArray).filter(_ => _.status === RoomStatus.Available);
+        this.isShowBooking = !this.isShowBooking;
+    }
+
     // onClickItem(item) {
     //     this.bookingService.getBookRoom(this.selectedRoom.id, item.value).subscribe(
-    //         (booked) => {
-    //             this.selectedBooked = booked;
+    //         (booked-list) => {
+    //             this.selectedBooked = booked-list;
     //
     //             switch (item.value) {
     //                 case ActionNavigationType.AddToBookingList:

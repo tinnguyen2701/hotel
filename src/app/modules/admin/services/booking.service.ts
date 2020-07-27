@@ -39,6 +39,14 @@ export class BookingService {
         });
     }
 
+    booking(booked: BookedModel): Observable<string> {
+        if (environment.production) {
+            console.log('API: getBookings');
+        }
+        return of(['A', 'B', 'C', 'D'][random(0, 3)] + random(10, 99));
+    }
+
+    // TODO will be remove all code above
     deleteBooking(param: number): Observable<boolean> {
         if (environment.production) {
             console.log('API: deleteBooking');

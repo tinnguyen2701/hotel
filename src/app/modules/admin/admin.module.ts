@@ -9,9 +9,11 @@ import { AdminComponent } from './components/admin/admin.component';
 import { UsersComponent } from './components/users/users.component';
 import { SearchFormComponent } from '@app/modules/admin/components/shared/search-form/search-form.component';
 import { RoomsComponent } from './components/rooms/rooms.component';
-import { BookedClientsComponent } from './components/booked/booked.component';
+import { BookedClientsComponent } from './components/booked-list/booked-list.component';
 import { AppState } from './store';
 import { RevenueComponent } from './components/revenue/revenue.component';
+import { BookingComponent } from './components/booking/booking.component';
+import { CheckoutComponent } from './components/checkout/checkout.component';
 
 const PROVIDERS = [
     BookingService,
@@ -40,7 +42,7 @@ export const STATES = [
                         component: RoomsComponent
                     },
                     {
-                        path: 'booked',
+                        path: 'booked-list',
                         component: BookedClientsComponent
                     },
                     {
@@ -57,7 +59,9 @@ export const STATES = [
         UsersComponent,
         BookedClientsComponent,
         SearchFormComponent,
-        RevenueComponent
+        RevenueComponent,
+        BookingComponent,
+        CheckoutComponent
     ],
     providers: [
         ...PROVIDERS

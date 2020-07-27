@@ -11,8 +11,8 @@ import {BookType} from '@app/modules/admin/shared/enums';
 
 @Component({
   selector: 'app-admin-booked',
-  templateUrl: './booked.component.html',
-  styleUrls: ['./booked.component.scss']
+  templateUrl: './booked-list.component.html',
+  styleUrls: ['./booked-list.component.scss']
 })
 export class BookedClientsComponent implements OnInit {
     // @ViewChild('deleteDetailConfirmPopover') deleteDetailConfirmPopover: PopoverConfirmBoxComponent;

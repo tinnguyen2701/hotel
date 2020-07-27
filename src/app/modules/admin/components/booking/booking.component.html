@@ -1,0 +1,131 @@
+<app-popup-container title="Booking"
+                     [width]="700"
+                     [height]="500"
+                     [(visible)]="visible"
+                     [footerTemplate]="popupFooter">
+
+    <div class="d-flex align-items-center justify-content-end">
+        <span>Group booking</span>
+        <dx-switch class="ml-2" [(value)]="isGroupBooking"></dx-switch>
+    </div>
+
+    <ng-container *ngIf="!isGroupBooking">
+        <p>Information:</p>
+        <div>
+            <div class="row">
+                <div class="field col-md-6">
+                    <div class="field-label">Room<span class="text-danger"> *</span></div>
+                    <div class="field-value">
+                        <dx-select-box [dataSource]="allRoomsAvailable"
+                                       valueExpr="id"
+                                       displayExpr="name"
+                                       placeholder="selected room"
+                                       [(value)]="selectedBooking.roomId"
+                                       (onValueChanged)="onChangedRoom()">
+                        </dx-select-box>
+                    </div>
+                </div>
+
+                <div class="field col-md-6" *ngIf="!isGroupBooking">
+                    <div class="field-label">Room type</div>
+                    <div class="field-value">
+                        <dx-select-box
+                            [dataSource]="roomType"
+                            [(value)]="selectedBooking.roomType"
+                            displayExpr="name"
+                            valueExpr="value"
+                            readOnly="true">
+                        </dx-select-box>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="field col-md-6">
+                    <div class="field-label">Checkin Date<span class="text-danger"> *</span></div>
+                    <div class="field-value">
+                        <dx-date-box [(value)]="selectedBooking.checkinDate"
+                                     [max]="selectedBooking.checkoutDate"
+                                     [useMaskBehavior]="true"
+                                     type="datetime"
+                                     showClearButton="true">
+                        </dx-date-box>
+                    </div>
+                </div>
+                <div class="field col-md-6">
+                    <div class="field-label">Checkout Date<span class="text-danger"> *</span></div>
+                    <div class="field-value">
+                        <dx-date-box [(value)]="selectedBooking.checkoutDate"
+                                     [min]="selectedBooking.checkinDate"
+                                     [useMaskBehavior]="true"
+                                     type="datetime"
+                                     showClearButton="true">
+                        </dx-date-box>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="field col-md-3">
+                    <div class="field-label">Prepay</div>
+                    <div class="field-value">
+                        <dx-number-box [min]="0" [(value)]="selectedBooking.prepay">
+                        </dx-number-box>
+                    </div>
+                </div>
+                <div class="field col-md-3">
+                    <div class="field-label">Deduct</div>
+                    <div class="field-value">
+                        <dx-number-box [min]="0" [(value)]="selectedBooking.deduct">
+                        </dx-number-box>
+                    </div>
+                </div>
+                <div class="field col-md-3">
+                    <div class="field-label">Price<span class="text-danger"> *</span></div>
+                    <div class="field-value">
+                        <dx-number-box [min]="0" [(value)]="selectedBooking.roomPrice">
+                        </dx-number-box>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+
+    <ng-container *ngIf="isGroupBooking">
+        <h1>h1</h1>
+    </ng-container>
+
+    <ng-template #popupFooter>
+        <div class="d-flex">
+            <dx-button type="normal" class="mr-auto"
+                       text="Cancel"
+                       (onClick)="onHandleCancel()">
+            </dx-button>
+            <dx-button class="ml-auto"
+                       type="default"
+                       text="Booking"
+                       [useSubmitBehavior]="false"
+                       (onClick)="onHandleBooking()">
+            </dx-button>
+        </div>
+    </ng-template>
+</app-popup-container>
+
+
+<ng-container *ngIf="isShowBookedCodeReceived">
+    <app-popup-container title="Booked Code"
+                         [width]="300"
+                         (onHiding)="onReceivedCode()"
+                         [(visible)]="isShowBookedCodeReceived"
+                         [height]="'auto'">
+        your book code: <span class="text-danger">{{bookedCodeReceived}}</span>
+
+        <div class="text-right">
+            <dx-button text="OK"
+                       type="default"
+                       (onClick)="onReceivedCode()">
+            </dx-button>
+        </div>
+    </app-popup-container>
+</ng-container>
+

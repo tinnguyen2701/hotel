@@ -18,8 +18,6 @@ export class RoomModel {
     checkoutDate: Date;
     type: number;
     price: number;
-    deduct: number;
-    prepay: number;
     note: string;
     peopleNumber: number;
     bookCode: string;
@@ -100,18 +98,22 @@ export class BaseService {
 export class BookedModel {
     id: number;
     code: string;
-    bookType: number; // just need booking and checkin
-    status: number;
+    bookType: number; // personal or group
+    status: number; // booking , checkin or checkout
     name: string;
     checkinDate: Date;
     checkoutDate: Date;
+    companyName: string;
     rooms: RoomModel[] = [];
     customers: CustomerModel[] = [];
     services: ServiceModel[] = [];
     prepay: number;
+    deduct: number;
     paymentMethod: number;
     note: string;
-    depositRoom: number;
+    roomId: number;
+    roomType: number;
+    roomPrice: number;
 
     public constructor(init?: Partial<BookedModel>) {
         Object.assign(this, init);

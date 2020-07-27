@@ -41,9 +41,9 @@
                     </dx-date-box>
                 </div>
             </div>
-            <div class="field ml-3 p-0" *ngIf="listRoomsSelected.length">
+            <div class="field ml-5 p-0" *ngIf="listRoomsSelected.length">
                 <div class="field-label">Selected rooms</div>
-                <div class="field-value">
+                <div class="field-value text-center">
                     {{listRoomsSelected.length}}
                 </div>
             </div>
@@ -69,7 +69,8 @@
         </div>
         <div class="action-booking d-flex flex-column ml-5">
             <dx-button type="normal"
-                       text="Booking">
+                       text="Booking"
+                       (onClick)="onToggleBooking()">
             </dx-button>
             <dx-button type="normal"
                        class="mt-3"
@@ -87,6 +88,13 @@
     </div>
 
 </div>
+
+<ng-container *ngIf="isShowBooking">
+    <app-admin-booking [(visible)]="isShowBooking"
+                       [allRoomsAvailable]="allRoomsAvailable"
+                       [listRoomSelected]="listRoomsSelected">
+    </app-admin-booking>
+</ng-container>
 
 <ng-container *ngIf="isShowPopupTransferRoom">
     <app-popup-container title="Transfer room"
