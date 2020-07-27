@@ -6,6 +6,7 @@ import {FloorModel, QuerySearchingModel, RoomModel, TransferRoom} from '../../mo
 import {RoomStatus} from '../../shared/enums';
 import {ROOM_TYPE, TRANSFER_ROOM_TYPE} from '../../shared/constant';
 import {BaseLookup} from '@app/modules/admin/models';
+import {AppNotify} from '@app/utilities';
 
 @Component({
     selector: 'app-admin-rooms',
@@ -21,9 +22,9 @@ export class RoomsComponent implements OnInit {
     isShowBooking: boolean = false;
     isShowPopupTransferRoom: boolean = false;
     transferRoom = new TransferRoom();
-    roomSource: BaseLookup[] = [];
     transferRoomType = TRANSFER_ROOM_TYPE;
     allRoomsAvailable: RoomModel[] = [];
+    allRoomsNotAvailable: RoomModel[] = [];
 
     constructor(private bookingService: BookingService) {
     }
@@ -58,12 +59,40 @@ export class RoomsComponent implements OnInit {
     }
 
     onToggleBooking() {
-        const roomArray = this.floors.map(_ => _.rooms);
-        this.allRoomsAvailable = [].concat.apply([], roomArray).filter(_ => _.status === RoomStatus.Available);
+        this.allRoomAvailable();
         this.isShowBooking = !this.isShowBooking;
     }
 
-    onSaveBooking() {
+    onClickedTransferRoom() {
+        this.allRoomAvailable();
+        this.transferRoom.fromRoomId = this.listRoomsSelected[0].id;
+        this.isShowPopupTransferRoom = true;
+    }
+
+    onTransferRoom() {
+        if (!this.transferRoom.fromRoomId || !this.transferRoom.toRoomId || !this.transferRoom.option) {
+            return;
+        }
+
+        this.bookingService.transferRoom(this.transferRoom).subscribe(rs => {
+            this.isShowPopupTransferRoom = false;
+            AppNotify.success('Transfer room success message');
+            this.transferRoom = new TransferRoom();
+            this.refresh();
+        }, err => {
+            this.isShowPopupTransferRoom = false;
+            AppNotify.error('Can not transfer room!');
+            this.transferRoom = new TransferRoom();
+        });
+    }
+
+    private allRoomAvailable() {
+        const roomArray = this.floors.map(_ => _.rooms);
+        this.allRoomsAvailable = [].concat.apply([], roomArray).filter(_ => _.status === RoomStatus.Available);
+        this.allRoomsNotAvailable = [].concat.apply([], roomArray).filter(_ => _.status !== RoomStatus.Available);
+    }
+
+    refresh() {
         setTimeout(() => {
             this.loadFloor();
             this.listRoomsSelected = [];
