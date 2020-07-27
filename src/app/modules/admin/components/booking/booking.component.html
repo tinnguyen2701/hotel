@@ -105,7 +105,7 @@
                         </dx-number-box>
                     </div>
                 </div>
-                <div class="field col-md-3">
+                <div class="field col-md-3" *ngIf="!isGroupBooking">
                     <div class="field-label">Price<span class="text-danger"> *</span></div>
                     <div class="field-value">
                         <dx-number-box [min]="0"
@@ -137,18 +137,19 @@
     </app-tab>
 
     <ng-container *ngIf="currentTab.value === rooms">
-        <app-admin-tab-rooms [(rooms)]="selectedBooking.rooms"></app-admin-tab-rooms>
+        <app-admin-tab-rooms [(rooms)]="selectedBooking.rooms"
+                             (onDeleteRoom)="onDeleteRoom($event)">
+        </app-admin-tab-rooms>
     </ng-container>
 
-<!--    <ng-container *ngIf="currentTab.value === customers">-->
-<!--        <app-tab-customers [(customers)]="book.customers"></app-tab-customers>-->
-<!--    </ng-container>-->
+        <ng-container *ngIf="currentTab.value === customers">
+            <app-tab-customers [(customers)]="selectedBooking.customers"></app-tab-customers>
+        </ng-container>
 
-<!--    <ng-container *ngIf="currentTab.value === services">-->
-<!--        <app-tab-services [services]="book.services"-->
-<!--                      (onChangeService)="onChangeService()">-->
-<!--        </app-tab-services>-->
-<!--    </ng-container>-->
+        <ng-container *ngIf="currentTab.value === services">
+            <app-tab-services [(services)]="selectedBooking.services">
+            </app-tab-services>
+        </ng-container>
 
     <ng-template #popupFooter>
         <div class="d-flex">

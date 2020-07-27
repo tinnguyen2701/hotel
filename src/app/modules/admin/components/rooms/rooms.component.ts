@@ -1,21 +1,10 @@
 import {Component, OnInit} from '@angular/core';
-import {SelectSnapshot} from '@ngxs-labs/select-snapshot';
 import {Store} from '@ngxs/store';
 //
 import {BookingService} from '../../services';
-import {BookedModel, FloorModel, QuerySearchingModel, RoomModel, TransferRoom} from '../../models/roomModel';
-import {RoomStatus, ActionType, ActionNavigationType, RoomType} from '../../shared/enums';
-import {ROOM_STATUS_TYPE, ROOM_TYPE, TRANSFER_ROOM_TYPE} from '../../shared/constant';
-import {
-    AppState,
-    SetActionType,
-    SetBookAvailable,
-    SetBookCheckin,
-    SetBookCheckout,
-    SetEditBooking,
-    SetFloor
-} from '../../store';
-import {AppNotify} from '@app/utilities';
+import {FloorModel, QuerySearchingModel, RoomModel, TransferRoom} from '../../models/roomModel';
+import {RoomStatus} from '../../shared/enums';
+import {ROOM_TYPE, TRANSFER_ROOM_TYPE} from '../../shared/constant';
 import {BaseLookup} from '@app/modules/admin/models';
 
 @Component({
@@ -30,17 +19,13 @@ export class RoomsComponent implements OnInit {
     listRoomsSelected: RoomModel[] = [];
     querySearching: QuerySearchingModel = new QuerySearchingModel();
     isShowBooking: boolean = false;
-    // selectedRoom: BookModel = {} as BookModel;
-    // selectedBooked: BookedModel = new BookedModel();
-    // visible: boolean = false;
-    // menus = [];
     isShowPopupTransferRoom: boolean = false;
     transferRoom = new TransferRoom();
     roomSource: BaseLookup[] = [];
     transferRoomType = TRANSFER_ROOM_TYPE;
     allRoomsAvailable: RoomModel[] = [];
 
-    constructor(private bookingService: BookingService, private store: Store) {
+    constructor(private bookingService: BookingService) {
     }
 
     ngOnInit() {
@@ -81,7 +66,14 @@ export class RoomsComponent implements OnInit {
     onSaveBooking() {
         setTimeout(() => {
             this.loadFloor();
+            this.listRoomsSelected = [];
         }, 200);
+    }
+
+    onDeleteRoomId(roomId: number) {
+        const element = document.getElementById(roomId.toString());
+        element.classList.remove('selected');
+        this.listRoomsSelected = this.listRoomsSelected.filter(_ => _.id !== roomId);
     }
 
     // onClickItem(item) {

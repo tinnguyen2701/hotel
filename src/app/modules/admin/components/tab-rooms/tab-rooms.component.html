@@ -1,5 +1,6 @@
 <dx-data-grid #dxDataGridRoom
               height="200"
+              class="mt-1"
               [dataSource]="rooms"
               [showRowLines]="true"
               [showBorders]="true"
@@ -18,28 +19,29 @@
 
     <dxo-paging [enabled]="false"></dxo-paging>
 
-    <dxi-column caption="#" alignment="center"
+    <dxi-column caption="#"
+                alignment="center"
                 [allowEditing]="false"
                 [allowSorting]="false"
                 [allowResizing]="false"
-                [fixed]="true" fixedPosition="left"
+                [formItem]="{ visible: false }"
+                [width]="40"
+                [fixed]="true"
                 headerCellTemplate="indexHeaderCellTemplate"
                 cellTemplate="indexCellTemplate">
         <div *dxTemplate="let row of 'indexHeaderCellTemplate'">
-            <dx-button type="default"
-                       icon="plus"
-                       class="btn-add-row-circle"
-                       hint="Add Rooms"
-                       [stylingMode]="'outlined'"
-                       (onClick)="onClickedAddAvailableRooms($event)">
+            <dx-button
+                type="default"
+                icon="plus"
+                class="btn-add-row-circle border-0 p-0"
+                [stylingMode]="'outlined'"
+                [hint]="'Add Rooms'"
+                (onClick)="onClickedAddAvailableRooms($event)">
             </dx-button>
         </div>
         <div *dxTemplate="let cell of 'indexCellTemplate'">
             <ng-container>
-				<span *ngIf="!cell.row.isNewRow">
-					{{cell.rowIndex + 1}}
-				</span>
-                <span *ngIf="cell.row.isNewRow"></span>
+                {{ cell.rowIndex + 1 }}
             </ng-container>
         </div>
     </dxi-column>
@@ -107,7 +109,7 @@
                     [cssClass]="'far fa-trash-alt delete-icon'"
                     [hint]="'Delete'"
                     [text]="''"
-                    [onClick]="onDeleteRoom">
+                    [onClick]="onHandlerDeleteRoom">
         </dxi-button>
     </dxi-column>
 </dx-data-grid>

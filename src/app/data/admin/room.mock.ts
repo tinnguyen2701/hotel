@@ -114,18 +114,18 @@ export function randomServiceLookup(): BaseService[] {
     return [
         {
             id: 1,
-            name: 'bò húc',
-            price: 10000,
+            name: 'breakfast',
+            price: 20000,
         },
         {
             id: 2,
-            name: 'coca',
-            price: 7000,
+            name: 'lunch',
+            price: 70000,
         },
         {
             id: 3,
-            name: 'mì hảo hảo',
-            price: 3000,
+            name: 'dinner',
+            price: 100000,
         },
     ];
 }

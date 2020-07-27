@@ -31,6 +31,7 @@ export class BookingComponent implements OnInit {
     //
     @Output() visibleChange = new EventEmitter<boolean>();
     @Output() onSaveBooking = new EventEmitter<void>();
+    @Output() onDeleteRoomId = new EventEmitter<number>();
     //
 
     isGroupBooking: boolean = false;
@@ -38,7 +39,7 @@ export class BookingComponent implements OnInit {
     isShowBookedCodeReceived: boolean = false;
     bookedCodeReceived: string;
 
-    roomTypes: {value: number, name: string}[] = [
+    roomTypes: { value: number, name: string }[] = [
         {value: RoomType.Single, name: 'Single Room'},
         {value: RoomType.Double, name: 'Double Room'}
     ];
@@ -46,8 +47,8 @@ export class BookingComponent implements OnInit {
     rooms = 'Rooms';
     customers = 'Customers';
     services = 'Services';
-    menuTabs: {value: string, text: string, enableHistory: boolean, visited: boolean}[] = [];
-    currentTab: {value: string, text: string, enableHistory: boolean, visited: boolean};
+    menuTabs: { value: string, text: string, enableHistory: boolean, visited: boolean }[] = [];
+    currentTab: { value: string, text: string, enableHistory: boolean, visited: boolean };
 
 
     constructor(private bookingsService: BookingService) {
@@ -167,19 +168,19 @@ export class BookingComponent implements OnInit {
     }
 
     onHandleBooking() {
-            if (this.isEmptyInformation()) {
-                return;
-            }
+        if (this.isEmptyInformation()) {
+            return;
+        }
 
-            this.bookingsService.booking(this.selectedBooking)
-                .subscribe(rs => {
-                        this.bookedCodeReceived = rs;
-                        this.isShowBookedCodeReceived = true;
-                        this.onSaveBooking.emit();
-                    }, (error) => {
-                        AppNotify.error('Update error!');
-                    }
-                );
+        this.bookingsService.booking(this.selectedBooking)
+            .subscribe(rs => {
+                    this.bookedCodeReceived = rs;
+                    this.isShowBookedCodeReceived = true;
+                    this.onSaveBooking.emit();
+                }, (error) => {
+                    AppNotify.error('Update error!');
+                }
+            );
     }
 
     onReceivedCode() {
@@ -187,10 +188,29 @@ export class BookingComponent implements OnInit {
         this.visible = false;
     }
 
+
+    onDeleteRoom(roomId: number) {
+        this.onDeleteRoomId.emit(roomId);
+        this.selectedBooking.rooms = this.selectedBooking.rooms.filter(_ => _.id !== roomId);
+    }
+
     private isEmptyInformation() {
+        if (!this.selectedBooking.checkinDate
+            || !this.selectedBooking.checkoutDate
+            || !this.selectedBooking.roomPrice
+            || !this.selectedBooking.customers.length) {
+            AppNotify.error('The information is required');
+            return true;
+        }
         if (!this.isGroupBooking) {
-            if (!this.selectedBooking.roomId || !this.selectedBooking.checkinDate
-                || !this.selectedBooking.checkoutDate || !this.selectedBooking.roomPrice) {
+            if (!this.selectedBooking.roomId) {
+                AppNotify.error('The information is required');
+                return true;
+            }
+        } else {
+            if (!this.selectedBooking.rooms.length
+                || !this.selectedBooking.companyName
+                || !this.selectedBooking.roomPrice) {
                 AppNotify.error('The information is required');
                 return true;
             }

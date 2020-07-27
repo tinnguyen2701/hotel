@@ -29,11 +29,13 @@ export class TabRoomsComponent implements OnInit {
     }
     //
     @Output() roomsChange = new EventEmitter<RoomModel[]>();
+    @Output() onDeleteRoom = new EventEmitter<number>();
     //
 
     selectedRoomId: number;
     numberOfSingleRooms: number = 0;
     numberOfDoubleRooms: number = 0;
+    selectedRoom: RoomModel = new RoomModel();
 
     constructor(private bookingsService: BookingService) {
     }
@@ -64,23 +66,20 @@ export class TabRoomsComponent implements OnInit {
         e.component.editRow(e.row.dataIndex);
     };
 
-    onDeleteRoom = (e) => {
+    onHandlerDeleteRoom = (e) => {
         e.event.preventDefault();
         const data = e.row.data;
-        this.selectedRoomId = this.rooms.findIndex(
-            (detail) => detail.id === data.id
-        );
+        this.selectedRoom = data;
+        // this.selectedRoomId = this.rooms.findIndex(
+        //     (detail) => detail.id === data.id
+        // );
         if (this.confirmDeleteDetailPopover) {
             this.confirmDeleteDetailPopover.show(e.event.currentTarget);
         }
     };
 
     deleteRoom() {
-        if (this.selectedRoomId !== null) {
-            this.rooms.splice(this.selectedRoomId, 1);
-            this.dxDataGridRoom.instance.refresh(true);
-            this.selectedRoomId = null;
-        }
+        this.onDeleteRoom.emit(this.selectedRoom.id);
     }
 
     onFindRooms() {
@@ -92,6 +91,5 @@ export class TabRoomsComponent implements OnInit {
         } else {
             this.findAvailableRoomsPopover.instance.hide();
         }
-        console.log(this.rooms);
     }
 }

@@ -1,1 +1,130 @@
-<p>tab-customers works!</p>
+<dx-data-grid
+    #dxDataGrid
+    class="w-100 mt-1"
+    height="200"
+    [(dataSource)]="editingCustomers"
+    [showRowLines]="true"
+    [showBorders]="true"
+    [showColumnLines]="true"
+    [hoverStateEnabled]="true"
+    [columnAutoWidth]="false"
+    [allowColumnResizing]="true"
+    [allowColumnReordering]="false"
+    (onRowInserted)="onRowInserted($event)"
+    (onRowUpdated)="onRowUpdated($event)">
+    <dxo-editing mode="row" [allowUpdating]="true" [allowDeleting]="true">
+        <dxo-texts [confirmDeleteMessage]="null"></dxo-texts>
+    </dxo-editing>
+
+    <dxo-paging [enabled]="false"></dxo-paging>
+
+    <dxi-column caption="#"
+                alignment="center"
+                [allowEditing]="false"
+                [allowSorting]="false"
+                [allowResizing]="false"
+                [formItem]="{ visible: false }"
+                [width]="40"
+                [fixed]="true"
+                headerCellTemplate="indexHeaderCellTemplate"
+                cellTemplate="indexCellTemplate">
+        <div *dxTemplate="let row of 'indexHeaderCellTemplate'">
+            <dx-button
+                type="default"
+                icon="plus"
+                class="btn-add-row-circle border-0 p-0"
+                [stylingMode]="'outlined'"
+                [hint]="'Add'"
+                (onClick)="dxDataGrid.instance.addRow()">
+            </dx-button>
+        </div>
+        <div *dxTemplate="let cell of 'indexCellTemplate'">
+            <ng-container>
+                {{ cell.rowIndex + 1 }}
+            </ng-container>
+        </div>
+    </dxi-column>
+
+    <dxi-column dataField="name"
+                caption="Name"
+                [width]="150"
+                alignment="right">
+        <dxi-validation-rule
+            type="required"
+            [message]="'This field is required'">
+        </dxi-validation-rule>
+    </dxi-column>
+
+    <dxi-column dataField="sex"
+                caption="Sex"
+                [width]="100"
+                alignment="right"
+                cellTemplate="cellTemplate"
+                editCellTemplate="editCellTemplate">
+        <div *dxTemplate="let cell of 'cellTemplate'">
+            <dx-switch
+                width="100"
+                [(value)]="cell.value"
+                [switchedOnText]="'Male'"
+                [switchedOffText]="'Female'">
+            </dx-switch>
+        </div>
+        <div *dxTemplate="let cell of 'editCellTemplate'">
+            <dx-switch
+                width="100"
+                [(value)]="cell.value"
+                [switchedOnText]="'Male'"
+                [switchedOffText]="'Female'">
+            </dx-switch>
+        </div>
+    </dxi-column>
+
+    <dxi-column dataField="cmnd"
+                caption="Cmnd"
+                [width]="130"
+                alignment="right">
+    </dxi-column>
+
+    <dxi-column dataField="phone"
+                caption="Phone"
+                [width]="110"
+                alignment="right">
+    </dxi-column>
+
+    <dxi-column dataField="note"
+                caption="Note"
+                [width]="210"
+                alignment="right">
+    </dxi-column>
+    <dxi-column caption="Action" type="buttons" alignment="center" [width]="80">
+        <dxi-button name="save"
+                    icon="save"
+                    [text]="''"
+                    [hint]="'Save'"
+                    [onClick]="onSaveDxGridRow">
+        </dxi-button>
+        <dxi-button name="cancel"
+                    icon="revert"
+                    [text]="''"
+                    [hint]="'Cancel'"
+                    [onClick]="onRevertDxGridRow">
+        </dxi-button>
+        <dxi-button name="edit"
+                    icon="fas fa-pencil-alt edit-icon"
+                    [text]="''"
+                    [hint]="'Edit'"
+                    [onClick]="onUpdateDxGridRow">
+        </dxi-button>
+        <dxi-button name="delete"
+                    [cssClass]="'far fa-trash-alt delete-icon'"
+                    [hint]="'Delete'"
+                    [text]="''"
+                    [onClick]="onDeleteDxGridRow">
+        </dxi-button>
+    </dxi-column>
+</dx-data-grid>
+
+<app-popover-confirm-box #confirmPopover
+                         [message]="'Are you want to remove it out of list'"
+                         (onConfirm)="deleteCustomer()">
+</app-popover-confirm-box>

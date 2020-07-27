@@ -41,8 +41,6 @@ export class QuerySearchingModel {
     }
 }
 
-
-
 export class CustomerModel {
     id: number;
     name: string;
@@ -125,7 +123,6 @@ export class TransferRoom {
     fromRoomId: number;
     toRoomId: number;
     option: number;
-
 
     public constructor(init?: Partial<TransferRoom>) {
         Object.assign(this, init);
