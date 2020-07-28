@@ -29,7 +29,7 @@ export class BookingService {
         return of(randomFloors(7));
     }
 
-    getBookings(param: LoadParamModel): Observable<LoadResultModel<BookedModel[]>> {
+    getListBookings(param: LoadParamModel): Observable<LoadResultModel<BookedModel[]>> {
         if (environment.debug) {
             console.log('API: getBookings');
         }
@@ -39,11 +39,26 @@ export class BookingService {
         });
     }
 
-    booking(booked: BookedModel): Observable<string> {
+    getBooking(listRooms: RoomModel[]): Observable<BookedModel> {
+        if (environment.debug) {
+            console.log('API: getBooking');
+        }
+        return of(randomBookings(1, listRooms)[0]);
+    }
+
+    booking(booked: BookedModel, bookingStatus: number): Observable<string> {
         if (environment.debug) {
             console.log('API: booking');
         }
         return of(['A', 'B', 'C', 'D'][random(0, 3)] + random(10, 99));
+    }
+
+    checkout(booked: BookedModel): Observable<boolean> {
+        if (environment.debug) {
+            console.log('API: checkout');
+        }
+
+        return of(true);
     }
 
     findListAvailableRooms(numberOfSingleRooms: number, numberOfDoubleRooms: number): Observable<RoomModel[]> {
@@ -52,6 +67,7 @@ export class BookingService {
         }
         return of(randomRoomsBooked(numberOfSingleRooms + numberOfDoubleRooms));
     }
+
 
     // TODO will be remove all code above
     deleteBooking(param: number): Observable<boolean> {
@@ -107,13 +123,7 @@ export class BookingService {
     //     });
     // }
 
-    checkoutBook(booked: BookedModel): Observable<boolean> {
-        if (environment.debug) {
-            console.log('API: checkoutBook');
-        }
 
-        return of(true);
-    }
 
     saveBookEditing(booked: BookedModel): Observable<boolean> {
         if (environment.debug) {

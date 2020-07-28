@@ -71,15 +71,20 @@
         <div class="action-booking d-flex flex-column ml-5">
             <dx-button type="normal"
                        text="Booking"
-                       (onClick)="onToggleBooking()">
+                       [disabled]="listRoomsSelected.length !== 0 && listRoomsSelected[0].status !== roomStatus.Available"
+                       (onClick)="onToggleBooking(bookedStatus.Booking)">
             </dx-button>
             <dx-button type="normal"
                        class="mt-3"
-                       text="Checkin">
+                       text="Checkin"
+                       [disabled]="listRoomsSelected.length !== 0 && listRoomsSelected[0].status === roomStatus.Checkin"
+                       (onClick)="onToggleBooking(bookedStatus.Checkin)">
             </dx-button>
             <dx-button type="normal"
                        class="mt-3"
-                       text="Checkout">
+                       text="Checkout"
+                       [disabled]="listRoomsSelected.length < 1 || listRoomsSelected[0].status !== roomStatus.Checkin"
+                       (onClick)="onToggleCheckout()">
             </dx-button>
             <dx-button type="normal"
                        class="mt-3"
@@ -92,19 +97,27 @@
 
 </div>
 
-<ng-container *ngIf="isShowBooking">
-    <app-admin-booking [(visible)]="isShowBooking"
+<ng-container *ngIf="isShowBookingPopup">
+    <app-admin-booking [(visible)]="isShowBookingPopup"
                        [allRoomsAvailable]="allRoomsAvailable"
                        [listRoomSelected]="listRoomsSelected"
+                       [selectedBookedStatus]="selectedBookedStatus"
                        (onSaveBooking)="refresh()"
                        (onDeleteRoomId)="onDeleteRoomId($event)">
     </app-admin-booking>
 </ng-container>
 
-<ng-container *ngIf="isShowPopupTransferRoom">
+<ng-container *ngIf="isShowCheckoutPopup">
+    <app-admin-checkout [(visible)]="isShowCheckoutPopup"
+                        [listRoomSelected]="listRoomsSelected"
+                       (onCheckoutBooking)="refresh()">
+    </app-admin-checkout>
+</ng-container>
+
+<ng-container *ngIf="isShowTransferRoomPopup">
     <app-popup-container title="Transfer room"
                          [width]="650"
-                         [(visible)]="isShowPopupTransferRoom"
+                         [(visible)]="isShowTransferRoomPopup"
                          [height]="'auto'">
         <div class="dx-field">
             <div class="dx-field-label">From room</div>

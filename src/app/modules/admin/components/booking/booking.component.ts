@@ -4,7 +4,7 @@ import {cloneDeep, isEqual} from 'lodash';
 import {BookedModel, RoomModel} from '@app/modules/admin/models';
 import {AppNotify} from '@app/utilities';
 import {ROOM_TYPE} from '@app/modules/admin/shared/constant';
-import {RoomType} from '@app/modules/admin/shared/enums';
+import {BookedStatus, RoomType} from '@app/modules/admin/shared/enums';
 import {BookingService} from '@app/modules/admin/services';
 
 @Component({
@@ -17,6 +17,7 @@ export class BookingComponent implements OnInit {
     //
     @Input() listRoomSelected: RoomModel[] = [];
     @Input() allRoomsAvailable: RoomModel[] = [];
+    @Input() selectedBookedStatus: BookedStatus;
 
     @Input()
     get visible(): boolean {
@@ -38,6 +39,7 @@ export class BookingComponent implements OnInit {
     selectedBooking: BookedModel = new BookedModel();
     isShowBookedCodeReceived: boolean = false;
     bookedCodeReceived: string;
+    bookedStatus = BookedStatus;
 
     roomTypes: { value: number, name: string }[] = [
         {value: RoomType.Single, name: 'Single Room'},
@@ -172,7 +174,7 @@ export class BookingComponent implements OnInit {
             return;
         }
 
-        this.bookingsService.booking(this.selectedBooking)
+        this.bookingsService.booking(this.selectedBooking, this.selectedBookedStatus)
             .subscribe(rs => {
                     this.bookedCodeReceived = rs;
                     this.isShowBookedCodeReceived = true;
@@ -197,7 +199,6 @@ export class BookingComponent implements OnInit {
     private isEmptyInformation() {
         if (!this.selectedBooking.checkinDate
             || !this.selectedBooking.checkoutDate
-            || !this.selectedBooking.roomPrice
             || !this.selectedBooking.customers.length) {
             AppNotify.error('The information is required');
             return true;
@@ -209,8 +210,7 @@ export class BookingComponent implements OnInit {
             }
         } else {
             if (!this.selectedBooking.rooms.length
-                || !this.selectedBooking.companyName
-                || !this.selectedBooking.roomPrice) {
+                || !this.selectedBooking.name) {
                 AppNotify.error('The information is required');
                 return true;
             }

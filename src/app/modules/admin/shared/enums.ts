@@ -21,6 +21,11 @@ export enum BookType {
     Group = 2,
 }
 
+export enum PaymentMethodTypes {
+    Cash = 1,
+    Transfer = 2
+}
+
 export enum ActionType {
     None ,
     Available ,

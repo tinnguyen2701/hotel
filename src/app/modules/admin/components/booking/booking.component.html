@@ -1,9 +1,8 @@
-<app-popup-container title="Booking"
+<app-popup-container [title]="selectedBookedStatus === bookedStatus.Booking ? 'Booking' : 'Checkin'"
                      [width]="750"
                      [height]="650"
                      [(visible)]="visible"
                      [footerTemplate]="popupFooter">
-
     <div class="d-flex align-items-center justify-content-end">
         <span>Group booking</span>
         <dx-switch class="ml-2"
@@ -47,7 +46,7 @@
                 <div class="field col-md-6">
                     <div class="field-label">Group Name<span class="text-danger"> *</span></div>
                     <div class="field-value">
-                        <dx-text-box [(value)]="selectedBooking.companyName">
+                        <dx-text-box [(value)]="selectedBooking.name">
                         </dx-text-box>
                     </div>
                 </div>
@@ -142,14 +141,14 @@
         </app-admin-tab-rooms>
     </ng-container>
 
-        <ng-container *ngIf="currentTab.value === customers">
-            <app-tab-customers [(customers)]="selectedBooking.customers"></app-tab-customers>
-        </ng-container>
+    <ng-container *ngIf="currentTab.value === customers">
+        <app-tab-customers [(customers)]="selectedBooking.customers"></app-tab-customers>
+    </ng-container>
 
-        <ng-container *ngIf="currentTab.value === services">
-            <app-tab-services [(services)]="selectedBooking.services">
-            </app-tab-services>
-        </ng-container>
+    <ng-container *ngIf="currentTab.value === services">
+        <app-tab-services [(services)]="selectedBooking.services">
+        </app-tab-services>
+    </ng-container>
 
     <ng-template #popupFooter>
         <div class="d-flex">
@@ -157,9 +156,15 @@
                        text="Cancel"
                        (onClick)="onHandleCancel()">
             </dx-button>
-            <dx-button class="ml-auto"
+            <dx-button *ngIf="selectedBookedStatus === bookedStatus.Booking" class="ml-auto"
                        type="default"
                        text="Booking"
+                       [useSubmitBehavior]="false"
+                       (onClick)="onHandleBooking()">
+            </dx-button>
+            <dx-button *ngIf="selectedBookedStatus === bookedStatus.Checkin" class="ml-auto"
+                       type="default"
+                       text="Checkin"
                        [useSubmitBehavior]="false"
                        (onClick)="onHandleBooking()">
             </dx-button>

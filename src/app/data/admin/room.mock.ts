@@ -254,9 +254,15 @@ export function getRevenueModel(): RevenueModel[] {
     }];
 }
 
-export function randomBookings(count: number): BookedModel[] {
+export function randomBookings(count: number, listRooms: RoomModel[] = null): BookedModel[] {
     return Array(count).fill({}).map((item: RoomModel, index) => {
-        const bookType = random(1, 2);
+        let bookType: number;
+        if (listRooms && listRooms.length > 0) {
+            bookType = listRooms.length === 1 ? 1 : 2;
+        } else {
+            bookType = random(1, 2);
+        }
+
         if (bookType === BookType.Personal) {
             return new BookedModel({
                 id: index + 1,
@@ -268,6 +274,8 @@ export function randomBookings(count: number): BookedModel[] {
                 checkoutDate: faker.date.future(),
                 prepay: random(0, 100) * 1000,
                 note: faker.lorem.sentence(),
+                deduct: 0,
+                roomType: random(1, 2)
             });
         } else {
             return new BookedModel({
@@ -280,7 +288,9 @@ export function randomBookings(count: number): BookedModel[] {
                 checkoutDate: faker.date.future(),
                 prepay: random(0, 100) * 1000,
                 note: faker.lorem.sentence(),
-                rooms: randomRoomsBooked(random(2, 5))
+                rooms: randomRoomsBooked(random(2, 5)),
+                peopleNumber: random(5, 10),
+                deduct: 0,
             });
         }
     });

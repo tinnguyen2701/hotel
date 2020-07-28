@@ -101,7 +101,6 @@ export class BookedModel {
     name: string;
     checkinDate: Date;
     checkoutDate: Date;
-    companyName: string;
     rooms: RoomModel[] = [];
     customers: CustomerModel[] = [];
     services: ServiceModel[] = [];
@@ -113,6 +112,7 @@ export class BookedModel {
     roomType: number;
     roomPrice: number;
     peopleNumber: number;
+    checkoutStatus: number; // cancel, payment part, payment, not payment
 
     public constructor(init?: Partial<BookedModel>) {
         Object.assign(this, init);

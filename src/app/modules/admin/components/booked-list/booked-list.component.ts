@@ -93,7 +93,7 @@ export class BookedClientsComponent implements OnInit {
         this.bookingSource = new DataSource({
             load: (loadOptions) => {
                 const loadParams = new LoadParamModel(loadOptions, this.filterBooking);
-                return this.bookingsService.getBookings(loadParams).toPromise();
+                return this.bookingsService.getListBookings(loadParams).toPromise();
             }
         });
     }

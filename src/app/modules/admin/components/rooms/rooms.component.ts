@@ -1,12 +1,10 @@
 import {Component, OnInit} from '@angular/core';
-import {Store} from '@ngxs/store';
 //
+import {AppNotify} from '@app/utilities';
 import {BookingService} from '../../services';
 import {FloorModel, QuerySearchingModel, RoomModel, TransferRoom} from '../../models/roomModel';
-import {RoomStatus} from '../../shared/enums';
+import {BookedStatus, RoomStatus} from '../../shared/enums';
 import {ROOM_TYPE, TRANSFER_ROOM_TYPE} from '../../shared/constant';
-import {BaseLookup} from '@app/modules/admin/models';
-import {AppNotify} from '@app/utilities';
 
 @Component({
     selector: 'app-admin-rooms',
@@ -19,12 +17,15 @@ export class RoomsComponent implements OnInit {
     roomStatus = RoomStatus;
     listRoomsSelected: RoomModel[] = [];
     querySearching: QuerySearchingModel = new QuerySearchingModel();
-    isShowBooking: boolean = false;
-    isShowPopupTransferRoom: boolean = false;
+    isShowBookingPopup: boolean = false;
+    isShowCheckoutPopup: boolean = false;
+    isShowTransferRoomPopup: boolean = false;
     transferRoom = new TransferRoom();
     transferRoomType = TRANSFER_ROOM_TYPE;
     allRoomsAvailable: RoomModel[] = [];
     allRoomsNotAvailable: RoomModel[] = [];
+    selectedBookedStatus: number;
+    bookedStatus = BookedStatus;
 
     constructor(private bookingService: BookingService) {
     }
@@ -58,15 +59,20 @@ export class RoomsComponent implements OnInit {
         this.loadFloor();
     }
 
-    onToggleBooking() {
+    onToggleBooking(bookedStatus: BookedStatus) {
         this.allRoomAvailable();
-        this.isShowBooking = !this.isShowBooking;
+        this.selectedBookedStatus = bookedStatus;
+        this.isShowBookingPopup = !this.isShowBookingPopup;
+    }
+
+    onToggleCheckout() {
+        this.isShowCheckoutPopup = !this.isShowCheckoutPopup;
     }
 
     onClickedTransferRoom() {
         this.allRoomAvailable();
         this.transferRoom.fromRoomId = this.listRoomsSelected[0].id;
-        this.isShowPopupTransferRoom = true;
+        this.isShowTransferRoomPopup = true;
     }
 
     onTransferRoom() {
@@ -75,12 +81,12 @@ export class RoomsComponent implements OnInit {
         }
 
         this.bookingService.transferRoom(this.transferRoom).subscribe(rs => {
-            this.isShowPopupTransferRoom = false;
+            this.isShowTransferRoomPopup = false;
             AppNotify.success('Transfer room success message');
             this.transferRoom = new TransferRoom();
             this.refresh();
         }, err => {
-            this.isShowPopupTransferRoom = false;
+            this.isShowTransferRoomPopup = false;
             AppNotify.error('Can not transfer room!');
             this.transferRoom = new TransferRoom();
         });
