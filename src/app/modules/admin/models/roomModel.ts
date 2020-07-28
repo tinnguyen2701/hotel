@@ -113,6 +113,7 @@ export class BookedModel {
     roomPrice: number;
     peopleNumber: number;
     checkoutStatus: number; // cancel, payment part, payment, not payment
+    paymentAmount: number;
 
     public constructor(init?: Partial<BookedModel>) {
         Object.assign(this, init);

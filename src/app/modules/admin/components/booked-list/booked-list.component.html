@@ -231,7 +231,24 @@
                     dataField="prepay"
                     dataType="number"
                     alignment="center"
+                    format="#0,###"
                     [width]="200">
+        </dxi-column>
+        <dxi-column caption="Payment Amount"
+                    dataField="paymentAmount"
+                    dataType="number"
+                    alignment="center"
+                    format="#0,###"
+                    [width]="200">
+        </dxi-column>
+        <dxi-column caption="Payment Status"
+                    dataField="checkoutStatus"
+                    dataType="number"
+                    alignment="center"
+                    [width]="200">
+<!--            <div *dxTemplate="let cell of 'cellTypeRoomTemplate'">-->
+<!--                {{cell.value | LookupDisplay : roomType}}-->
+<!--            </div>-->
         </dxi-column>
         <dxi-column caption="Note"
                     dataField="note"

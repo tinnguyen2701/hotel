@@ -272,10 +272,12 @@ export function randomBookings(count: number, listRooms: RoomModel[] = null): Bo
                 name: ['mr A', 'mr B', 'mr C', 'mr D', 'mr E'][random(0, 4)],
                 checkinDate: faker.date.past(),
                 checkoutDate: faker.date.future(),
-                prepay: random(0, 100) * 1000,
+                prepay: random(0, 50) * 1000,
                 note: faker.lorem.sentence(),
                 deduct: 0,
-                roomType: random(1, 2)
+                roomType: random(1, 2),
+                paymentAmount: random(5, 100) * 1000,
+                checkoutStatus: random(1, 4)
             });
         } else {
             return new BookedModel({
@@ -286,11 +288,13 @@ export function randomBookings(count: number, listRooms: RoomModel[] = null): Bo
                 name: ['Cty A', 'Cty B', 'Cty C', 'Cty D', 'Cty E'][random(0, 4)],
                 checkinDate: faker.date.past(),
                 checkoutDate: faker.date.future(),
-                prepay: random(0, 100) * 1000,
+                prepay: random(0, 50) * 1000,
                 note: faker.lorem.sentence(),
                 rooms: randomRoomsBooked(random(2, 5)),
                 peopleNumber: random(5, 10),
                 deduct: 0,
+                paymentAmount: random(5, 100) * 1000,
+                checkoutStatus: random(1, 4)
             });
         }
     });
