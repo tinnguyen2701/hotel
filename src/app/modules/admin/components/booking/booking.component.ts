@@ -61,7 +61,9 @@ export class BookingComponent implements OnInit {
             // personal booking
             // handler checkin from reservation
             if (this.selectedBookedStatus === this.bookedStatus.Checkin
-                && this.listRoomSelected && this.listRoomSelected[0].status === this.roomStatus.Booking) {
+                && this.listRoomSelected
+                && this.listRoomSelected.length > 0
+                && this.listRoomSelected[0].status === this.roomStatus.Booking) {
                 this.bookingsService.getBooking(this.listRoomSelected).subscribe(rs => {
                     this.selectedBooking = rs;
                     console.log(this.selectedBooking);
@@ -96,7 +98,9 @@ export class BookingComponent implements OnInit {
             // group booking
             // handler checkin from reservation
             if (this.selectedBookedStatus === this.bookedStatus.Checkin
-                && this.listRoomSelected && this.listRoomSelected[0].status === this.roomStatus.Booking) {
+                && this.listRoomSelected
+                && this.listRoomSelected.length > 0
+                && this.listRoomSelected[0].status === this.roomStatus.Booking) {
                 this.bookingsService.getBooking(this.listRoomSelected).subscribe(rs => {
                     this.selectedBooking = rs;
                     console.log(this.selectedBooking);

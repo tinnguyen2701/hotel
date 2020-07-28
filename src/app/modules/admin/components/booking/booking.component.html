@@ -147,8 +147,8 @@
     </ng-container>
 
     <ng-container *ngIf="currentTab.value === services">
-        <app-tab-services [(services)]="selectedBooking.services">
-        </app-tab-services>
+        <app-admin-tab-services [services]="selectedBooking.services">
+        </app-admin-tab-services>
     </ng-container>
 
     <ng-template #popupFooter>

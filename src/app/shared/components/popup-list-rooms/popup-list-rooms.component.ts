@@ -6,7 +6,7 @@ import {Subscription} from 'rxjs';
 import {SelectSnapshot} from '@ngxs-labs/select-snapshot';
 //
 import {AppState, SetActionType, SetEmptyBooking, SetEmptyEditBooking, SetFloor} from '@app/modules/admin/store';
-import {BaseLookup, BookedModel, FloorModel, RoomModel, ServiceModel} from '@app/modules/admin/models';
+import {BaseLookup, BookedModel, FloorModel, RoomModel, ServiceTampModel} from '@app/modules/admin/models';
 import {PopoverConfirmBoxComponent} from '..';
 import {ROOM_STATUS_TYPE, ROOM_TYPE} from '@app/modules/admin/shared/constant';
 import {ActionType, RoomStatus} from '@app/modules/admin/shared/enums';
@@ -49,8 +49,8 @@ export class PopupListRoomsComponent implements OnInit, DoCheck, OnDestroy {
     roomCheckinSource: BaseLookup[] = [];
 
     isShowManageServices: boolean = false;
-    services: ServiceModel[] = [];
-    selectedService: ServiceModel;
+    services: ServiceTampModel[] = [];
+    selectedService: ServiceTampModel;
     selectedItemServiceIndex: number;
 
     isFormDirty: boolean = false;

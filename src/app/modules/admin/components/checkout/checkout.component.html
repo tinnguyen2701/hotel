@@ -114,8 +114,9 @@
             </div>
 
             <ng-container *ngIf="selectedBooking && selectedBooking.rooms.length > 1">
+                <p class="font-weight-bold mt-3 mb-0">List Rooms</p>
                 <dx-data-grid #dxDataGrid
-                              class="mt-3"
+                              class="mt-1"
                               [dataSource]="selectedBooking.rooms"
                               keyExpr="id"
                               [showColumnLines]="true"
@@ -169,7 +170,28 @@
                                 [allowEditing]="false">
                     </dxi-column>
                 </dx-data-grid>
+                <div class="font-weight-bold">
+                    Payment rooms: {{paymentRoomAmount | CurrencyDisplay}}
+                </div>
             </ng-container>
+
+            <ng-container>
+                <p class="font-weight-bold mt-3 mb-0">List Services</p>
+                <div class="wrapper d-flex">
+                    <app-admin-tab-services [services]="selectedBooking.services"
+                                            [readOnly]="true">
+                    </app-admin-tab-services>
+                </div>
+                <div class="font-weight-bold">
+                    Payment services: {{paymentServiceAmount | CurrencyDisplay}}
+                </div>
+            </ng-container>
+            <hr>
+            <div class="font-weight-bold text-danger mt-2">
+                Total payment:
+                {{paymentRoomAmount + paymentServiceAmount
+            - this.selectedBooking.deduct - this.selectedBooking.prepay | CurrencyDisplay}}
+            </div>
 
             <div class="row mt-2">
                 <div class="field col-md-6">
