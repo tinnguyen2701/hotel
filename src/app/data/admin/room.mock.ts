@@ -277,7 +277,9 @@ export function randomBookings(count: number, listRooms: RoomModel[] = null): Bo
                 deduct: 0,
                 roomType: random(1, 2),
                 paymentAmount: random(5, 100) * 1000,
-                checkoutStatus: random(1, 4)
+                checkoutStatus: random(1, 4),
+                roomId: listRooms[0]?.id || null,
+                roomPrice: listRooms[0]?.price || null,
             });
         } else {
             return new BookedModel({

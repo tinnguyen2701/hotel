@@ -10,7 +10,9 @@
                 <div class="field col-md-6">
                     <div class="field-label">Room</div>
                     <div class="field-value">
-                        {{listRoomSelected[0].name}}
+                        <dx-text-box [value]="listRoomSelected[0].name"
+                                     readOnly="true">
+                        </dx-text-box>
                     </div>
                 </div>
 
@@ -110,6 +112,64 @@
                     </div>
                 </div>
             </div>
+
+            <ng-container *ngIf="selectedBooking && selectedBooking.rooms.length > 1">
+                <dx-data-grid #dxDataGrid
+                              class="mt-3"
+                              [dataSource]="selectedBooking.rooms"
+                              keyExpr="id"
+                              [showColumnLines]="true"
+                              [showRowLines]="true"
+                              [hoverStateEnabled]="true"
+                              [columnAutoWidth]="true"
+                              [showBorders]="true"
+                              (onSelectionChanged)="onSelectionChanged()"
+                              (onContentReady)="onContentGridReady()">
+                    <dxo-editing [allowDeleting]="false"
+                                 [allowUpdating]="false"
+                                 [allowAdding]="false">
+                    </dxo-editing>
+                    <dxo-selection mode="multiple"
+                                   showCheckBoxesMode="always">
+                    </dxo-selection>
+
+                    <dxi-column dataField="name"
+                                alignment="left"
+                                caption="Room No"
+                                [allowSorting]="false"
+                                [allowEditing]="false">
+                    </dxi-column>
+
+                    <dxi-column dataField="type"
+                                caption="Type room"
+                                alignment="center"
+                                [allowSorting]="false"
+                                [allowEditing]="false">
+                        <dxo-lookup
+                            [dataSource]="roomTypes"
+                            valueExpr="value"
+                            displayExpr="name">
+                        </dxo-lookup>
+                    </dxi-column>
+
+                    <dxi-column dataField="price"
+                                format="#0,###"
+                                [editorOptions]="{format: '#0,###'}"
+                                alignment="right"
+                                dataType="number"
+                                caption="Price"
+                                [allowSorting]="false"
+                                [allowEditing]="false">
+                    </dxi-column>
+
+                    <dxi-column dataField="note"
+                                alignment="left"
+                                caption="Note"
+                                [allowSorting]="false"
+                                [allowEditing]="false">
+                    </dxi-column>
+                </dx-data-grid>
+            </ng-container>
 
             <div class="row mt-2">
                 <div class="field col-md-6">

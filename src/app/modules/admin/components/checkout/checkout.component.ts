@@ -1,4 +1,5 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {DxDataGridComponent} from 'devextreme-angular';
 //
 import {BookedModel, RoomModel} from '@app/modules/admin/models';
 import {BookingService} from '@app/modules/admin/services';
@@ -13,7 +14,8 @@ import {PAYMENT_METHOD_TYPE} from '@app/modules/admin/shared/constant';
 })
 export class CheckoutComponent implements OnInit {
     private _visible: boolean = false;
-
+    //
+    @ViewChild('dxDataGrid', {static: false}) dxDataGrid: DxDataGridComponent;
     //
     @Input() listRoomSelected: RoomModel[] = [];
 
@@ -33,6 +35,7 @@ export class CheckoutComponent implements OnInit {
 
     //
     selectedBooking: BookedModel = new BookedModel();
+    selectedRooms: BookedModel[] = [];
     bookType = BookType;
     roomTypes: { value: number, name: string }[] = [
         {value: RoomType.Single, name: 'Single Room'},
@@ -50,6 +53,14 @@ export class CheckoutComponent implements OnInit {
             console.log(this.selectedBooking);
         });
         this.selectedBooking.paymentMethod = PaymentMethodTypes.Cash;
+    }
+
+    onSelectionChanged() {
+        this.selectedRooms = this.dxDataGrid.instance.getSelectedRowsData();
+    }
+
+    onContentGridReady() {
+        this.dxDataGrid.instance.selectAll();
     }
 
     onHandleCancel() {

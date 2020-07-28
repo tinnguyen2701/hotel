@@ -18,12 +18,13 @@
                 <div class="field col-md-6">
                     <div class="field-label">Room<span class="text-danger"> *</span></div>
                     <div class="field-value">
-                        <dx-select-box [dataSource]="allRoomsAvailable"
-                                       valueExpr="id"
-                                       displayExpr="name"
-                                       placeholder="selected room"
-                                       [(value)]="selectedBooking.roomId"
-                                       (onValueChanged)="onChangedRoom()">
+                        <dx-select-box
+                            [dataSource]="selectedBookedStatus === bookedStatus.Booking ? allRoomsAvailable : allRoomBooking"
+                            valueExpr="id"
+                            displayExpr="name"
+                            placeholder="selected room"
+                            [(value)]="selectedBooking.roomId"
+                            (onValueChanged)="onChangedRoom()">
                         </dx-select-box>
                     </div>
                 </div>
