@@ -66,22 +66,14 @@ export class CustomerModel {
 
 export class ServiceModel {
     id: number;
-    serviceId: number;
-    price: number;
     quantity: number;
-    amount: number;
+    price: number;
     name: string;
-
-    // UI only
-    isUpdated: boolean;
-    isDeleted: boolean;
-    isInserted: boolean;
 
     public constructor(init?: Partial<ServiceModel>) {
         Object.assign(this, init);
     }
 }
-
 
 export class BaseService {
     id: number;
@@ -166,3 +158,23 @@ export class FilterBookModel implements ISearchDataInterface {
         Object.assign(this, init);
     }
 }
+
+// TODO will be remove
+export class ServiceTampModel {
+    id: number;
+    serviceId: number;
+    price: number;
+    quantity: number;
+    amount: number;
+    name: string;
+
+    // UI only
+    isUpdated: boolean;
+    isDeleted: boolean;
+    isInserted: boolean;
+
+    public constructor(init?: Partial<ServiceTampModel>) {
+        Object.assign(this, init);
+    }
+}
+

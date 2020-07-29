@@ -23,6 +23,7 @@ export class RoomsComponent implements OnInit {
     transferRoom = new TransferRoom();
     transferRoomType = TRANSFER_ROOM_TYPE;
     allRoomsAvailable: RoomModel[] = [];
+    allRoomsBooking: RoomModel[] = [];
     allRoomsNotAvailable: RoomModel[] = [];
     selectedBookedStatus: number;
     bookedStatus = BookedStatus;
@@ -60,7 +61,7 @@ export class RoomsComponent implements OnInit {
     }
 
     onToggleBooking(bookedStatus: BookedStatus) {
-        this.allRoomAvailable();
+        this.handleAllRoomsSource();
         this.selectedBookedStatus = bookedStatus;
         this.isShowBookingPopup = !this.isShowBookingPopup;
     }
@@ -70,7 +71,7 @@ export class RoomsComponent implements OnInit {
     }
 
     onClickedTransferRoom() {
-        this.allRoomAvailable();
+        this.handleAllRoomsSource();
         this.transferRoom.fromRoomId = this.listRoomsSelected[0].id;
         this.isShowTransferRoomPopup = true;
     }
@@ -92,10 +93,11 @@ export class RoomsComponent implements OnInit {
         });
     }
 
-    private allRoomAvailable() {
+    private handleAllRoomsSource() {
         const roomArray = this.floors.map(_ => _.rooms);
         this.allRoomsAvailable = [].concat.apply([], roomArray).filter(_ => _.status === RoomStatus.Available);
         this.allRoomsNotAvailable = [].concat.apply([], roomArray).filter(_ => _.status !== RoomStatus.Available);
+        this.allRoomsBooking = [].concat.apply([], roomArray).filter(_ => _.status !== RoomStatus.Checkin);
     }
 
     refresh() {

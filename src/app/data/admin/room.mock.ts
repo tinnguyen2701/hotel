@@ -7,8 +7,8 @@ import {
     CustomerModel,
     FloorModel,
     RevenueModel,
-    RoomModel,
-    ServiceModel
+    RoomModel, ServiceModel,
+    ServiceTampModel
 } from '@app/modules/admin/models/roomModel';
 import {ActionNavigationType, BookType, RoomStatus} from '@app/modules/admin/shared/enums';
 
@@ -130,22 +130,27 @@ export function randomServiceLookup(): BaseService[] {
     ];
 }
 
-export function randomServices(count: number): ServiceModel[] {
-    return Array(count)
-        .fill({})
-        .map((item: ServiceModel, index) => {
-            const price = random(1, 10) * 10000;
-            const quantity = random(1, 10);
-
-            return new ServiceModel({
-                id: index + 1,
-                serviceId: random(1, 3),
-                price,
-                quantity,
-                amount: price * quantity,
-                name: ['bò húc', 'coca', 'hảo hảo'][random(0, 2)]
-            });
-        });
+export function randomServices(): ServiceModel[] {
+    return [
+        new ServiceModel({
+            id: 1,
+            name: 'Breakfast',
+            price: 10000,
+            quantity: random(0, 2)
+        }),
+        new ServiceModel({
+            id: 2,
+            name: 'Lunch',
+            price: 20000,
+            quantity: random(0, 2)
+        }),
+        new ServiceModel({
+            id: 3,
+            name: 'Dinner',
+            price: 20000,
+            quantity: random(0, 2)
+        })
+    ];
 }
 
 export function randomCustomers(count: number): CustomerModel[] {
@@ -183,7 +188,7 @@ export function randomBooked(roomId: number, status: ActionNavigationType): Book
                 id: roomId,
                 rooms: [randomRoom(roomId, 2)],
                 customers: randomCustomers(random(0, 2)),
-                services: randomServices(random(0, 3))
+                services: randomServices()
             });
             break;
         case ActionNavigationType.AddToCheckoutList:
@@ -191,7 +196,7 @@ export function randomBooked(roomId: number, status: ActionNavigationType): Book
                 id: roomId,
                 rooms: [randomRoom(roomId, 2)],
                 customers: randomCustomers(random(0, 2)),
-                services: randomServices(random(0, 3))
+                services: randomServices()
             });
             break;
         case ActionNavigationType.CheckoutNow:
@@ -199,7 +204,7 @@ export function randomBooked(roomId: number, status: ActionNavigationType): Book
                 id: roomId,
                 rooms: [randomRoom(roomId, 2)],
                 customers: randomCustomers(random(0, 2)),
-                services: randomServices(random(0, 3))
+                services: randomServices()
             });
             break;
         default:
@@ -207,7 +212,7 @@ export function randomBooked(roomId: number, status: ActionNavigationType): Book
                 id: roomId,
                 rooms: [randomRoom(roomId, 2)],
                 customers: randomCustomers(random(0, 2)),
-                services: randomServices(random(0, 3))
+                services: randomServices()
             });
             break;
     }
@@ -288,7 +293,10 @@ export function randomBookings(count: number, listRooms: RoomModel[] = null): Bo
                 deduct: 0,
                 roomType: random(1, 2),
                 paymentAmount: random(5, 100) * 1000,
-                checkoutStatus: random(1, 4)
+                checkoutStatus: random(1, 4),
+                roomId: listRooms[0]?.id || null,
+                roomPrice: listRooms[0]?.price || null,
+                services: randomServices()
             });
         } else {
             return new BookedModel({
@@ -305,7 +313,8 @@ export function randomBookings(count: number, listRooms: RoomModel[] = null): Bo
                 peopleNumber: random(5, 10),
                 deduct: 0,
                 paymentAmount: random(5, 100) * 1000,
-                checkoutStatus: random(1, 4)
+                checkoutStatus: random(1, 4),
+                services: randomServices()
             });
         }
     });

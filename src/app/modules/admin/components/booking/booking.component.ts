@@ -1,10 +1,8 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {cloneDeep, isEqual} from 'lodash';
 //
 import {BookedModel, RoomModel} from '@app/modules/admin/models';
 import {AppNotify} from '@app/utilities';
-import {ROOM_TYPE} from '@app/modules/admin/shared/constant';
-import {BookedStatus, RoomType} from '@app/modules/admin/shared/enums';
+import {BookedStatus, RoomStatus, RoomType} from '@app/modules/admin/shared/enums';
 import {BookingService} from '@app/modules/admin/services';
 
 @Component({
@@ -17,6 +15,7 @@ export class BookingComponent implements OnInit {
     //
     @Input() listRoomSelected: RoomModel[] = [];
     @Input() allRoomsAvailable: RoomModel[] = [];
+    @Input() allRoomBooking: RoomModel[] = [];
     @Input() selectedBookedStatus: BookedStatus;
 
     @Input()
@@ -40,7 +39,7 @@ export class BookingComponent implements OnInit {
     isShowBookedCodeReceived: boolean = false;
     bookedCodeReceived: string;
     bookedStatus = BookedStatus;
-
+    roomStatus = RoomStatus;
     roomTypes: { value: number, name: string }[] = [
         {value: RoomType.Single, name: 'Single Room'},
         {value: RoomType.Double, name: 'Double Room'}
@@ -60,14 +59,25 @@ export class BookingComponent implements OnInit {
         this.isGroupBooking = this.listRoomSelected.length > 1;
         if (!this.isGroupBooking) {
             // personal booking
-            if (this.listRoomSelected.length === 1) {
-                // information booking
-                this.selectedBooking.checkinDate = this.listRoomSelected[0].checkinDate;
-                this.selectedBooking.checkoutDate = this.listRoomSelected[0].checkoutDate;
-                // information room
-                this.selectedBooking.roomId = this.listRoomSelected[0].id;
-                this.selectedBooking.roomPrice = this.listRoomSelected[0].price;
-                this.selectedBooking.roomType = this.listRoomSelected[0].type;
+            // handler checkin from reservation
+            if (this.selectedBookedStatus === this.bookedStatus.Checkin
+                && this.listRoomSelected
+                && this.listRoomSelected.length > 0
+                && this.listRoomSelected[0].status === this.roomStatus.Booking) {
+                this.bookingsService.getBooking(this.listRoomSelected).subscribe(rs => {
+                    this.selectedBooking = rs;
+                    console.log(this.selectedBooking);
+                });
+            } else {
+                if (this.listRoomSelected.length === 1) {
+                    // information booking
+                    this.selectedBooking.checkinDate = this.listRoomSelected[0].checkinDate;
+                    this.selectedBooking.checkoutDate = this.listRoomSelected[0].checkoutDate;
+                    // information room
+                    this.selectedBooking.roomId = this.listRoomSelected[0].id;
+                    this.selectedBooking.roomPrice = this.listRoomSelected[0].price;
+                    this.selectedBooking.roomType = this.listRoomSelected[0].type;
+                }
             }
             this.menuTabs = [
                 {
@@ -86,7 +96,18 @@ export class BookingComponent implements OnInit {
             this.currentTab = this.menuTabs[0];
         } else {
             // group booking
-            this.selectedBooking.rooms = this.listRoomSelected;
+            // handler checkin from reservation
+            if (this.selectedBookedStatus === this.bookedStatus.Checkin
+                && this.listRoomSelected
+                && this.listRoomSelected.length > 0
+                && this.listRoomSelected[0].status === this.roomStatus.Booking) {
+                this.bookingsService.getBooking(this.listRoomSelected).subscribe(rs => {
+                    this.selectedBooking = rs;
+                    console.log(this.selectedBooking);
+                });
+            } else {
+                this.selectedBooking.rooms = this.listRoomSelected;
+            }
             this.menuTabs = [
                 {
                     value: this.rooms,
