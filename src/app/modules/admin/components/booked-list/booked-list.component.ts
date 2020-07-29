@@ -1,18 +1,19 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { AppNotify } from '@app/utilities';
-import { PopoverConfirmBoxComponent } from '@app/shared/components';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {AppNotify} from '@app/utilities';
+import {PopoverConfirmBoxComponent} from '@app/shared/components';
 import DataSource from 'devextreme/data/data_source';
 import {BookedModel, FilterBookModel, RoomModel} from '../../models';
-import { LoadParamModel } from '@app/modules/core/models';
-import { BookingService } from '../../services';
-import { ROOM_TYPE } from '../../shared/constant';
+import {LoadParamModel} from '@app/modules/core/models';
+import {BookingService} from '../../services';
+import {PAYMENT_STATUS_TYPE, ROOM_TYPE} from '../../shared/constant';
 import {DxDataGridComponent} from 'devextreme-angular';
 import {BookType} from '@app/modules/admin/shared/enums';
+import {finalize} from 'rxjs/operators';
 
 @Component({
-  selector: 'app-admin-booked',
-  templateUrl: './booked-list.component.html',
-  styleUrls: ['./booked-list.component.scss']
+    selector: 'app-admin-booked',
+    templateUrl: './booked-list.component.html',
+    styleUrls: ['./booked-list.component.scss']
 })
 export class BookedClientsComponent implements OnInit {
     // @ViewChild('deleteDetailConfirmPopover') deleteDetailConfirmPopover: PopoverConfirmBoxComponent;
@@ -72,10 +73,15 @@ export class BookedClientsComponent implements OnInit {
     //     });
     // }
     @ViewChild('paymentGrid', {static: true}) paymentGrid: DxDataGridComponent;
+    @ViewChild('deletingConfirmBox', {static: true}) deletingConfirmBox: PopoverConfirmBoxComponent;
     //
     bookingSource: DataSource;
     filterBooking: FilterBookModel = new FilterBookModel();
     roomType = ROOM_TYPE;
+    paymentStatus = PAYMENT_STATUS_TYPE;
+    selectedBooking: BookedModel;
+    isLoading: boolean = false;
+    isProcessing: boolean = false;
 
     constructor(private bookingsService: BookingService) {
         this.loadBookings();
@@ -90,17 +96,15 @@ export class BookedClientsComponent implements OnInit {
     }
 
     loadBookings() {
+        this.isLoading = true;
         this.bookingSource = new DataSource({
             load: (loadOptions) => {
                 const loadParams = new LoadParamModel(loadOptions, this.filterBooking);
+                this.isLoading = false;
                 return this.bookingsService.getListBookings(loadParams).toPromise();
             }
         });
     }
-
-    /**
-     * handler grid
-     */
 
     onGridCellPrepared(e) {
         if (e.rowType === 'data' && e.column.command === 'expand') {
@@ -110,5 +114,25 @@ export class BookedClientsComponent implements OnInit {
                 e.cellElement.firstElementChild.classList.remove('dx-datagrid-group-closed');
             }
         }
+    }
+
+    openDeletingConfirmPopup(data: BookedModel, e: any) {
+        this.selectedBooking = data;
+        if (this.deletingConfirmBox) {
+            this.deletingConfirmBox.show(e.currentTarget);
+        }
+    }
+
+    onDeleteBooking() {
+        if (!this.selectedBooking) {
+            return false;
+        }
+        this.isProcessing = true;
+        this.bookingsService.deleteBooking(this.selectedBooking.id).pipe(finalize(() => {
+            this.isProcessing = false;
+            this.bookingSource.reload();
+        })).subscribe(() => {
+            AppNotify.success('Deleted success');
+        });
     }
 }

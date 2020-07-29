@@ -214,44 +214,55 @@ export function randomBooked(roomId: number, status: ActionNavigationType): Book
 }
 
 
-export function getRevenueModel(): RevenueModel[] {
-    return [{
-        month: 'Jan',
-        amount: 3
-    }, {
-        month: 'Feb',
-        amount: 2
-    }, {
-        month: 'Mar',
-        amount: 3
-    }, {
-        month: 'Apr',
-        amount: 4
-    }, {
-        month: 'May',
-        amount: 6
-    }, {
-        month: 'Jun',
-        amount: 11
-    }, {
-        month: 'Jul',
-        amount: 4
-    }, {
-        month: 'Aug',
-        amount: 6
-    }, {
-        month: 'Sep',
-        amount: 11
-    }, {
-        month: 'Oct',
-        amount: 4
-    }, {
-        month: 'Nov',
-        amount: 4
-    }, {
-        month: 'Dec',
-        amount: 4
-    }];
+export function getRevenue(): RevenueModel {
+    return new RevenueModel({
+        months: [{
+            month: 'Jan',
+            amount: 3
+        }, {
+            month: 'Feb',
+            amount: 2
+        }, {
+            month: 'Mar',
+            amount: 3
+        }, {
+            month: 'Apr',
+            amount: 4
+        }, {
+            month: 'May',
+            amount: 6
+        }, {
+            month: 'Jun',
+            amount: 11
+        }, {
+            month: 'Jul',
+            amount: 4
+        }, {
+            month: 'Aug',
+            amount: 6
+        }, {
+            month: 'Sep',
+            amount: 11
+        }, {
+            month: 'Oct',
+            amount: 4
+        }, {
+            month: 'Nov',
+            amount: 4
+        }, {
+            month: 'Dec',
+            amount: 4
+        }],
+        years: [
+            {
+                year: '2019',
+                amount: 400
+            }, {
+                year: '2020',
+                amount: 450
+            }
+        ]
+    });
 }
 
 export function randomBookings(count: number, listRooms: RoomModel[] = null): BookedModel[] {

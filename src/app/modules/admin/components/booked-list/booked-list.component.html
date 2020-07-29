@@ -144,6 +144,12 @@
 <!--                         [message]="'Are you sure to delete?'"-->
 <!--                         (onConfirm)="deleteBooking()">-->
 <!--</app-popover-confirm-box>-->
+<dx-load-panel [visible]="true" *ngIf="isLoading" [showPane]="false"></dx-load-panel>
+<dx-load-panel *ngIf="isProcessing"
+               [visible]="true" [showPane]="false"
+               message="Processing">
+</dx-load-panel>
+
 <div class="wrapper">
     <div class="d-flex align-items-center pt-2 pb-3">
         <div class="field pl-0">
@@ -245,10 +251,11 @@
                     dataField="checkoutStatus"
                     dataType="number"
                     alignment="center"
+                    cellTemplate="cellCheckoutStatusTemplate"
                     [width]="200">
-<!--            <div *dxTemplate="let cell of 'cellTypeRoomTemplate'">-->
-<!--                {{cell.value | LookupDisplay : roomType}}-->
-<!--            </div>-->
+            <div *dxTemplate="let cell of 'cellCheckoutStatusTemplate'">
+                {{cell.value | LookupDisplay : paymentStatus}}
+            </div>
         </dxi-column>
         <dxi-column caption="Note"
                     dataField="note"
@@ -257,12 +264,15 @@
         </dxi-column>
 
         <dxi-column alignment="center"
-                    cellTemplate="actionsCellTemplate">
+                    fixedPosition="right"
+                    cellTemplate="actionsCellTemplate"
+                    fixed="true">
             <div *dxTemplate="let cell of 'actionsCellTemplate'">
                 <div class="action-inline d-flex justify-content-center">
                     <ng-container>
                         <i class="fas fa-eye mr-3" title="View"></i>
-                        <i title="Delete" class="far fa-trash-alt delete-icon mr-3"></i>
+                        <i title="Delete" class="far fa-trash-alt delete-icon mr-3"
+                        (click)="openDeletingConfirmPopup(cell.data, $event)"></i>
                     </ng-container>
                 </div>
             </div>
@@ -292,3 +302,7 @@
     </dx-data-grid>
 </div>
 
+<app-popover-confirm-box #deletingConfirmBox
+                         message="Are you sure to delete?"
+                         (onConfirm)="onDeleteBooking()">
+</app-popover-confirm-box>

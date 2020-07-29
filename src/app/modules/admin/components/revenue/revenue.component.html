@@ -1,8 +1,53 @@
-<dx-chart [dataSource]="revenueSource">
-    <dxi-series argumentField="month"
-        valueField="amount"
-        name="VNĐ"
-        type="bar"
-        color="#70e1f3">
-    </dxi-series>
-</dx-chart>
+<div>
+    <dx-chart [dataSource]="revenue.months">
+        <dxi-series argumentField="month"
+                    valueField="amount"
+                    name="VNĐ"
+                    type="bar"
+                    color="#70e1f3">
+        </dxi-series>
+
+        <dxo-common-series-settings
+            argumentField="state"
+            type="bar"
+            hoverMode="allArgumentPoints"
+            selectionMode="allArgumentPoints">
+            <dxo-label
+                [visible]="true"
+                [format]="{
+                type: 'fixedPoint',
+                precision: '0'
+            }">
+            </dxo-label>
+        </dxo-common-series-settings>
+    </dx-chart>
+    <p class="text-center font-weight-bold">Revenue all months in year 2020</p>
+</div>
+
+
+<div>
+    <dx-chart [dataSource]="revenue.years">
+        <dxi-series argumentField="year"
+                    valueField="amount"
+                    name="VNĐ"
+                    type="bar"
+                    color="#70e1f3"
+                    [width]="100">
+        </dxi-series>
+
+        <dxo-common-series-settings
+            argumentField="state"
+            type="bar"
+            hoverMode="allArgumentPoints"
+            selectionMode="allArgumentPoints">
+            <dxo-label
+                [visible]="true"
+                [format]="{
+                type: 'fixedPoint',
+                precision: '0'
+            }">
+            </dxo-label>
+        </dxo-common-series-settings>
+    </dx-chart>
+    <p class="text-center font-weight-bold">Revenue all years recent</p>
+</div>

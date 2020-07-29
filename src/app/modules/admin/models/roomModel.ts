@@ -131,10 +131,28 @@ export class TransferRoom {
 }
 
 export class RevenueModel {
+    months: RevenueMonthModel[];
+    years: RevenueYearModel[];
+
+    public constructor(init?: Partial<RevenueModel>) {
+        Object.assign(this, init);
+    }
+}
+
+export class RevenueMonthModel {
     month: string;
     amount: number;
 
-    public constructor(init?: Partial<RevenueModel>) {
+    public constructor(init?: Partial<RevenueMonthModel>) {
+        Object.assign(this, init);
+    }
+}
+
+export class RevenueYearModel {
+    year: string;
+    amount: number;
+
+    public constructor(init?: Partial<RevenueYearModel>) {
         Object.assign(this, init);
     }
 }

@@ -16,6 +16,13 @@ export enum RoomType {
     Double,
 }
 
+export enum PaymentStatusType {
+    Cancel = 1,
+    Unpaid = 2,
+    PartiallyPaid = 3,
+    Paid = 4
+}
+
 export enum BookType {
     Personal = 1,
     Group = 2,

@@ -1,7 +1,7 @@
 import {Observable, of} from 'rxjs';
 import {random} from 'lodash';
 //
-import {getRevenueModel, randomBooked, randomBookings, randomRoom, randomRoomsBooked, randomServices} from '@app/data/admin';
+import {getRevenue, randomBooked, randomBookings, randomRoom, randomRoomsBooked, randomServices} from '@app/data/admin';
 import {environment} from '@environment';
 import {
     RoomModel,
@@ -68,15 +68,15 @@ export class BookingService {
         return of(randomRoomsBooked(numberOfSingleRooms + numberOfDoubleRooms));
     }
 
-
-    // TODO will be remove all code above
     deleteBooking(param: number): Observable<boolean> {
-        if (environment.production) {
+        if (environment.debug) {
             console.log('API: deleteBooking');
         }
         return of(true);
     }
 
+
+    // TODO will be remove all code above
 
 
     getBookRoom(roomId: number, status: ActionNavigationType): Observable<BookedModel> {
@@ -164,12 +164,12 @@ export class BookingService {
         return of(true);
     }
 
-    getRevenueByMonth(): Observable<RevenueModel[]> {
+    getRevenue(): Observable<RevenueModel> {
         if (environment.debug) {
             console.log('API: getRevenueByMonth');
         }
 
-        return of(getRevenueModel());
+        return of(getRevenue());
     }
 
 }

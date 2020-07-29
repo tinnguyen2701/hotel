@@ -11,7 +11,7 @@ import {RevenueModel} from '@app/modules/admin/models';
     styleUrls: ['./revenue.component.scss']
 })
 export class RevenueComponent implements OnInit {
-    revenueSource: RevenueModel[] = [];
+    revenue: RevenueModel;
 
     constructor(private bookingService: BookingService) {
     }
@@ -21,10 +21,9 @@ export class RevenueComponent implements OnInit {
     }
 
     private getRevenueByMonth() {
-        this.bookingService.getRevenueByMonth().subscribe(
+        this.bookingService.getRevenue().subscribe(
             (rs) => {
-
-                this.revenueSource = rs;
+                this.revenue = rs;
             },
             (err) => {
                 AppNotify.error('Get book went wrong!');

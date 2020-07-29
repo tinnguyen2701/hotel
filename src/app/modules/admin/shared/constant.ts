@@ -1,4 +1,4 @@
-import {PaymentMethodTypes, RoomStatus, RoomType, TransferOption} from '@app/modules/admin/shared/enums';
+import {PaymentStatusType, PaymentMethodTypes, RoomStatus, RoomType, TransferOption} from '@app/modules/admin/shared/enums';
 
 export const ADMIN_MENU = [
     {
@@ -33,6 +33,13 @@ export const ROOM_TYPE: { value: RoomType, name: string }[] = [
     {value: RoomType.All, name: 'All'},
     {value: RoomType.Single, name: 'Single Room'},
     {value: RoomType.Double, name: 'Double Room'},
+];
+
+export const PAYMENT_STATUS_TYPE: { value: PaymentStatusType, name: string }[] = [
+    {value: PaymentStatusType.Cancel, name: 'Cancel'},
+    {value: PaymentStatusType.Unpaid, name: 'Unpaid'},
+    {value: PaymentStatusType.PartiallyPaid, name: 'Partial paid'},
+    {value: PaymentStatusType.Paid, name: 'Paid'},
 ];
 
 export const TRANSFER_ROOM_TYPE: { value: number, name: string }[] = [
